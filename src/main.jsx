@@ -12,6 +12,7 @@ import Leetcode from './components/Leetcode/Leetcode.jsx'
 import Codolio from './components/Codolio/Codolio.jsx'
 import Github from './components/Github/Github.jsx'
 import Linkedin from './components/Linkedin/Linkedin.jsx'
+import ALML from './components/ML/ALML.jsx'
 
 import Arrays from './components/DSA/Arrays.jsx'
 import Narray1 from './components/Innerdsa/arraydsa/Narray1.jsx'
@@ -104,6 +105,7 @@ const router = createBrowserRouter(
       <Route path='Codolio' element={<Codolio />} />
       <Route path='github' element={<Github />} /> 
       <Route path='Linkedin' element={<Linkedin />} /> 
+      <Route path='ALML' element={<ALML />} /> 
 
 
       <Route path='Arrays' element={<Arrays />} />
