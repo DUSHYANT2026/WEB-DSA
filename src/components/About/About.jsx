@@ -47,10 +47,14 @@ export default function About() {
               Whether you're just beginning or honing your expertise, All About Coding ensures an engaging and effective learning experience. Join us and unlock your full potential!
             </p>
 
-            <div className="mt-8 flex justify-start">
-              <button className="px-8 py-4 bg-gradient-to-r from-orange-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transform transition duration-300 hover:scale-110">
-                Join Our Community
-              </button>
+            <div className="mt-8 flex justify-center">
+              <a
+                href="https://chat.whatsapp.com/BLXxM1kODlcEuN2gjuXjOU"
+                target="_blank"
+                className="inline-block px-8 py-4 bg-gradient-to-r from-orange-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-2xl transform transition duration-300 hover:scale-110"
+                aria-label="Join Our WhatsApp Community"
+              >Join Our Community
+              </a>
             </div>
           </div>
         </div>
