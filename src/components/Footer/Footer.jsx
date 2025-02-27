@@ -11,15 +11,15 @@ export default function Footer() {
                         <h2 className="text-xl font-bold text-white mb-6">Track Your Coding Journey</h2>
                         <ul className="space-y-3">
                             <li>
-                                <Link to="https://codolio.com/" className="flex items-center text-gray-400 hover:text-orange-400 transition duration-300">
+                                <a href="https://codolio.com/" target="_blank" className="flex items-center text-gray-400 hover:text-orange-400 transition duration-300">
                                     <span className="mr-2">🚀</span>
                                     Codolio
-                                </Link>
+                                </a>
                             </li>
                         </ul>
                     </div>
                     
-                    {/* Section 2 - Resources */}
+                 
                     <div>
                         <h2 className="text-xl font-bold text-white mb-6">Resources</h2>
                         <ul className="space-y-3">
@@ -44,7 +44,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     
-                    {/* Section 3 - Media */}
+           
                     <div>
                         <h2 className="text-xl font-bold text-white mb-6">Media</h2>
                         <ul className="space-y-3">
@@ -63,7 +63,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     
-                    {/* Section 4 - Coding Platforms */}
+                  
                     <div>
                         <h2 className="text-xl font-bold text-white mb-6">Coding Platforms</h2>
                         <div className="grid grid-cols-2 gap-3">
@@ -75,9 +75,9 @@ export default function Footer() {
                                 { name: "HackerRank", link: "https://www.hackerrank.com/dashboard" },
                                 { name: "CodeStudio", link: "https://www.naukri.com/code360/problems" }
                             ].map(({ name, link }) => (
-                                <Link key={name} to={link} className="text-sm bg-gray-800 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300 flex items-center justify-center">
+                                <a key={name} href={link} target="_blank" className="text-sm bg-gray-800 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300 flex items-center justify-center">
                                     {name}
-                                </Link>
+                                </a>
                             ))}
                         </div>
                     </div>
@@ -85,7 +85,7 @@ export default function Footer() {
 
                 <hr className="border-gray-700 my-8" />
 
-                {/* Coding Resources */}
+            
                 <div className="text-center">
                     <h2 className="text-xl font-bold text-white mb-6">Coding Resources</h2>
                     <div className="flex flex-wrap justify-center gap-4">
@@ -96,15 +96,15 @@ export default function Footer() {
                             { name: "Java-T-Point", link: "https://www.javatpoint.com/data-structure-tutorial" },
                             { name: "CP-Algorithms", link: "https://cp-algorithms.com/index.html" }
                         ].map(({ name, link }) => (
-                            <Link key={name} to={link} className="text-sm bg-gray-800 py-2 px-4 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300">
+                            <a key={name} href={link} target="_blank" className="text-sm bg-gray-800 py-2 px-4 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300">
                                 {name}
-                            </Link>
+                            </a>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* Footer Bottom */}
+
             <div className="text-center mt-10 border-t border-gray-800 pt-6">
                 <p className="text-gray-400 text-sm">
                     &copy; {new Date().getFullYear()} Dushyant Mudgal. All rights reserved.
