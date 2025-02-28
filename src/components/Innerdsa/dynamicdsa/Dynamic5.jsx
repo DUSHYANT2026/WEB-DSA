@@ -206,24 +206,32 @@ function Dynamic5() {
 
   return (
     <div className="container mx-auto px-6 py-16 max-w-7xl">
-      <h1 className="text-6xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-indigo-600 to-purple-600 mb-16">
+      <h1 className="text-6xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-700 to-purple-700 mb-16 animate-gradient">
         Dynamic Programming (LeetCode)
       </h1>
-  
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {codeexample.map((item, index) => (
           <a
-            key={index}
-            href={item.questionlink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block p-6 bg-white border border-gray-200 rounded-3xl shadow-lg hover:shadow-2xl transition-all transform hover:-translate-y-2 hover:scale-105 text-center hover:bg-gradient-to-br from-indigo-50 to-purple-100"
-          >
-            <h2 className="text-xl font-semibold text-gray-900">{item.question}</h2>
+            className="block p-8 bg-white border border-gray-200 rounded-3xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2 hover:scale-105 text-center hover:bg-gradient-to-br from-indigo-50 to-purple-100 group"
+            >
+            <div className="flex flex-col items-center justify-center h-full">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-indigo-700 transition-colors">
+                {item.question}
+              </h2>
+              <a    key={index} href={item.questionlink} target="_blank" rel="noopener noreferrer">
+              <button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-indigo-700 hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-105 border-2 border-transparent hover:border-white">
+                   View Problem
+              </button>
+              </a>
+            </div>
           </a>
         ))}
       </div>
+
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-50 to-purple-50 opacity-50 animate-background"></div>
     </div>
   );
-}
+};
+
   export default Dynamic5;
