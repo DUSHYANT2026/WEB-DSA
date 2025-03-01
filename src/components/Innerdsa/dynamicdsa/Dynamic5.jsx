@@ -219,6 +219,8 @@ function Dynamic5() {
               <h2 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-indigo-700 transition-colors">
                 {item.question}
               </h2>
+
+              
               <a    key={index} href={item.questionlink} target="_blank" rel="noopener noreferrer">
               <button className="px-8 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-full shadow-lg hover:from-blue-600 hover:to-indigo-700 hover:shadow-2xl transition-all transform hover:-translate-y-1 hover:scale-105 border-2 border-transparent hover:border-white">
                    View Problem
