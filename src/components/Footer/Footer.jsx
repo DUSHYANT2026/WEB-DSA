@@ -107,7 +107,7 @@ export default function Footer() {
             {/* Footer Bottom */}
             <div className="text-center mt-10 border-t border-gray-800 pt-6">
                 <p className="text-gray-400 text-sm">
-                    &copy; {new Date().getFullYear()} Dushyant Mudgal. All rights reserved.
+                    &copy; {new Date().getFullYear()} All About Coding. All rights reserved.
                 </p>
             </div>
         </footer>
