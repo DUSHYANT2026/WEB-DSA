@@ -99,6 +99,9 @@ import DataPreprocessing from './components/ML2/DataPreprocessing.jsx';
 import MachineLearning from './components/ML2/MachineLearning.jsx';
 import ModelEvaluation from './components/ML2/ModelEvaluation.jsx';
 import UnsupervisedLearning from './components/ML2/UnsupervisedLearning.jsx';
+import SupervisedLearning from './components/ML2/SupervisedLearning.jsx';
+import ReinforcementLearning from './components/ML2/ReinforcementLearning.jsx';
+import AdvancedML from './components/ML2/AdvancedML.jsx';
 
 
 const router = createBrowserRouter(
@@ -202,6 +205,9 @@ const router = createBrowserRouter(
       <Route path='MachineLearning' element={<MachineLearning />} />
       <Route path='ModelEvaluation' element={<ModelEvaluation />} />
       <Route path='UnsupervisedLearning' element={<UnsupervisedLearning />} />
+      <Route path='SupervisedLearning' element={<SupervisedLearning />} />
+      <Route path='ReinforcementLearning' element={<ReinforcementLearning />} />
+      <Route path='AdvancedML' element={<AdvancedML />} />
       
     </Route>     
   )
