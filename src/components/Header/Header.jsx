@@ -91,7 +91,7 @@ export default function Header() {
                             </li>
                             <li>
                                 <NavLink
-                                    to="/ALML"
+                                    to="/AIML"
                                     className={({ isActive }) =>
                                         `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-300 underline font-bold" : "text-white"} border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-300 lg:p-0 transition duration-300`
                                     }

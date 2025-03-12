@@ -12,7 +12,7 @@ import Leetcode from './components/Leetcode/Leetcode.jsx'
 import Codolio from './components/Codolio/Codolio.jsx'
 import Github from './components/Github/Github.jsx'
 import Linkedin from './components/Linkedin/Linkedin.jsx'
-import ALML from './components/ML/ALML.jsx'
+import AIML from './components/ML/AIML.jsx'
 
 import Arrays from './components/DSA/Arrays.jsx'
 import Narray1 from './components/Innerdsa/arraydsa/Narray1.jsx'
@@ -93,6 +93,14 @@ import Trie1 from './components/Innerdsa/Trie/Trie1.jsx'
 import Trie2 from './components/Innerdsa/Trie/Trie2.jsx'
 import Trie3 from './components/Innerdsa/Trie/Trie3.jsx'
 
+import Foundation from './components/ML2/Foundation.jsx';
+import BasicDeployment from './components/ML2/BasicDeployment.jsx';
+import DataPreprocessing from './components/ML2/DataPreprocessing.jsx';
+import MachineLearning from './components/ML2/MachineLearning.jsx';
+import ModelEvaluation from './components/ML2/ModelEvaluation.jsx';
+import UnsupervisedLearning from './components/ML2/UnsupervisedLearning.jsx';
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layouts />}>
@@ -105,7 +113,7 @@ const router = createBrowserRouter(
       <Route path='Codolio' element={<Codolio />} />
       <Route path='github' element={<Github />} /> 
       <Route path='Linkedin' element={<Linkedin />} /> 
-      <Route path='ALML' element={<ALML />} /> 
+      <Route path='AIML' element={<AIML />} /> 
 
 
       <Route path='Arrays' element={<Arrays />} />
@@ -186,6 +194,14 @@ const router = createBrowserRouter(
       <Route path='Trie1' element={<Trie1 />} />
       <Route path='Trie2' element={<Trie2 />} />
       <Route path='Trie3' element={<Trie3 />} />
+
+      <Route path='AIML' element={<AIML />} />
+      <Route path='BasicDeployment' element={<BasicDeployment />} />
+      <Route path='DataPreprocessing' element={<DataPreprocessing />} />
+      <Route path='Foundation' element={<Foundation />} />
+      <Route path='MachineLearning' element={<MachineLearning />} />
+      <Route path='ModelEvaluation' element={<ModelEvaluation />} />
+      <Route path='UnsupervisedLearning' element={<UnsupervisedLearning />} />
       
     </Route>     
   )
