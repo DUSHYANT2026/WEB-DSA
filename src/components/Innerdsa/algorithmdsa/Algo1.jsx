@@ -964,7 +964,7 @@ function Algo1() {
           className="mb-12 p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-102 duration-300 border border-indigo-100"
         >
           <h2 className="text-4xl font-bold text-indigo-800 mb-6">{example.title}</h2>
-          <p className="text-gray-700 mb-6 text-lg leading-relaxed">{example.description}</p>
+          <p className="text-gray-800 mb-6 text-lg leading-relaxed font-medium bg-gray-50 p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">{example.description}</p>
           <p className="text-gray-800 font-semibold mb-6">
             <span className="text-indigo-700 font-bold">Complexity:</span> {example.complexity}
           </p>
