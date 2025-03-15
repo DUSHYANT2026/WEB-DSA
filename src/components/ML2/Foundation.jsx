@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React from "react";
+import { NavLink } from "react-router-dom";
 
 const Foundation = () => {
   return (
@@ -9,43 +9,40 @@ const Foundation = () => {
           Foundations of Machine Learning
         </span>
       </div>
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <NavLink to="/LinearAlgebra">
           <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Linear Algebra</span>
+            <span className="text-white text-center text-2xl font-bold">
+              Linear Algebra
+            </span>
           </div>
         </NavLink>
 
         <NavLink to="/Probability">
           <div className="bg-gradient-to-r from-green-500 to-teal-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Probability & Statistics</span>
+            <span className="text-white text-center text-2xl font-bold">
+              Probability & Statistics
+            </span>
           </div>
         </NavLink>
 
         <NavLink to="/Calculus">
           <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Calculus</span>
+            <span className="text-white text-center text-2xl font-bold">
+              Calculus
+            </span>
           </div>
         </NavLink>
 
         <NavLink to="/Python">
           <div className="bg-gradient-to-r from-pink-500 to-red-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Python for ML</span>
+            <span className="text-white text-center text-2xl font-bold">
+              Python for ML
+            </span>
           </div>
         </NavLink>
-
-        <NavLink to="/DataStructures">
-          <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Data Structures</span>
-          </div>
-        </NavLink>
-
-        <NavLink to="/Visualization">
-          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer">
-            <span className="text-white text-center text-2xl font-bold">Data Visualization</span>
-          </div>
-        </NavLink>
+      
       </div>
     </div>
   );
