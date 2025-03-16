@@ -76,7 +76,7 @@ export default function About() {
                   }`}
                 >
                   <span
-                    className={`inline-block w-6 h-6 mt-1 mr-4 rounded-full flex items-center justify-center text-white font-bold ${
+                    className={`inline-block w-6 h-6 mt-1 mr-4 rounded-full items-center justify-center text-white font-bold ${
                       darkMode ? "bg-purple-500" : "bg-orange-500"
                     }`}
                   >
