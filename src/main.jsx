@@ -103,8 +103,6 @@ import SupervisedLearning from './components/ML2/SupervisedLearning.jsx';
 import ReinforcementLearning from './components/ML2/ReinforcementLearning.jsx';
 import AdvancedML from './components/ML2/AdvancedML.jsx';
 
-
-
 import AIvsMLvsDL from './components/ML3/AIvsMLvsDL.jsx'
 import AnomalyDetection from './components/ML3/AnomalyDetection.jsx'
 import BasicsOfRL from './components/ML3/BasicsOfRL.jsx'
@@ -271,7 +269,7 @@ const router = createBrowserRouter(
       <Route path='RLGamingRobotics' element={<RLGamingRobotics />} />
       <Route path='SplittingData' element={<SplittingData />} />
       <Route path='TimeSeriesForecasting' element={<TimeSeriesForecasting />} />
-      
+
     </Route>     
   )
 )
