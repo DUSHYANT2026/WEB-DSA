@@ -104,6 +104,39 @@ import ReinforcementLearning from './components/ML2/ReinforcementLearning.jsx';
 import AdvancedML from './components/ML2/AdvancedML.jsx';
 
 
+
+import AIvsMLvsDL from './components/ML3/AIvsMLvsDL.jsx'
+import AnomalyDetection from './components/ML3/AnomalyDetection.jsx'
+import BasicsOfRL from './components/ML3/BasicsOfRL.jsx'
+import BiasVarianceTradeoff from './components/ML3/BiasVarianceTradeoff.jsx'
+import Calculus from './components/ML3/Calculus.jsx'
+import Classification from './components/ML3/Classification.jsx'
+import Clustering from './components/ML3/Clustering.jsx'
+import DataCleaning from './components/ML3/DataCleaning.jsx'
+import DataTransformation from './components/ML3/DataTransformation.jsx'
+import DimensionalityReduction from './components/ML3/DimensionalityReduction.jsx'
+import DQN from './components/ML3/DQN.jsx'
+import EnsembleLearning from './components/ML3/EnsembleLearning.jsx'
+import EvaluationMetrics from './components/ML3/EvaluationMetrics.jsx'
+import FeatureEngineering from './components/ML3/FeatureEngineering.jsx'
+import HistoryML from './components/ML3/HistoryML.jsx'
+import HyperparameterTuning from './components/ML3/HyperparameterTuning.jsx'
+import LinearAlgebra from './components/ML3/LinearAlgebra.jsx'
+import MDP from './components/ML3/MDP.jsx'
+import MLPipeline from './components/ML3/MLPipeline.jsx'
+import NeuralNetworks from './components/ML3/NeuralNetworks.jsx'
+import PolicyGradientMethods from './components/ML3/PolicyGradientMethods.jsx'
+import Probability from './components/ML3/Probability.jsx'
+import Python from './components/ML3/Python.jsx'
+import QLearning from './components/ML3/QLearning.jsx'
+import Regression from './components/ML3/Regression.jsx'
+import RegularizationBasics from './components/ML3/RegularizationBasics.jsx'
+import RLGamingRobotics from './components/ML3/RLGamingRobotics.jsx'
+import SplittingData from './components/ML3/SplittingData.jsx'
+import TimeSeriesForecasting from './components/ML3/TimeSeriesForecasting.jsx'
+
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layouts />}>
@@ -208,6 +241,36 @@ const router = createBrowserRouter(
       <Route path='SupervisedLearning' element={<SupervisedLearning />} />
       <Route path='ReinforcementLearning' element={<ReinforcementLearning />} />
       <Route path='AdvancedML' element={<AdvancedML />} />
+      
+      <Route path='AIvsMLvsDL' element={<AIvsMLvsDL />} />
+      <Route path='AnomalyDetection' element={<AnomalyDetection />} />
+      <Route path='BasicsOfRL' element={<BasicsOfRL />} />
+      <Route path='BiasVarianceTradeoff' element={<BiasVarianceTradeoff />} />
+      <Route path='Calculus' element={<Calculus />} />
+      <Route path='Classification' element={<Classification />} />
+      <Route path='Clustering' element={<Clustering />} />
+      <Route path='DataCleaning' element={<DataCleaning />} />
+      <Route path='DataTransformation' element={<DataTransformation />} />
+      <Route path='DimensionalityReduction' element={<DimensionalityReduction />} />
+      <Route path='DQN' element={<DQN />} />
+      <Route path='EnsembleLearning' element={<EnsembleLearning />} />
+      <Route path='EvaluationMetrics' element={<EvaluationMetrics />} />
+      <Route path='FeatureEngineering' element={<FeatureEngineering />} />
+      <Route path='HistoryML' element={<HistoryML />} />
+      <Route path='HyperparameterTuning' element={<HyperparameterTuning />} />
+      <Route path='LinearAlgebra' element={<LinearAlgebra />} />
+      <Route path='MDP' element={<MDP />} />
+      <Route path='MLPipeline' element={<MLPipeline />} />
+      <Route path='NeuralNetworks' element={<NeuralNetworks />} />
+      <Route path='PolicyGradientMethods' element={<PolicyGradientMethods />} />
+      <Route path='Probability' element={<Probability />} />
+      <Route path='Python' element={<Python />} />
+      <Route path='QLearning' element={<QLearning />} />
+      <Route path='Regression' element={<Regression />} />
+      <Route path='RegularizationBasics' element={<RegularizationBasics />} />
+      <Route path='RLGamingRobotics' element={<RLGamingRobotics />} />
+      <Route path='SplittingData' element={<SplittingData />} />
+      <Route path='TimeSeriesForecasting' element={<TimeSeriesForecasting />} />
       
     </Route>     
   )
