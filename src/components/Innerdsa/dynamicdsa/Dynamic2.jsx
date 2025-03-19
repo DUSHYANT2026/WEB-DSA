@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
