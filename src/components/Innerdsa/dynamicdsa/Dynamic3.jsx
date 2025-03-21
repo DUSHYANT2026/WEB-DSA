@@ -1,34 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useTheme } from "../../../ThemeContext";
 
-function dynamic3() {
+function Dynamic3() {
+  const { darkMode } = useTheme();
   const [visibleCodeIndex, setVisibleCodeIndex] = useState(null);
   const [visibleJavaCodeIndex, setVisibleJavaCodeIndex] = useState(null);
   const [visiblePythonCodeIndex, setVisiblePythonCodeIndex] = useState(null);
 
   const toggleCodeVisibility = (index) => {
-    if (visibleCodeIndex === index) {
-      setVisibleCodeIndex(null);
-    } else {
-      setVisibleCodeIndex(index);
-    }
+    setVisibleCodeIndex(visibleCodeIndex === index ? null : index);
   };
 
   const toggleJavaCodeVisibility = (index) => {
-    if (visibleJavaCodeIndex === index) {
-      setVisibleJavaCodeIndex(null);
-    } else {
-      setVisibleJavaCodeIndex(index);
-    }
+    setVisibleJavaCodeIndex(visibleJavaCodeIndex === index ? null : index);
   };
 
   const togglePythonCodeVisibility = (index) => {
-    if (visiblePythonCodeIndex === index) {
-      setVisiblePythonCodeIndex(null);
-    } else {
-      setVisiblePythonCodeIndex(index);
-    }
+    setVisiblePythonCodeIndex(visiblePythonCodeIndex === index ? null : index);
   };
 
   const codeExamples = [
@@ -954,102 +944,106 @@ function dynamic3() {
   ];
 
   return (
-    <div className="container mx-auto px-6 py-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-2xl max-w-7xl">
-      <h1 className="text-6xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-12">
-        Dynamic Programming (Sequences & LIS)
-      </h1>
-      {codeExamples.map((example, index) => (
-        <div
-          key={index}
-          className="mb-12 p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-102 duration-300 border border-indigo-100"
-        >
-          <h2 className="text-4xl font-bold text-indigo-800 mb-6">{example.title}</h2>
-          <p className="text-gray-700 mb-6 text-lg leading-relaxed">{example.description}</p>
-          <p className="text-gray-800 font-semibold mb-6">
-            <span className="text-indigo-700 font-bold">Complexity:</span> {example.complexity}
-          </p>
-          <div className="flex gap-4 mb-6">
-            <a
-              href={example.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105"
+    <div className={darkMode ? "dark" : ""}>
+      <div className={darkMode ? "bg-zinc-900 text-gray-300" : "bg-gray-50 text-black"}>
+        <div className="container mx-auto px-6 py-12 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl shadow-2xl max-w-7xl">
+          <h1 className="text-6xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-12">
+            Dynamic Programming (Sequences & LIS)
+          </h1>
+          {codeExamples.map((example, index) => (
+            <div
+              key={index}
+              className="mb-12 p-8 bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all transform hover:scale-102 duration-300 border border-indigo-100"
             >
-              View Problem
-            </a>
+              <h2 className="text-4xl font-bold text-indigo-800 mb-6">{example.title}</h2>
+              <p className="text-gray-700 mb-6 text-lg leading-relaxed">{example.description}</p>
+              <p className="text-gray-800 font-semibold mb-6">
+                <span className="text-indigo-700 font-bold">Complexity:</span> {example.complexity}
+              </p>
+              <div className="flex gap-4 mb-6">
+                <a
+                  href={example.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all transform hover:scale-105"
+                >
+                  View Problem
+                </a>
+              </div>
+              <div className="flex gap-4 mb-6">
+                <button
+                  onClick={() => toggleCodeVisibility(index)}
+                  className="inline-block bg-gradient-to-r from-pink-500 to-red-500 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all transform hover:scale-105"
+                >
+                  {visibleCodeIndex === index ? "Hide CPP Code" : "Show CPP Code"}
+                </button>
+                <button
+                  onClick={() => toggleJavaCodeVisibility(index)}
+                  className="inline-block bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-teal-600 transition-all transform hover:scale-105"
+                >
+                  {visibleJavaCodeIndex === index ? "Hide Java Code" : "Show Java Code"}
+                </button>
+                <button
+                  onClick={() => togglePythonCodeVisibility(index)}
+                  className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105"
+                >
+                  {visiblePythonCodeIndex === index ? "Hide Python Code" : "Show Python Code"}
+                </button>
+              </div>
+              {visibleCodeIndex === index && (
+                <div className="rounded-lg overflow-hidden border-2 border-indigo-100 mb-6">
+                  <SyntaxHighlighter
+                    language={example.language}
+                    style={tomorrow}
+                    customStyle={{
+                      padding: "1.5rem",
+                      fontSize: "0.95rem",
+                      background: "#f9f9f9",
+                      borderRadius: "0.5rem",
+                    }}
+                  >
+                    {example.cppcode}
+                  </SyntaxHighlighter>
+                </div>
+              )}
+              {visibleJavaCodeIndex === index && (
+                <div className="rounded-lg overflow-hidden border-2 border-green-100">
+                  <SyntaxHighlighter
+                    language={example.javaLanguage}
+                    style={tomorrow}
+                    customStyle={{
+                      padding: "1.5rem",
+                      fontSize: "0.95rem",
+                      background: "#f9f9f9",
+                      borderRadius: "0.5rem",
+                    }}
+                  >
+                    {example.javacode}
+                  </SyntaxHighlighter>
+                </div>
+              )}
+              {visiblePythonCodeIndex === index && (
+                <div className="rounded-lg overflow-hidden border-2 border-yellow-100">
+                  <SyntaxHighlighter
+                    language={example.pythonlanguage}
+                    style={tomorrow}
+                    customStyle={{
+                      padding: "1.5rem",
+                      fontSize: "0.95rem",
+                      background: "#f9f9f9",
+                      borderRadius: "0.5rem",
+                    }}
+                  >
+                    {example.pythoncode}
+                  </SyntaxHighlighter>
+                </div>
+              )}
             </div>
-            <div className="flex gap-4 mb-6">
-            <button
-              onClick={() => toggleCodeVisibility(index)}
-              className="inline-block bg-gradient-to-r from-pink-500 to-red-500 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-purple-600 transition-all transform hover:scale-105"
-            >
-              {visibleCodeIndex === index ? "Hide CPP Code" : "Show CPP Code"}
-            </button>
-            <button
-              onClick={() => toggleJavaCodeVisibility(index)}
-              className="inline-block bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-lg hover:from-green-600 hover:to-teal-600 transition-all transform hover:scale-105"
-            >
-              {visibleJavaCodeIndex === index ? "Hide Java Code" : "Show Java Code"}
-            </button>
-            <button
-              onClick={() => togglePythonCodeVisibility(index)}
-              className="inline-block bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all transform hover:scale-105"
-            >
-              {visiblePythonCodeIndex === index ? "Hide Python Code" : "Show Python Code"}
-            </button>
-          </div>
-          {visibleCodeIndex === index && (
-            <div className="rounded-lg overflow-hidden border-2 border-indigo-100 mb-6">
-              <SyntaxHighlighter
-                language={example.language}
-                style={tomorrow}
-                customStyle={{
-                  padding: "1.5rem",
-                  fontSize: "0.95rem",
-                  background: "#f9f9f9",
-                  borderRadius: "0.5rem",
-                }}
-              >
-                {example.cppcode}
-              </SyntaxHighlighter>
-            </div>
-          )}
-          {visibleJavaCodeIndex === index && (
-            <div className="rounded-lg overflow-hidden border-2 border-green-100">
-              <SyntaxHighlighter
-                language={example.javaLanguage}
-                style={tomorrow}
-                customStyle={{
-                  padding: "1.5rem",
-                  fontSize: "0.95rem",
-                  background: "#f9f9f9",
-                  borderRadius: "0.5rem",
-                }}
-              >
-                {example.javacode}
-              </SyntaxHighlighter>
-            </div>
-          )}
-          {visiblePythonCodeIndex === index && (
-            <div className="rounded-lg overflow-hidden border-2 border-yellow-100">
-              <SyntaxHighlighter
-                language={example.pythonlanguage}
-                style={tomorrow}
-                customStyle={{
-                  padding: "1.5rem",
-                  fontSize: "0.95rem",
-                  background: "#f9f9f9",
-                  borderRadius: "0.5rem",
-                }}
-              >
-                {example.pythoncode}
-              </SyntaxHighlighter>
-            </div>
-          )}
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 }
 
-export default dynamic3;
+export default Dynamic3;
