@@ -132,6 +132,12 @@ import RegularizationBasics from './components/ML3/RegularizationBasics.jsx'
 import RLGamingRobotics from './components/ML3/RLGamingRobotics.jsx'
 import SplittingData from './components/ML3/SplittingData.jsx'
 import TimeSeriesForecasting from './components/ML3/TimeSeriesForecasting.jsx'
+import CICD from './components/ML3/CICD.jsx'
+import CloudDeployment from './components/ML3/CloudDeployment.jsx'
+import DockerDeployment from './components/ML3/DockerDeployment.jsx'
+import FlaskFastAPI from './components/ML3/FlaskFastAPI.jsx'
+import RESTAPI from './components/ML3/RESTAPI.jsx'
+import SavingModels from './components/ML3/SavingModels.jsx'
 
 
 
@@ -269,6 +275,12 @@ const router = createBrowserRouter(
       <Route path='RLGamingRobotics' element={<RLGamingRobotics />} />
       <Route path='SplittingData' element={<SplittingData />} />
       <Route path='TimeSeriesForecasting' element={<TimeSeriesForecasting />} />
+      <Route path='CICD' element={<CICD />} />
+      <Route path='CloudDeployment' element={<CloudDeployment />} />
+      <Route path='DockerDeployment' element={<DockerDeployment />} />
+      <Route path='FlaskFastAPI' element={<FlaskFastAPI />} />
+      <Route path='RESTAPI' element={<RESTAPI />} />
+      <Route path='SavingModels' element={<SavingModels />} />
 
     </Route>     
   )
