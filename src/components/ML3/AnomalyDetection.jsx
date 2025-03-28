@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useTheme } from "../../ThemeContext.jsx";
 
 function AnomalyDetection() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -302,9 +304,12 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
       maxWidth: '1200px',
       margin: '0 auto',
       padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
+      background: darkMode 
+        ? 'linear-gradient(to bottom right, #1e293b, #0f172a)' 
+        : 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
       borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+      boxShadow: darkMode ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.1)',
+      color: darkMode ? '#e2e8f0' : '#1e293b'
     }}>
       <h1 style={{
         fontSize: '3.5rem',
@@ -320,7 +325,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
       </h1>
 
       <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
+        backgroundColor: darkMode ? 'rgba(14, 165, 233, 0.2)' : 'rgba(14, 165, 233, 0.1)',
         padding: '2rem',
         borderRadius: '12px',
         marginBottom: '3rem',
@@ -333,7 +338,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
           marginBottom: '1rem'
         }}>Unsupervised Learning → Anomaly Detection</h2>
         <p style={{
-          color: '#374151',
+          color: darkMode ? '#e2e8f0' : '#374151',
           fontSize: '1.1rem',
           lineHeight: '1.6'
         }}>
@@ -349,13 +354,13 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
           style={{
             marginBottom: '3rem',
             padding: '2rem',
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+            boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
             transition: 'all 0.3s ease',
-            border: '1px solid #bae6fd',
+            border: darkMode ? '1px solid #334155' : '1px solid #bae6fd',
             ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+              boxShadow: darkMode ? '0 8px 25px rgba(0,0,0,0.4)' : '0 8px 25px rgba(0,0,0,0.1)',
               transform: 'translateY(-2px)'
             }
           }}
@@ -395,7 +400,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
           {visibleSection === section.id && (
             <div style={{ display: 'grid', gap: '2rem' }}>
               <div style={{
-                backgroundColor: '#e0f2fe',
+                backgroundColor: darkMode ? '#1e3a8a' : '#e0f2fe',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -406,7 +411,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                   marginBottom: '1rem'
                 }}>Core Concepts</h3>
                 <p style={{
-                  color: '#374151',
+                  color: darkMode ? '#e2e8f0' : '#374151',
                   fontSize: '1.1rem',
                   lineHeight: '1.6',
                   marginBottom: '1rem'
@@ -421,7 +426,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                 }}>
                   {section.keyPoints.map((point, index) => (
                     <li key={index} style={{
-                      color: '#374151',
+                      color: darkMode ? '#e2e8f0' : '#374151',
                       fontSize: '1.1rem'
                     }}>{point}</li>
                   ))}
@@ -429,7 +434,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
               </div>
 
               <div style={{
-                backgroundColor: '#ecfdf5',
+                backgroundColor: darkMode ? '#064e3b' : '#ecfdf5',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -442,7 +447,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                 <div style={{ display: 'grid', gap: '1rem' }}>
                   {section.detailedExplanation.map((paragraph, index) => (
                     <p key={index} style={{
-                      color: '#374151',
+                      color: darkMode ? '#e2e8f0' : '#374151',
                       fontSize: '1.1rem',
                       lineHeight: '1.6',
                       margin: paragraph === '' ? '0.5rem 0' : '0'
@@ -454,7 +459,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
               </div>
 
               <div style={{
-                backgroundColor: '#f0f9ff',
+                backgroundColor: darkMode ? '#164e63' : '#f0f9ff',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -465,7 +470,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                   marginBottom: '1rem'
                 }}>Implementation Example</h3>
                 <p style={{
-                  color: '#374151',
+                  color: darkMode ? '#e2e8f0' : '#374151',
                   fontWeight: '600',
                   marginBottom: '1rem',
                   fontSize: '1.1rem'
@@ -473,7 +478,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                 <div style={{
                   borderRadius: '8px',
                   overflow: 'hidden',
-                  border: '2px solid #7dd3fc'
+                  border: darkMode ? '2px solid #0c4a6e' : '2px solid #7dd3fc'
                 }}>
                   <SyntaxHighlighter
                     language="python"
@@ -481,7 +486,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                     customStyle={{
                       padding: "1.5rem",
                       fontSize: "0.95rem",
-                      background: "#f9f9f9",
+                      background: darkMode ? "#1e293b" : "#f9f9f9",
                       borderRadius: "0.5rem",
                     }}
                   >
@@ -498,10 +503,10 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
       <div style={{
         marginTop: '3rem',
         padding: '2rem',
-        backgroundColor: 'white',
+        backgroundColor: darkMode ? '#1e293b' : 'white',
         borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
+        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+        border: darkMode ? '1px solid #334155' : '1px solid #bae6fd'
       }}>
         <h2 style={{
           fontSize: '2rem',
@@ -534,13 +539,15 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
                 ["Statistical Methods", "Simple, interpretable", "Strong distribution assumptions", "Low-dimensional data, quick baselines"]
               ].map((row, index) => (
                 <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0f9ff' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
+                  backgroundColor: index % 2 === 0 
+                    ? (darkMode ? '#334155' : '#f0f9ff') 
+                    : (darkMode ? '#1e293b' : 'white'),
+                  borderBottom: darkMode ? '1px solid #334155' : '1px solid #e2e8f0'
                 }}>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} style={{
                       padding: '1rem',
-                      color: '#334155'
+                      color: darkMode ? '#e2e8f0' : '#334155'
                     }}>
                       {cell}
                     </td>
@@ -556,10 +563,10 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
       <div style={{
         marginTop: '3rem',
         padding: '2rem',
-        backgroundColor: '#ecfdf5',
+        backgroundColor: darkMode ? '#1e3a8a' : '#ecfdf5',
         borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #a7f3d0'
+        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+        border: darkMode ? '1px solid #1e40af' : '1px solid #a7f3d0'
       }}>
         <h3 style={{
           fontSize: '1.8rem',
@@ -569,10 +576,10 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
         }}>Practical Guidance</h3>
         <div style={{ display: 'grid', gap: '1.5rem' }}>
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -586,26 +593,26 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
               display: 'grid',
               gap: '0.75rem'
             }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ color: darkMode ? '#e2e8f0' : '#374151', fontSize: '1.1rem' }}>
                 For high-dimensional data: Isolation Forest or One-Class SVM
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ color: darkMode ? '#e2e8f0' : '#374151', fontSize: '1.1rem' }}>
                 For clustered data: Local Outlier Factor
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ color: darkMode ? '#e2e8f0' : '#374151', fontSize: '1.1rem' }}>
                 For interpretability: Statistical methods
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ color: darkMode ? '#e2e8f0' : '#374151', fontSize: '1.1rem' }}>
                 For large datasets: Isolation Forest
               </li>
             </ul>
           </div>
           
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -614,7 +621,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
               marginBottom: '0.75rem'
             }}>Implementation Tips</h4>
             <p style={{
-              color: '#374151',
+              color: darkMode ? '#e2e8f0' : '#374151',
               fontSize: '1.1rem',
               lineHeight: '1.6'
             }}>
@@ -626,10 +633,10 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
           </div>
 
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -638,7 +645,7 @@ maha_outliers = np.where(mahalanobis_dist > maha_threshold)`,
               marginBottom: '0.75rem'
             }}>Advanced Applications</h4>
             <p style={{
-              color: '#374151',
+              color: darkMode ? '#e2e8f0' : '#374151',
               fontSize: '1.1rem',
               lineHeight: '1.6'
             }}>

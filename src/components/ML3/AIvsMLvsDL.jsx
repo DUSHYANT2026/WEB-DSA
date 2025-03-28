@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useTheme } from "../../ThemeContext.jsx";
 
 function AIvsMLvsDL() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -237,9 +239,12 @@ class CNN(nn.Module):
       maxWidth: '1200px',
       margin: '0 auto',
       padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #f0fdf4)',
+      background: darkMode 
+        ? 'linear-gradient(to bottom right, #1e293b, #0f172a)' 
+        : 'linear-gradient(to bottom right, #f0f9ff, #f0fdf4)',
       borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+      boxShadow: darkMode ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.1)',
+      color: darkMode ? '#e2e8f0' : '#1e293b'
     }}>
       <h1 style={{
         fontSize: '3.5rem',
@@ -255,7 +260,7 @@ class CNN(nn.Module):
       </h1>
 
       <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
+        backgroundColor: darkMode ? 'rgba(14, 165, 233, 0.2)' : 'rgba(14, 165, 233, 0.1)',
         padding: '2rem',
         borderRadius: '12px',
         marginBottom: '3rem',
@@ -268,7 +273,7 @@ class CNN(nn.Module):
           marginBottom: '1rem'
         }}>Introduction to Machine Learning → Differences</h2>
         <p style={{
-          color: '#374151',
+          color: darkMode ? '#e2e8f0' : '#374151',
           fontSize: '1.1rem',
           lineHeight: '1.6'
         }}>
@@ -284,13 +289,13 @@ class CNN(nn.Module):
           style={{
             marginBottom: '3rem',
             padding: '2rem',
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+            boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
             transition: 'all 0.3s ease',
-            border: '1px solid #e0f2fe',
+            border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe',
             ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
+              boxShadow: darkMode ? '0 8px 25px rgba(0,0,0,0.4)' : '0 8px 25px rgba(0,0,0,0.1)',
               transform: 'translateY(-2px)'
             }
           }}
@@ -330,7 +335,7 @@ class CNN(nn.Module):
           {visibleSection === section.id && (
             <div style={{ display: 'grid', gap: '2rem' }}>
               <div style={{
-                backgroundColor: '#ecfdf5',
+                backgroundColor: darkMode ? '#1e3a8a' : '#ecfdf5',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -341,7 +346,7 @@ class CNN(nn.Module):
                   marginBottom: '1rem'
                 }}>Core Concepts</h3>
                 <p style={{
-                  color: '#374151',
+                  color: darkMode ? '#e2e8f0' : '#374151',
                   fontSize: '1.1rem',
                   lineHeight: '1.6',
                   marginBottom: '1rem'
@@ -356,7 +361,7 @@ class CNN(nn.Module):
                 }}>
                   {section.keyPoints.map((point, index) => (
                     <li key={index} style={{
-                      color: '#374151',
+                      color: darkMode ? '#e2e8f0' : '#374151',
                       fontSize: '1.1rem'
                     }}>{point}</li>
                   ))}
@@ -364,7 +369,7 @@ class CNN(nn.Module):
               </div>
 
               <div style={{
-                backgroundColor: '#ecfeff',
+                backgroundColor: darkMode ? '#164e63' : '#ecfeff',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -377,7 +382,7 @@ class CNN(nn.Module):
                 <div style={{ display: 'grid', gap: '1rem' }}>
                   {section.detailedExplanation.map((paragraph, index) => (
                     <p key={index} style={{
-                      color: '#374151',
+                      color: darkMode ? '#e2e8f0' : '#374151',
                       fontSize: '1.1rem',
                       lineHeight: '1.6',
                       margin: paragraph === '' ? '0.5rem 0' : '0'
@@ -389,7 +394,7 @@ class CNN(nn.Module):
               </div>
 
               <div style={{
-                backgroundColor: '#f0fdfa',
+                backgroundColor: darkMode ? '#064e3b' : '#f0fdfa',
                 padding: '1.5rem',
                 borderRadius: '12px'
               }}>
@@ -400,7 +405,7 @@ class CNN(nn.Module):
                   marginBottom: '1rem'
                 }}>Implementation Example</h3>
                 <p style={{
-                  color: '#374151',
+                  color: darkMode ? '#e2e8f0' : '#374151',
                   fontWeight: '600',
                   marginBottom: '1rem',
                   fontSize: '1.1rem'
@@ -408,7 +413,7 @@ class CNN(nn.Module):
                 <div style={{
                   borderRadius: '8px',
                   overflow: 'hidden',
-                  border: '2px solid #a5f3fc'
+                  border: darkMode ? '2px solid #0c4a6e' : '2px solid #a5f3fc'
                 }}>
                   <SyntaxHighlighter
                     language="python"
@@ -416,7 +421,7 @@ class CNN(nn.Module):
                     customStyle={{
                       padding: "1.5rem",
                       fontSize: "0.95rem",
-                      background: "#f9f9f9",
+                      background: darkMode ? "#1e293b" : "#f9f9f9",
                       borderRadius: "0.5rem",
                     }}
                   >
@@ -433,10 +438,10 @@ class CNN(nn.Module):
       <div style={{
         marginTop: '3rem',
         padding: '2rem',
-        backgroundColor: 'white',
+        backgroundColor: darkMode ? '#1e293b' : 'white',
         borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #e0f2fe'
+        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+        border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe'
       }}>
         <h2 style={{
           fontSize: '2rem',
@@ -491,7 +496,7 @@ class CNN(nn.Module):
           </div>
         </div>
         <p style={{
-          color: '#374151',
+          color: darkMode ? '#e2e8f0' : '#374151',
           fontSize: '1.1rem',
           textAlign: 'center',
           marginTop: '2rem',
@@ -506,10 +511,10 @@ class CNN(nn.Module):
       <div style={{
         marginTop: '3rem',
         padding: '2rem',
-        backgroundColor: 'white',
+        backgroundColor: darkMode ? '#1e293b' : 'white',
         borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #e0f2fe'
+        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+        border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe'
       }}>
         <h2 style={{
           fontSize: '2rem',
@@ -544,13 +549,15 @@ class CNN(nn.Module):
                 ["Example Systems", "Expert systems, Chatbots", "Spam filters, Recommendation engines", "Self-driving cars, GPT models"]
               ].map((row, index) => (
                 <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0fdf4' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
+                  backgroundColor: index % 2 === 0 
+                    ? (darkMode ? '#334155' : '#f0fdf4') 
+                    : (darkMode ? '#1e293b' : 'white'),
+                  borderBottom: darkMode ? '1px solid #334155' : '1px solid #e2e8f0'
                 }}>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex} style={{
                       padding: '1rem',
-                      color: '#334155'
+                      color: darkMode ? '#e2e8f0' : '#334155'
                     }}>
                       {cell}
                     </td>
@@ -566,10 +573,10 @@ class CNN(nn.Module):
       <div style={{
         marginTop: '3rem',
         padding: '2rem',
-        backgroundColor: '#ecfdf5',
+        backgroundColor: darkMode ? '#1e3a8a' : '#ecfdf5',
         borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #d1fae5'
+        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+        border: darkMode ? '1px solid #1e40af' : '1px solid #d1fae5'
       }}>
         <h3 style={{
           fontSize: '1.8rem',
@@ -579,10 +586,10 @@ class CNN(nn.Module):
         }}>Practical Implications</h3>
         <div style={{ display: 'grid', gap: '1.5rem' }}>
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -596,26 +603,38 @@ class CNN(nn.Module):
               display: 'grid',
               gap: '0.75rem'
             }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ 
+                color: darkMode ? '#e2e8f0' : '#374151', 
+                fontSize: '1.1rem' 
+              }}>
                 <strong>AI:</strong> When explicit rules can solve the problem
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ 
+                color: darkMode ? '#e2e8f0' : '#374151', 
+                fontSize: '1.1rem' 
+              }}>
                 <strong>ML:</strong> When patterns exist in structured data
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ 
+                color: darkMode ? '#e2e8f0' : '#374151', 
+                fontSize: '1.1rem' 
+              }}>
                 <strong>DL:</strong> When dealing with unstructured data or complex patterns
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li style={{ 
+                color: darkMode ? '#e2e8f0' : '#374151', 
+                fontSize: '1.1rem' 
+              }}>
                 <strong>Hybrid:</strong> Often combine approaches for best results
               </li>
             </ul>
           </div>
           
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -635,7 +654,7 @@ class CNN(nn.Module):
                 ["2020s", "Large Language Models"]
               ].map(([era, description], index) => (
                 <div key={index} style={{
-                  backgroundColor: '#f0fdf4',
+                  backgroundColor: darkMode ? '#334155' : '#f0fdf4',
                   padding: '1rem',
                   borderRadius: '8px',
                   borderLeft: '4px solid #10b981'
@@ -645,17 +664,19 @@ class CNN(nn.Module):
                     color: '#059669',
                     marginBottom: '0.5rem'
                   }}>{era}</div>
-                  <div style={{ color: '#374151' }}>{description}</div>
+                  <div style={{ 
+                    color: darkMode ? '#e2e8f0' : '#374151' 
+                  }}>{description}</div>
                 </div>
               ))}
             </div>
           </div>
 
           <div style={{
-            backgroundColor: 'white',
+            backgroundColor: darkMode ? '#1e293b' : 'white',
             padding: '1.5rem',
             borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
           }}>
             <h4 style={{
               fontSize: '1.3rem',
@@ -664,7 +685,7 @@ class CNN(nn.Module):
               marginBottom: '0.75rem'
             }}>Application Spectrum</h4>
             <p style={{
-              color: '#374151',
+              color: darkMode ? '#e2e8f0' : '#374151',
               fontSize: '1.1rem',
               lineHeight: '1.6'
             }}>

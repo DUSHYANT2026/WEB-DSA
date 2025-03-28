@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { useTheme } from "../../ThemeContext.jsx";
 
 function LinearAlgebra() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
 
   const toggleSection = (section) => {
@@ -267,9 +269,14 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         maxWidth: "1200px",
         margin: "0 auto",
         padding: "2rem",
-        background: "linear-gradient(to bottom right, #f0f4ff, #f9f0ff)",
+        background: darkMode
+          ? "linear-gradient(to bottom right, #1e1b4b, #1e1b4b)"
+          : "linear-gradient(to bottom right, #f0f4ff, #f9f0ff)",
         borderRadius: "20px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+        boxShadow: darkMode
+          ? "0 10px 30px rgba(0,0,0,0.3)"
+          : "0 10px 30px rgba(0,0,0,0.1)",
+        color: darkMode ? "#e2e8f0" : "#1e293b",
       }}
     >
       <h1
@@ -289,7 +296,9 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
       <div
         style={{
-          backgroundColor: "rgba(79, 70, 229, 0.1)",
+          backgroundColor: darkMode
+            ? "rgba(79, 70, 229, 0.2)"
+            : "rgba(79, 70, 229, 0.1)",
           padding: "2rem",
           borderRadius: "12px",
           marginBottom: "3rem",
@@ -308,7 +317,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         </h2>
         <p
           style={{
-            color: "#374151",
+            color: darkMode ? "#e2e8f0" : "#374151",
             fontSize: "1.1rem",
             lineHeight: "1.6",
           }}
@@ -326,13 +335,17 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
           style={{
             marginBottom: "3rem",
             padding: "2rem",
-            backgroundColor: "white",
+            backgroundColor: darkMode ? "#1e293b" : "white",
             borderRadius: "16px",
-            boxShadow: "0 5px 15px rgba(0,0,0,0.05)",
+            boxShadow: darkMode
+              ? "0 5px 15px rgba(0,0,0,0.3)"
+              : "0 5px 15px rgba(0,0,0,0.05)",
             transition: "all 0.3s ease",
-            border: "1px solid #e0e7ff",
+            border: darkMode ? "1px solid #334155" : "1px solid #e0e7ff",
             ":hover": {
-              boxShadow: "0 8px 25px rgba(0,0,0,0.1)",
+              boxShadow: darkMode
+                ? "0 8px 25px rgba(0,0,0,0.4)"
+                : "0 8px 25px rgba(0,0,0,0.1)",
               transform: "translateY(-2px)",
             },
           }}
@@ -381,7 +394,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
             <div style={{ display: "grid", gap: "2rem" }}>
               <div
                 style={{
-                  backgroundColor: "#f0f9ff",
+                  backgroundColor: darkMode ? "#1e3a8a" : "#f0f9ff",
                   padding: "1.5rem",
                   borderRadius: "12px",
                 }}
@@ -398,7 +411,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                 </h3>
                 <p
                   style={{
-                    color: "#374151",
+                    color: darkMode ? "#e2e8f0" : "#374151",
                     fontSize: "1.1rem",
                     lineHeight: "1.6",
                     marginBottom: "1rem",
@@ -418,7 +431,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                     <li
                       key={index}
                       style={{
-                        color: "#374151",
+                        color: darkMode ? "#e2e8f0" : "#374151",
                         fontSize: "1.1rem",
                       }}
                     >
@@ -430,7 +443,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
               <div
                 style={{
-                  backgroundColor: "#f0fdf4",
+                  backgroundColor: darkMode ? "#064e3b" : "#f0fdf4",
                   padding: "1.5rem",
                   borderRadius: "12px",
                 }}
@@ -450,7 +463,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                     <p
                       key={index}
                       style={{
-                        color: "#374151",
+                        color: darkMode ? "#e2e8f0" : "#374151",
                         fontSize: "1.1rem",
                         lineHeight: "1.6",
                         margin: paragraph === "" ? "0.5rem 0" : "0",
@@ -464,7 +477,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
               <div
                 style={{
-                  backgroundColor: "#f5f3ff",
+                  backgroundColor: darkMode ? "#4c1d95" : "#f5f3ff",
                   padding: "1.5rem",
                   borderRadius: "12px",
                 }}
@@ -481,7 +494,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                 </h3>
                 <p
                   style={{
-                    color: "#374151",
+                    color: darkMode ? "#e2e8f0" : "#374151",
                     fontWeight: "600",
                     marginBottom: "1rem",
                     fontSize: "1.1rem",
@@ -493,7 +506,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                   style={{
                     borderRadius: "8px",
                     overflow: "hidden",
-                    border: "2px solid #e9d5ff",
+                    border: darkMode ? "2px solid #5b21b6" : "2px solid #e9d5ff",
                   }}
                 >
                   <SyntaxHighlighter
@@ -502,7 +515,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                     customStyle={{
                       padding: "1.5rem",
                       fontSize: "0.95rem",
-                      background: "#f9f9f9",
+                      background: darkMode ? "#1e293b" : "#f9f9f9",
                       borderRadius: "0.5rem",
                     }}
                   >
@@ -520,10 +533,12 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         style={{
           marginTop: "3rem",
           padding: "2rem",
-          backgroundColor: "white",
+          backgroundColor: darkMode ? "#1e293b" : "white",
           borderRadius: "16px",
-          boxShadow: "0 5px 15px rgba(0,0,0,0.05)",
-          border: "1px solid #e0e7ff",
+          boxShadow: darkMode
+            ? "0 5px 15px rgba(0,0,0,0.3)"
+            : "0 5px 15px rgba(0,0,0,0.05)",
+          border: darkMode ? "1px solid #334155" : "1px solid #e0e7ff",
         }}
       >
         <h2
@@ -619,8 +634,17 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                 <tr
                   key={index}
                   style={{
-                    backgroundColor: index % 2 === 0 ? "#f8fafc" : "white",
-                    borderBottom: "1px solid #e2e8f0",
+                    backgroundColor:
+                      index % 2 === 0
+                        ? darkMode
+                          ? "#334155"
+                          : "#f8fafc"
+                        : darkMode
+                        ? "#1e293b"
+                        : "white",
+                    borderBottom: darkMode
+                      ? "1px solid #334155"
+                      : "1px solid #e2e8f0",
                   }}
                 >
                   {row.map((cell, cellIndex) => (
@@ -628,7 +652,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                       key={cellIndex}
                       style={{
                         padding: "1rem",
-                        color: "#334155",
+                        color: darkMode ? "#e2e8f0" : "#334155",
                       }}
                     >
                       {cell}
@@ -646,10 +670,12 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         style={{
           marginTop: "3rem",
           padding: "2rem",
-          backgroundColor: "#fff7ed",
+          backgroundColor: darkMode ? "#1e3a8a" : "#fff7ed",
           borderRadius: "16px",
-          boxShadow: "0 5px 15px rgba(0,0,0,0.05)",
-          border: "1px solid #ffedd5",
+          boxShadow: darkMode
+            ? "0 5px 15px rgba(0,0,0,0.3)"
+            : "0 5px 15px rgba(0,0,0,0.05)",
+          border: darkMode ? "1px solid #1e40af" : "1px solid #ffedd5",
         }}
       >
         <h3
@@ -665,10 +691,12 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         <div style={{ display: "grid", gap: "1.5rem" }}>
           <div
             style={{
-              backgroundColor: "white",
+              backgroundColor: darkMode ? "#1e293b" : "white",
               padding: "1.5rem",
               borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              boxShadow: darkMode
+                ? "0 2px 8px rgba(0,0,0,0.3)"
+                : "0 2px 8px rgba(0,0,0,0.05)",
             }}
           >
             <h4
@@ -689,16 +717,36 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                 gap: "0.75rem",
               }}
             >
-              <li style={{ color: "#374151", fontSize: "1.1rem" }}>
+              <li
+                style={{
+                  color: darkMode ? "#e2e8f0" : "#374151",
+                  fontSize: "1.1rem",
+                }}
+              >
                 Vector/matrix operations form the backbone of neural networks
               </li>
-              <li style={{ color: "#374151", fontSize: "1.1rem" }}>
+              <li
+                style={{
+                  color: darkMode ? "#e2e8f0" : "#374151",
+                  fontSize: "1.1rem",
+                }}
+              >
                 Eigendecomposition powers dimensionality reduction techniques
               </li>
-              <li style={{ color: "#374151", fontSize: "1.1rem" }}>
+              <li
+                style={{
+                  color: darkMode ? "#e2e8f0" : "#374151",
+                  fontSize: "1.1rem",
+                }}
+              >
                 SVD enables efficient matrix approximations in large systems
               </li>
-              <li style={{ color: "#374151", fontSize: "1.1rem" }}>
+              <li
+                style={{
+                  color: darkMode ? "#e2e8f0" : "#374151",
+                  fontSize: "1.1rem",
+                }}
+              >
                 Understanding these concepts helps debug and optimize models
               </li>
             </ul>
@@ -706,10 +754,12 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
           <div
             style={{
-              backgroundColor: "white",
+              backgroundColor: darkMode ? "#1e293b" : "white",
               padding: "1.5rem",
               borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              boxShadow: darkMode
+                ? "0 2px 8px rgba(0,0,0,0.3)"
+                : "0 2px 8px rgba(0,0,0,0.05)",
             }}
           >
             <h4
@@ -724,7 +774,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
             </h4>
             <p
               style={{
-                color: "#374151",
+                color: darkMode ? "#e2e8f0" : "#374151",
                 fontSize: "1.1rem",
                 lineHeight: "1.6",
               }}
@@ -747,10 +797,12 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
           <div
             style={{
-              backgroundColor: "white",
+              backgroundColor: darkMode ? "#1e293b" : "white",
               padding: "1.5rem",
               borderRadius: "12px",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+              boxShadow: darkMode
+                ? "0 2px 8px rgba(0,0,0,0.3)"
+                : "0 2px 8px rgba(0,0,0,0.05)",
             }}
           >
             <h4
@@ -765,7 +817,7 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
             </h4>
             <p
               style={{
-                color: "#374151",
+                color: darkMode ? "#e2e8f0" : "#374151",
                 fontSize: "1.1rem",
                 lineHeight: "1.6",
               }}
@@ -788,4 +840,4 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
   );
 }
 
-export default LinearAlgebra;
+export default LinearAlgebra;   
