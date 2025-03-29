@@ -1,14 +1,61 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
 import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-yellow-100 dark:border-yellow-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 dark:from-yellow-600 dark:to-orange-600 dark:hover:from-yellow-700 dark:hover:to-orange-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-yellow-500 dark:focus:ring-yellow-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function LinearAlgebra() {
   const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
+  const formatDescription = (desc) => {
+    return desc.split("\n").map((paragraph, i) => (
+      <p
+        key={i}
+        className="mb-4 whitespace-pre-line dark:text-gray-300 text-gray-800"
+      >
+        {paragraph}
+      </p>
+    ));
   };
 
   const content = [
@@ -265,63 +312,31 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
   return (
     <div
-      style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
-        padding: "2rem",
-        background: darkMode
-          ? "linear-gradient(to bottom right, #1e1b4b, #1e1b4b)"
-          : "linear-gradient(to bottom right, #f0f4ff, #f9f0ff)",
-        borderRadius: "20px",
-        boxShadow: darkMode
-          ? "0 10px 30px rgba(0,0,0,0.3)"
-          : "0 10px 30px rgba(0,0,0,0.1)",
-        color: darkMode ? "#e2e8f0" : "#1e293b",
-      }}
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-indigo-50 to-purple-50"
+      }`}
     >
       <h1
-        style={{
-          fontSize: "3.5rem",
-          fontWeight: "800",
-          textAlign: "center",
-          background: "linear-gradient(to right, #4f46e5, #7c3aed)",
-          WebkitBackgroundClip: "text",
-          backgroundClip: "text",
-          color: "transparent",
-          marginBottom: "3rem",
-        }}
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-indigo-400 to-purple-400"
+            : "bg-gradient-to-r from-indigo-600 to-purple-600"
+        } mb-8 sm:mb-12`}
       >
         Linear Algebra for Machine Learning
       </h1>
 
       <div
-        style={{
-          backgroundColor: darkMode
-            ? "rgba(79, 70, 229, 0.2)"
-            : "rgba(79, 70, 229, 0.1)",
-          padding: "2rem",
-          borderRadius: "12px",
-          marginBottom: "3rem",
-          borderLeft: "4px solid #4f46e5",
-        }}
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-indigo-900/20" : "bg-indigo-100"
+        } border-l-4 border-indigo-500`}
       >
-        <h2
-          style={{
-            fontSize: "1.8rem",
-            fontWeight: "700",
-            color: "#4f46e5",
-            marginBottom: "1rem",
-          }}
-        >
+        <h2 className="text-2xl font-bold mb-4 dark:text-indigo-500 text-indigo-800">
           Mathematics for ML → Linear Algebra
         </h2>
-        <p
-          style={{
-            color: darkMode ? "#e2e8f0" : "#374151",
-            fontSize: "1.1rem",
-            lineHeight: "1.6",
-          }}
-        >
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
           Linear algebra forms the mathematical foundation for machine learning
           algorithms. This section covers the essential concepts with direct
           applications to ML models, including vector/matrix operations,
@@ -329,305 +344,149 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: "3rem",
-            padding: "2rem",
-            backgroundColor: darkMode ? "#1e293b" : "white",
-            borderRadius: "16px",
-            boxShadow: darkMode
-              ? "0 5px 15px rgba(0,0,0,0.3)"
-              : "0 5px 15px rgba(0,0,0,0.05)",
-            transition: "all 0.3s ease",
-            border: darkMode ? "1px solid #334155" : "1px solid #e0e7ff",
-            ":hover": {
-              boxShadow: darkMode
-                ? "0 8px 25px rgba(0,0,0,0.4)"
-                : "0 8px 25px rgba(0,0,0,0.1)",
-              transform: "translateY(-2px)",
-            },
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1.5rem",
-              cursor: "pointer",
-            }}
-            onClick={() => toggleSection(section.id)}
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-indigo-100"
+            }`}
           >
-            <h2
-              style={{
-                fontSize: "2rem",
-                fontWeight: "700",
-                color: "#4f46e5",
-              }}
-            >
-              {section.title}
-            </h2>
-            <div
-              style={{
-                width: "36px",
-                height: "36px",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: darkMode
-                  ? "rgba(79, 70, 229, 0.2)"
-                  : "rgba(79, 70, 229, 0.1)",
-                transition: "all 0.3s ease",
-                transform:
-                  visibleSection === section.id
-                    ? "rotate(180deg)"
-                    : "rotate(0deg)",
-                ":hover": {
-                  transform:
-                    visibleSection === section.id
-                      ? "rotate(180deg) scale(1.1)"
-                      : "rotate(0deg) scale(1.1)",
-                  backgroundColor: darkMode
-                    ? "rgba(79, 70, 229, 0.3)"
-                    : "rgba(79, 70, 229, 0.2)",
-                },
-              }}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
               >
-                <path
-                  d="M6 9L12 15L18 9"
-                  stroke={darkMode ? "#e2e8f0" : "#4f46e5"}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </div>
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-indigo-300" : "text-indigo-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-indigo-600 dark:text-indigo-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: "grid", gap: "2rem" }}>
-              <div
-                style={{
-                  backgroundColor: darkMode ? "#1e3a8a" : "#f0f9ff",
-                  padding: "1.5rem",
-                  borderRadius: "12px",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "600",
-                    color: "#4f46e5",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  Core Concepts
-                </h3>
-                <p
-                  style={{
-                    color: darkMode ? "#e2e8f0" : "#374151",
-                    fontSize: "1.1rem",
-                    lineHeight: "1.6",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  {section.description}
-                </p>
-                <ul
-                  style={{
-                    listStyleType: "disc",
-                    paddingLeft: "1.5rem",
-                    display: "grid",
-                    gap: "0.5rem",
-                  }}
-                >
-                  {section.keyPoints.map((point, index) => (
-                    <li
-                      key={index}
-                      style={{
-                        color: darkMode ? "#e2e8f0" : "#374151",
-                        fontSize: "1.1rem",
-                      }}
-                    >
-                      {point}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: darkMode ? "#064e3b" : "#f0fdf4",
-                  padding: "1.5rem",
-                  borderRadius: "12px",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "600",
-                    color: "#4f46e5",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  Technical Deep Dive
-                </h3>
-                <div style={{ display: "grid", gap: "1rem" }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p
-                      key={index}
-                      style={{
-                        color: darkMode ? "#e2e8f0" : "#374151",
-                        fontSize: "1.1rem",
-                        lineHeight: "1.6",
-                        margin: paragraph === "" ? "0.5rem 0" : "0",
-                      }}
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: darkMode ? "#4c1d95" : "#f5f3ff",
-                  padding: "1.5rem",
-                  borderRadius: "12px",
-                }}
-              >
-                <h3
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "600",
-                    color: "#4f46e5",
-                    marginBottom: "1rem",
-                  }}
-                >
-                  ML Implementation
-                </h3>
-                <p
-                  style={{
-                    color: darkMode ? "#e2e8f0" : "#374151",
-                    fontWeight: "600",
-                    marginBottom: "1rem",
-                    fontSize: "1.1rem",
-                  }}
-                >
-                  {section.code.complexity}
-                </p>
-                <div
-                  style={{
-                    borderRadius: "8px",
-                    overflow: "hidden",
-                    border: darkMode
-                      ? "2px solid #5b21b6"
-                      : "2px solid #e9d5ff",
-                  }}
-                >
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: darkMode ? "#1e293b" : "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Deep Dive
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      ML Implementation
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Comparison Table */}
       <div
-        style={{
-          marginTop: "3rem",
-          padding: "2rem",
-          backgroundColor: darkMode ? "#1e293b" : "white",
-          borderRadius: "16px",
-          boxShadow: darkMode
-            ? "0 5px 15px rgba(0,0,0,0.3)"
-            : "0 5px 15px rgba(0,0,0,0.05)",
-          border: darkMode ? "1px solid #334155" : "1px solid #e0e7ff",
-        }}
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
       >
         <h2
-          style={{
-            fontSize: "2rem",
-            fontWeight: "700",
-            color: "#4f46e5",
-            marginBottom: "2rem",
-          }}
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-indigo-300" : "text-indigo-800"
+          }`}
         >
           Linear Algebra in ML: Key Concepts
         </h2>
-        <div style={{ overflowX: "auto" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              textAlign: "left",
-            }}
-          >
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
             <thead
-              style={{
-                backgroundColor: "#4f46e5",
-                color: "white",
-              }}
+              className={`${
+                darkMode ? "bg-indigo-900" : "bg-indigo-600"
+              } text-white`}
             >
               <tr>
-                <th
-                  style={{
-                    padding: "1rem",
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  Concept
-                </th>
-                <th
-                  style={{
-                    padding: "1rem",
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  ML Application
-                </th>
-                <th
-                  style={{
-                    padding: "1rem",
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  Example Use Case
-                </th>
-                <th
-                  style={{
-                    padding: "1rem",
-                    fontSize: "1.1rem",
-                    fontWeight: "600",
-                  }}
-                >
-                  Key Libraries
-                </th>
+                <th className="p-4 text-left">Concept</th>
+                <th className="p-4 text-left">ML Application</th>
+                <th className="p-4 text-left">Example Use Case</th>
+                <th className="p-4 text-left">Key Libraries</th>
               </tr>
             </thead>
             <tbody>
@@ -659,27 +518,24 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
               ].map((row, index) => (
                 <tr
                   key={index}
-                  style={{
-                    backgroundColor:
-                      index % 2 === 0
-                        ? darkMode
-                          ? "#334155"
-                          : "#f8fafc"
-                        : darkMode
-                        ? "#1e293b"
-                        : "white",
-                    borderBottom: darkMode
-                      ? "1px solid #334155"
-                      : "1px solid #e2e8f0",
-                  }}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
                 >
                   {row.map((cell, cellIndex) => (
                     <td
                       key={cellIndex}
-                      style={{
-                        padding: "1rem",
-                        color: darkMode ? "#e2e8f0" : "#334155",
-                      }}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
                     >
                       {cell}
                     </td>
@@ -693,118 +549,59 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
 
       {/* Key Takeaways */}
       <div
-        style={{
-          marginTop: "3rem",
-          padding: "2rem",
-          backgroundColor: darkMode ? "#1e3a8a" : "#fff7ed",
-          borderRadius: "16px",
-          boxShadow: darkMode
-            ? "0 5px 15px rgba(0,0,0,0.3)"
-            : "0 5px 15px rgba(0,0,0,0.05)",
-          border: darkMode ? "1px solid #1e40af" : "1px solid #ffedd5",
-        }}
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-blue-900/30" : "bg-orange-50"
+        }`}
       >
         <h3
-          style={{
-            fontSize: "1.8rem",
-            fontWeight: "700",
-            color: "#4f46e5",
-            marginBottom: "1.5rem",
-          }}
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-indigo-300" : "text-indigo-800"
+          }`}
         >
           ML Practitioner's Perspective
         </h3>
-        <div style={{ display: "grid", gap: "1.5rem" }}>
+        <div className="grid gap-6">
           <div
-            style={{
-              backgroundColor: darkMode ? "#1e293b" : "white",
-              padding: "1.5rem",
-              borderRadius: "12px",
-              boxShadow: darkMode
-                ? "0 2px 8px rgba(0,0,0,0.3)"
-                : "0 2px 8px rgba(0,0,0,0.05)",
-            }}
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
           >
             <h4
-              style={{
-                fontSize: "1.3rem",
-                fontWeight: "600",
-                color: "#4f46e5",
-                marginBottom: "0.75rem",
-              }}
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-indigo-300" : "text-indigo-800"
+              }`}
             >
               Essential Linear Algebra for ML
             </h4>
-            <ul
-              style={{
-                listStyleType: "disc",
-                paddingLeft: "1.5rem",
-                display: "grid",
-                gap: "0.75rem",
-              }}
-            >
-              <li
-                style={{
-                  color: darkMode ? "#e2e8f0" : "#374151",
-                  fontSize: "1.1rem",
-                }}
-              >
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>
                 Vector/matrix operations form the backbone of neural networks
               </li>
-              <li
-                style={{
-                  color: darkMode ? "#e2e8f0" : "#374151",
-                  fontSize: "1.1rem",
-                }}
-              >
+              <li>
                 Eigendecomposition powers dimensionality reduction techniques
               </li>
-              <li
-                style={{
-                  color: darkMode ? "#e2e8f0" : "#374151",
-                  fontSize: "1.1rem",
-                }}
-              >
+              <li>
                 SVD enables efficient matrix approximations in large systems
               </li>
-              <li
-                style={{
-                  color: darkMode ? "#e2e8f0" : "#374151",
-                  fontSize: "1.1rem",
-                }}
-              >
+              <li>
                 Understanding these concepts helps debug and optimize models
               </li>
             </ul>
           </div>
 
           <div
-            style={{
-              backgroundColor: darkMode ? "#1e293b" : "white",
-              padding: "1.5rem",
-              borderRadius: "12px",
-              boxShadow: darkMode
-                ? "0 2px 8px rgba(0,0,0,0.3)"
-                : "0 2px 8px rgba(0,0,0,0.05)",
-            }}
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
           >
             <h4
-              style={{
-                fontSize: "1.3rem",
-                fontWeight: "600",
-                color: "#4f46e5",
-                marginBottom: "0.75rem",
-              }}
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-indigo-300" : "text-indigo-800"
+              }`}
             >
               Computational Considerations
             </h4>
-            <p
-              style={{
-                color: darkMode ? "#e2e8f0" : "#374151",
-                fontSize: "1.1rem",
-                lineHeight: "1.6",
-              }}
-            >
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               Modern ML implementations leverage:
               <br />
               <br />
@@ -822,32 +619,18 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
           </div>
 
           <div
-            style={{
-              backgroundColor: darkMode ? "#1e293b" : "white",
-              padding: "1.5rem",
-              borderRadius: "12px",
-              boxShadow: darkMode
-                ? "0 2px 8px rgba(0,0,0,0.3)"
-                : "0 2px 8px rgba(0,0,0,0.05)",
-            }}
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
           >
             <h4
-              style={{
-                fontSize: "1.3rem",
-                fontWeight: "600",
-                color: "#4f46e5",
-                marginBottom: "0.75rem",
-              }}
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-indigo-300" : "text-indigo-800"
+              }`}
             >
               Advanced Applications
             </h4>
-            <p
-              style={{
-                color: darkMode ? "#e2e8f0" : "#374151",
-                fontSize: "1.1rem",
-                lineHeight: "1.6",
-              }}
-            >
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               <strong>Graph Neural Networks:</strong> Adjacency matrix
               operations
               <br />
