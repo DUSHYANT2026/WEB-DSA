@@ -1,313 +1,458 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-violet-100 dark:border-violet-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-purple-500 to-violet-500 hover:from-purple-600 hover:to-violet-600 dark:from-purple-600 dark:to-violet-600 dark:hover:from-purple-700 dark:hover:to-violet-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 dark:focus:ring-purple-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function Clustering() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
   };
 
   const content = [
     {
-      title: "🔢 K-Means Clustering",
-      id: "kmeans",
-      description: "A centroid-based algorithm that partitions data into K distinct clusters.",
+      title: "📊 Logistic Regression",
+      id: "logistic",
+      description: "A fundamental linear classification algorithm that models probabilities using a sigmoid function.",
       keyPoints: [
-        "Requires specifying number of clusters (K) beforehand",
-        "Uses Euclidean distance as similarity measure",
-        "Iteratively minimizes within-cluster variance",
-        "Scalable to large datasets"
+        "Binary classification using sigmoid activation",
+        "Linear decision boundary",
+        "Outputs class probabilities",
+        "Regularized variants (L1/L2)"
       ],
       detailedExplanation: [
-        "Algorithm Steps:",
-        "1. Randomly initialize K cluster centroids",
-        "2. Assign each point to nearest centroid",
-        "3. Recalculate centroids as mean of assigned points",
-        "4. Repeat until convergence (no more changes)",
+        "How it works:",
+        "- Models log-odds as linear combination of features",
+        "- Applies sigmoid to get probabilities between 0 and 1",
+        "- Uses maximum likelihood estimation for training",
         "",
-        "Key Parameters:",
-        "- K: Number of clusters (use elbow method or silhouette score)",
-        "- Initialization: k-means++ improves convergence",
-        "- Max iterations: Prevent infinite loops",
-        "- Tolerance: Convergence threshold",
-        "",
-        "Advantages:",
-        "- Simple to implement and understand",
-        "- Efficient for large datasets (O(n))",
-        "- Works well with spherical clusters",
+        "Key advantages:",
+        "- Computationally efficient",
+        "- Provides probabilistic interpretation",
+        "- Works well with linearly separable data",
+        "- Feature importance through coefficients",
         "",
         "Limitations:",
-        "- Sensitive to initial centroids",
-        "- Assumes clusters of similar size",
-        "- Struggles with non-convex shapes"
+        "- Assumes linear relationship between features and log-odds",
+        "- Can underfit complex patterns",
+        "- Sensitive to correlated features",
+        "",
+        "Hyperparameters:",
+        "- Regularization strength (C)",
+        "- Penalty type (L1/L2/elasticnet)",
+        "- Solver algorithm (liblinear, saga, etc.)"
       ],
       code: {
-        python: `# K-Means Clustering Example
-from sklearn.cluster import KMeans
-import numpy as np
-import matplotlib.pyplot as plt
+        python: `# Logistic Regression Example
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
 
-# Generate sample data
-np.random.seed(42)
-X = np.concatenate([
-    np.random.normal((0,0), 1, (300,2)),
-    np.random.normal((5,5), 1, (300,2)),
-    np.random.normal((10,0), 1, (300,2))
-])
+# Load binary classification data
+X, y = load_iris(return_X_y=True)
+X = X[y != 2]  # Use only two classes
+y = y[y != 2]
 
-# Fit K-Means
-kmeans = KMeans(n_clusters=3, init='k-means++', n_init=10)
-kmeans.fit(X)
-labels = kmeans.labels_
-centroids = kmeans.cluster_centers_
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Visualize clusters
-plt.figure(figsize=(10,6))
-plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis', alpha=0.5)
-plt.scatter(centroids[:,0], centroids[:,1], c='red', s=200, marker='x')
-plt.title('K-Means Clustering')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
-plt.show()
+# Create and train model
+model = LogisticRegression(penalty='l2', C=1.0, solver='liblinear')
+model.fit(X_train, y_train)
 
-# Elbow method to find optimal K
-inertias = []
-for k in range(1, 10):
-    kmeans = KMeans(n_clusters=k)
-    kmeans.fit(X)
-    inertias.append(kmeans.inertia_)
+# Evaluate
+train_acc = model.score(X_train, y_train)
+test_acc = model.score(X_test, y_test)
+print(f"Training accuracy: {train_acc:.2f}")
+print(f"Test accuracy: {test_acc:.2f}")
 
-plt.figure(figsize=(10,6))
-plt.plot(range(1,10), inertias, marker='o')
-plt.title('Elbow Method')
-plt.xlabel('Number of clusters')
-plt.ylabel('Inertia')
-plt.show()`,
-        complexity: "O(n*k*i*d) where n=samples, k=clusters, i=iterations, d=dimensions"
+# Get probabilities
+probs = model.predict_proba(X_test)
+print("Class probabilities for first sample:", probs[0])
+
+# Feature importance
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)`,
+        complexity: "Training: O(n_samples × n_features), Prediction: O(n_features)"
       }
     },
     {
-      title: "🌳 Hierarchical Clustering",
-      id: "hierarchical",
-      description: "Builds a hierarchy of clusters either through agglomerative (bottom-up) or divisive (top-down) approaches.",
+      title: "🌳 Decision Trees",
+      id: "trees",
+      description: "Non-parametric models that learn hierarchical decision rules from data.",
       keyPoints: [
-        "Creates a dendrogram showing cluster relationships",
-        "No need to specify number of clusters initially",
-        "Agglomerative is more commonly used",
-        "Different linkage criteria (ward, complete, average, single)"
+        "Recursive binary splitting of feature space",
+        "Split criteria: Gini impurity or entropy",
+        "Prone to overfitting without regularization",
+        "Can handle non-linear relationships"
       ],
       detailedExplanation: [
-        "Agglomerative Approach:",
-        "1. Start with each point as its own cluster",
-        "2. Merge closest pairs of clusters iteratively",
-        "3. Continue until all points are in one cluster",
+        "Learning process:",
+        "- Start with all data at root node",
+        "- Find best feature and threshold to split on",
+        "- Recursively split until stopping criterion met",
         "",
-        "Linkage Criteria:",
-        "- Ward: Minimizes variance of merged clusters",
-        "- Complete: Uses maximum distance between clusters",
-        "- Average: Uses average distance between clusters",
-        "- Single: Uses minimum distance between clusters",
-        "",
-        "Key Parameters:",
-        "- Number of clusters (can cut dendrogram at desired level)",
-        "- Distance metric (Euclidean, Manhattan, etc.)",
-        "- Linkage method (affects cluster shapes)",
+        "Split criteria:",
+        "- Gini impurity: Probability of misclassification",
+        "- Information gain: Reduction in entropy",
+        "- Variance reduction (for regression)",
         "",
         "Advantages:",
-        "- Visual dendrogram provides intuitive interpretation",
-        "- Doesn't require specifying K beforehand",
-        "- Can handle non-spherical clusters",
+        "- No need for feature scaling",
+        "- Handles mixed data types",
+        "- Interpretable decision rules",
+        "- Feature importance scores",
         "",
-        "Limitations:",
-        "- Computationally expensive (O(n³))",
-        "- Sensitive to noise and outliers",
-        "- Once merged, clusters cannot be split"
+        "Regularization:",
+        "- Maximum depth",
+        "- Minimum samples per leaf",
+        "- Minimum impurity decrease",
+        "- Cost complexity pruning"
       ],
       code: {
-        python: `# Hierarchical Clustering Example
-from sklearn.cluster import AgglomerativeClustering
-from scipy.cluster.hierarchy import dendrogram, linkage
-import numpy as np
+        python: `# Decision Tree Classifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
 import matplotlib.pyplot as plt
 
-# Generate sample data
-np.random.seed(42)
-X = np.concatenate([
-    np.random.normal((0,0), 1, (100,2)),
-    np.random.normal((5,5), 1, (100,2)),
-    np.random.normal((10,0), 1, (100,2))
-])
+# Create and train model
+tree = DecisionTreeClassifier(
+    max_depth=3,
+    min_samples_leaf=5,
+    criterion='gini',
+    random_state=42
+)
+tree.fit(X_train, y_train)
 
-# Fit Agglomerative Clustering
-agg = AgglomerativeClustering(n_clusters=3, linkage='ward')
-labels = agg.fit_predict(X)
-
-# Visualize clusters
-plt.figure(figsize=(10,6))
-plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-plt.title('Agglomerative Clustering')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
+# Visualize the tree
+plt.figure(figsize=(12,8))
+plot_tree(tree, feature_names=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'], 
+          class_names=['setosa', 'versicolor'], filled=True)
 plt.show()
 
-# Create and plot dendrogram
-linked = linkage(X, 'ward')
-plt.figure(figsize=(12,6))
-dendrogram(linked, orientation='top', distance_sort='descending')
-plt.title('Dendrogram')
-plt.xlabel('Sample index')
-plt.ylabel('Distance')
-plt.show()
+# Feature importance
+importances = tree.feature_importances_
+features = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+for feature, importance in zip(features, importances):
+    print(f"{feature}: {importance:.3f}")
 
-# Different linkage methods comparison
-linkage_methods = ['ward', 'complete', 'average', 'single']
-plt.figure(figsize=(15,10))
-for i, method in enumerate(linkage_methods, 1):
-    plt.subplot(2,2,i)
-    agg = AgglomerativeClustering(n_clusters=3, linkage=method)
-    labels = agg.fit_predict(X)
-    plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-    plt.title(f'Linkage: {method}')
-plt.tight_layout()
-plt.show()`,
-        complexity: "O(n³) time, O(n²) space for standard implementations"
+# Evaluate
+print(f"Training accuracy: {tree.score(X_train, y_train):.2f}")
+print(f"Test accuracy: {tree.score(X_test, y_test):.2f}")`,
+        complexity: "Training: O(n_samples × n_features × depth), Prediction: O(depth)"
       }
     },
     {
-      title: "🌌 DBSCAN (Density-Based Clustering)",
-      id: "dbscan",
-      description: "Density-based algorithm that identifies clusters as areas of high density separated by areas of low density.",
+      title: "🌲 Random Forest",
+      id: "forest",
+      description: "Ensemble method that combines multiple decision trees via bagging.",
       keyPoints: [
-        "Does not require specifying number of clusters",
-        "Can find arbitrarily shaped clusters",
-        "Identifies outliers as noise points",
-        "Based on core points, border points, and noise"
+        "Builds many trees on random subsets of data/features",
+        "Averages predictions for better generalization",
+        "Reduces variance compared to single trees",
+        "Built-in feature importance"
       ],
       detailedExplanation: [
-        "Key Concepts:",
-        "- Core point: Has at least min_samples neighbors within ε distance",
-        "- Border point: Has fewer than min_samples but is reachable from a core point",
-        "- Noise point: Neither core nor border point",
+        "How it works:",
+        "- Bootstrap sampling creates many training subsets",
+        "- Each tree trained on random feature subset",
+        "- Final prediction by majority vote (classification)",
         "",
-        "Algorithm Steps:",
-        "1. Randomly select an unvisited point",
-        "2. Find all density-reachable points (ε and min_samples)",
-        "3. If core point, form a cluster",
-        "4. Repeat until all points are visited",
+        "Key benefits:",
+        "- Handles high dimensional spaces well",
+        "- Robust to outliers and noise",
+        "- Parallelizable training",
+        "- Doesn't require feature scaling",
         "",
-        "Key Parameters:",
-        "- ε (eps): Maximum distance between points",
-        "- min_samples: Minimum points to form dense region",
-        "- Metric: Distance calculation method",
+        "Tuning parameters:",
+        "- Number of trees",
+        "- Maximum depth",
+        "- Minimum samples per leaf",
+        "- Maximum features per split",
         "",
-        "Advantages:",
-        "- Can find arbitrarily shaped clusters",
-        "- Robust to outliers",
-        "- Doesn't require specifying number of clusters",
-        "",
-        "Limitations:",
-        "- Struggles with varying density clusters",
-        "- Sensitive to parameter choices",
-        "- Not suitable for high-dimensional data"
+        "Extensions:",
+        "- Extremely Randomized Trees (ExtraTrees)",
+        "- Feature importance scores",
+        "- Out-of-bag error estimation",
+        "- Partial dependence plots"
       ],
       code: {
-        python: `# DBSCAN Example
-from sklearn.cluster import DBSCAN
-import numpy as np
-import matplotlib.pyplot as plt
+        python: `# Random Forest Classifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
 
-# Generate sample data with non-spherical clusters
-np.random.seed(42)
-n = 200
-theta = np.linspace(0, 2*np.pi, n)
-circle1 = np.column_stack([np.cos(theta), np.sin(theta)]) * 2 + np.random.normal(0, 0.1, (n,2))
-circle2 = np.column_stack([np.cos(theta), np.sin(theta)]) * 5 + np.random.normal(0, 0.1, (n,2))
-X = np.vstack([circle1, circle2])
+# Create and train model
+forest = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=5,
+    max_features='sqrt',
+    random_state=42,
+    n_jobs=-1  # Use all cores
+)
+forest.fit(X_train, y_train)
 
-# Fit DBSCAN
-dbscan = DBSCAN(eps=0.5, min_samples=5)
-labels = dbscan.fit_predict(X)
+# Evaluate
+print("Training accuracy:", forest.score(X_train, y_train))
+print("Test accuracy:", forest.score(X_test, y_test))
+print(classification_report(y_test, forest.predict(X_test)))
 
-# Visualize clusters
+# Feature importance
+importances = forest.feature_importances_
+std = np.std([tree.feature_importances_ for tree in forest.estimators_], axis=0)
+
+# Plot feature importance
 plt.figure(figsize=(10,6))
-plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-plt.title('DBSCAN Clustering')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
-plt.show()
-
-# Parameter sensitivity analysis
-plt.figure(figsize=(15,10))
-for i, eps in enumerate([0.2, 0.5, 1.0, 2.0], 1):
-    plt.subplot(2,2,i)
-    dbscan = DBSCAN(eps=eps, min_samples=5)
-    labels = dbscan.fit_predict(X)
-    plt.scatter(X[:,0], X[:,1], c=labels, cmap='viridis')
-    plt.title(f'EPS: {eps}, Clusters: {len(set(labels))-1}')
-plt.tight_layout()
-plt.show()
-
-# Handling noise points
-dbscan = DBSCAN(eps=0.5, min_samples=5)
-labels = dbscan.fit_predict(X)
-core_samples = dbscan.core_sample_indices_
-noise = labels == -1
-
-plt.figure(figsize=(10,6))
-plt.scatter(X[~noise,0], X[~noise,1], c=labels[~noise], cmap='viridis')
-plt.scatter(X[noise,0], X[noise,1], c='red', marker='x', label='Noise')
-plt.title('DBSCAN with Noise Detection')
-plt.xlabel('Feature 1')
-plt.ylabel('Feature 2')
-plt.legend()
+plt.barh(features, importances, xerr=std, align='center')
+plt.xlabel("Feature Importance")
+plt.title("Random Forest Feature Importance")
 plt.show()`,
-        complexity: "O(n log n) with spatial indexing, O(n²) without"
+        complexity: "Training: O(n_trees × n_samples × n_features × depth), Prediction: O(n_trees × depth)"
+      }
+    },
+    {
+      title: "⚡ Support Vector Machines (SVM)",
+      id: "svm",
+      description: "Powerful classifiers that find optimal separating hyperplanes in high-dimensional spaces.",
+      keyPoints: [
+        "Finds maximum-margin decision boundary",
+        "Kernel trick for non-linear classification",
+        "Effective in high-dimensional spaces",
+        "Memory intensive for large datasets"
+      ],
+      detailedExplanation: [
+        "Key concepts:",
+        "- Support vectors: Critical training instances",
+        "- Margin: Distance between classes",
+        "- Kernel functions: Implicit feature transformations",
+        "",
+        "Kernel types:",
+        "- Linear: No transformation",
+        "- Polynomial: Captures polynomial relationships",
+        "- RBF: Handles complex non-linear boundaries",
+        "- Sigmoid: Neural network-like transformation",
+        "",
+        "Advantages:",
+        "- Effective in high dimensions",
+        "- Versatile with different kernels",
+        "- Robust to overfitting in high-D spaces",
+        "",
+        "Practical considerations:",
+        "- Scaling features is critical",
+        "- Regularization parameter C controls margin",
+        "- Kernel choice affects performance",
+        "- Can be memory intensive"
+      ],
+      code: {
+        python: `# SVM Classifier
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+
+# Create pipeline with scaling and SVM
+svm = make_pipeline(
+    StandardScaler(),
+    SVC(
+        kernel='rbf', 
+        C=1.0,
+        gamma='scale',
+        probability=True  # Enable predict_proba
+    )
+)
+
+# Train model
+svm.fit(X_train, y_train)
+
+# Evaluate
+print(f"Training accuracy: {svm.score(X_train, y_train):.2f}")
+print(f"Test accuracy: {svm.score(X_test, y_test):.2f}")
+
+# Get support vectors
+if hasattr(svm.named_steps['svc'], 'support_vectors_'):
+    print(f"Number of support vectors: {len(svm.named_steps['svc'].support_vectors_)}")
+
+# Plot decision boundary (for 2D data)
+def plot_decision_boundary(clf, X, y):
+    # Create grid
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, 0.02),
+                         np.arange(y_min, y_max, 0.02))
+    
+    # Predict on grid
+    Z = clf.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+    
+    # Plot
+    plt.contourf(xx, yy, Z, alpha=0.4)
+    plt.scatter(X[:, 0], X[:, 1], c=y, s=20, edgecolor='k')
+    plt.title("SVM Decision Boundary")
+    plt.show()
+
+# For 2D data only:
+# plot_decision_boundary(svm, X_train[:, :2], y_train)`,
+        complexity: "Training: O(n_samples² to n_samples³), Prediction: O(n_support_vectors × n_features)"
+      }
+    },
+    {
+      title: "🧠 Neural Networks for Classification",
+      id: "nn",
+      description: "Flexible function approximators that can learn complex decision boundaries.",
+      keyPoints: [
+        "Multi-layer perceptrons (MLPs) for classification",
+        "Backpropagation for training",
+        "Non-linear activation functions",
+        "Requires careful hyperparameter tuning"
+      ],
+      detailedExplanation: [
+        "Architecture components:",
+        "- Input layer (feature dimension)",
+        "- Hidden layers with non-linear activations",
+        "- Output layer with softmax (multi-class) or sigmoid (binary)",
+        "",
+        "Key hyperparameters:",
+        "- Number and size of hidden layers",
+        "- Activation functions (ReLU, tanh, etc.)",
+        "- Learning rate and optimizer",
+        "- Regularization (dropout, weight decay)",
+        "",
+        "Training process:",
+        "- Forward pass computes predictions",
+        "- Loss function measures error",
+        "- Backpropagation computes gradients",
+        "- Optimization updates weights",
+        "",
+        "Practical considerations:",
+        "- Feature scaling is essential",
+        "- Batch normalization helps training",
+        "- Early stopping prevents overfitting",
+        "- Architecture search is important"
+      ],
+      code: {
+        python: `# Neural Network Classifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+
+# Create pipeline with scaling and MLP
+mlp = make_pipeline(
+    StandardScaler(),
+    MLPClassifier(
+        hidden_layer_sizes=(64, 32),
+        activation='relu',
+        solver='adam',
+        alpha=0.0001,  # L2 regularization
+        batch_size=32,
+        learning_rate='adaptive',
+        max_iter=200,
+        early_stopping=True,
+        random_state=42
+    )
+)
+
+# Train model
+mlp.fit(X_train, y_train)
+
+# Evaluate
+print(f"Training accuracy: {mlp.score(X_train, y_train):.2f}")
+print(f"Test accuracy: {mlp.score(X_test, y_test):.2f}")
+
+# Loss curve
+plt.plot(mlp.named_steps['mlpclassifier'].loss_curve_)
+plt.title("Loss Curve During Training")
+plt.xlabel("Iterations")
+plt.ylabel("Loss")
+plt.show()
+
+# Using Keras/TensorFlow
+"""
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.optimizers import Adam
+
+model = Sequential([
+    Dense(64, activation='relu', input_shape=(X_train.shape[1],)),
+    Dropout(0.2),
+    Dense(32, activation='relu'),
+    Dense(1, activation='sigmoid')
+])
+
+model.compile(optimizer=Adam(0.001),
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+history = model.fit(X_train, y_train, 
+                    epochs=50, 
+                    batch_size=32,
+                    validation_split=0.2)
+"""`,
+        complexity: "Training: O(n_samples × n_features × width × depth × epochs), Prediction: O(width × depth × n_features)"
       }
     }
   ];
-
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-purple-50 to-violet-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-purple-400 to-violet-400"
+            : "bg-gradient-to-r from-purple-600 to-violet-600"
+        } mb-8 sm:mb-12`}
+      >
         Clustering Algorithms
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #0ea5e9'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '1rem'
-        }}>Unsupervised Learning → Clustering</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-purple-900/20" : "bg-purple-100"
+        } border-l-4 border-purple-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-purple-500 text-purple-800">
+          Unsupervised Learning → Clustering
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
           Clustering groups similar data points together without predefined labels.
           These algorithms discover inherent patterns and structures in data,
           enabling applications like customer segmentation, anomaly detection,
@@ -315,188 +460,150 @@ plt.show()`,
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #bae6fd',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#0369a1'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(3, 105, 161, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-violet-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-purple-300" : "text-purple-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-violet-600 dark:text-violet-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#f0f9ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Technical Deep Dive</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #7dd3fc'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Deep Dive
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-violet-900/30" : "bg-violet-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-violet-400 text-violet-600">
+                      Implementation Example
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      Computational Complexity: {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Comparison Table */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '2rem'
-        }}>Clustering Algorithm Comparison</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#0369a1',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-purple-300" : "text-purple-800"
+          }`}
+        >
+          Clustering Algorithm Comparison
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-purple-900" : "bg-purple-600"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Algorithm</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Cluster Shape</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Scalability</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Noise Handling</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Best Use Case</th>
+                <th className="p-4 text-left">Algorithm</th>
+                <th className="p-4 text-left">Cluster Shape</th>
+                <th className="p-4 text-left">Scalability</th>
+                <th className="p-4 text-left">Noise Handling</th>
+                <th className="p-4 text-left">Best Use Case</th>
               </tr>
             </thead>
             <tbody>
@@ -505,15 +612,27 @@ plt.show()`,
                 ["Hierarchical", "Arbitrary (depends on linkage)", "Low (O(n³))", "Moderate", "Small datasets, need hierarchy"],
                 ["DBSCAN", "Arbitrary", "Moderate (O(n log n))", "Excellent", "Noisy data, arbitrary shapes"]
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0f9ff' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -525,71 +644,48 @@ plt.show()`,
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#e0f2fe',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '1.5rem'
-        }}>Practical Considerations</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Algorithm Selection Guide</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                <strong>K-Means:</strong> When you know K and need speed
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                <strong>Hierarchical:</strong> When you need cluster relationships
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                <strong>DBSCAN:</strong> When dealing with noise and arbitrary shapes
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                <strong>GMM:</strong> When clusters may overlap (not covered here)
-              </li>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-purple-900/30" : "bg-purple-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-purple-300" : "text-purple-800"
+          }`}
+        >
+          Practical Considerations
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-purple-300" : "text-purple-800"
+              }`}
+            >
+              Algorithm Selection Guide
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li><strong>K-Means:</strong> When you know K and need speed</li>
+              <li><strong>Hierarchical:</strong> When you need cluster relationships</li>
+              <li><strong>DBSCAN:</strong> When dealing with noise and arbitrary shapes</li>
+              <li><strong>GMM:</strong> When clusters may overlap (not covered here)</li>
             </ul>
           </div>
           
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Preprocessing Tips</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-purple-300" : "text-purple-800"
+            }`}>
+              Preprocessing Tips
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               <strong>Normalization:</strong> Essential for distance-based algorithms<br/>
               <strong>Dimensionality Reduction:</strong> Helps with high-dimensional data<br/>
               <strong>Outlier Handling:</strong> Critical for centroid-based methods<br/>
@@ -597,23 +693,15 @@ plt.show()`,
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Evaluation Methods</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-purple-300" : "text-purple-800"
+            }`}>
+              Evaluation Methods
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               <strong>Silhouette Score:</strong> Measures cluster cohesion/separation<br/>
               <strong>Davies-Bouldin Index:</strong> Lower values indicate better clustering<br/>
               <strong>Calinski-Harabasz Index:</strong> Ratio of between/within cluster dispersion<br/>

@@ -1,24 +1,74 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-yellow-100 dark:border-yellow-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 dark:from-violet-600 dark:to-purple-600 dark:hover:from-violet-700 dark:hover:to-purple-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-violet-500 dark:focus:ring-violet-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function Python() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
+  const formatDescription = (desc) => {
+    return desc.split("\n").map((paragraph, i) => (
+      <p
+        key={i}
+        className="mb-4 whitespace-pre-line dark:text-gray-300 text-gray-800"
+      >
+        {paragraph}
+      </p>
+    ));
   };
 
   const content = [
     {
       title: "🐍 Python Basics",
       id: "basics",
-      description: "Fundamental programming concepts essential for ML implementation.",
+      description:
+        "Fundamental programming concepts essential for ML implementation.",
       keyPoints: [
         "Variables and data types (int, float, str, bool)",
         "Control flow (if-else, loops)",
         "Functions and lambda expressions",
-        "List comprehensions and generators"
+        "List comprehensions and generators",
       ],
       detailedExplanation: [
         "Core concepts for ML programming:",
@@ -37,7 +87,7 @@ function Python() {
         "- Avoiding global variables in ML scripts",
         "- Proper variable scoping in notebooks",
         "- Memory management with large datasets",
-        "- Profiling computational bottlenecks"
+        "- Profiling computational bottlenecks",
       ],
       code: {
         python: `# Python Basics for ML
@@ -82,18 +132,19 @@ def data_stream(file_path, chunk_size=1024):
             if not data:
                 break
             yield process(data)`,
-        complexity: "Basic operations: O(1), Loops: O(n), Comprehensions: O(n)"
-      }
+        complexity: "Basic operations: O(1), Loops: O(n), Comprehensions: O(n)",
+      },
     },
     {
       title: "📚 Python Libraries",
       id: "libraries",
-      description: "Essential scientific computing libraries for machine learning workflows.",
+      description:
+        "Essential scientific computing libraries for machine learning workflows.",
       keyPoints: [
         "NumPy: Numerical computing with arrays",
         "Pandas: Data manipulation and analysis",
         "Matplotlib: Data visualization",
-        "Seaborn: Statistical visualization"
+        "Seaborn: Statistical visualization",
       ],
       detailedExplanation: [
         "NumPy for ML:",
@@ -118,7 +169,7 @@ def data_stream(file_path, chunk_size=1024):
         "- Converting between Pandas and NumPy",
         "- Data preprocessing pipelines",
         "- Feature visualization",
-        "- Model evaluation plots"
+        "- Model evaluation plots",
       ],
       code: {
         python: `# Python Libraries for ML
@@ -160,18 +211,19 @@ g = sns.PairGrid(data.sample(100), vars=['feature_0', 'feature_1', 'feature_2'],
 g.map_diag(sns.histplot)
 g.map_offdiag(sns.scatterplot)
 g.add_legend()`,
-        complexity: "NumPy ops: O(n) to O(n³), Pandas ops: O(n) to O(n²)"
-      }
+        complexity: "NumPy ops: O(n) to O(n³), Pandas ops: O(n) to O(n²)",
+      },
     },
     {
       title: "🗃️ Data Structures",
       id: "data-structures",
-      description: "Efficient data organization for machine learning applications.",
+      description:
+        "Efficient data organization for machine learning applications.",
       keyPoints: [
         "Lists: Ordered, mutable collections",
         "Dictionaries: Key-value pairs for fast lookup",
         "Arrays: Homogeneous numerical data",
-        "Specialized structures (sets, tuples, deques)"
+        "Specialized structures (sets, tuples, deques)",
       ],
       detailedExplanation: [
         "Choosing the right structure:",
@@ -196,7 +248,7 @@ g.add_legend()`,
         "- Defaultdict for counting",
         "- Namedtuples for readable code",
         "- Deques for sliding windows",
-        "- Sparse matrices for NLP/cv"
+        "- Sparse matrices for NLP/cv",
       ],
       code: {
         python: `# Data Structures for ML
@@ -240,18 +292,19 @@ for data_point in stream:
     window.append(data_point)
     if len(window) == 5:
         process_window(list(window))`,
-        complexity: "Lists: O(1) access, O(n) insert; Dicts: O(1) average case"
-      }
+        complexity: "Lists: O(1) access, O(n) insert; Dicts: O(1) average case",
+      },
     },
     {
       title: "📂 File Handling",
       id: "file-handling",
-      description: "Reading and writing data in formats commonly used in ML pipelines.",
+      description:
+        "Reading and writing data in formats commonly used in ML pipelines.",
       keyPoints: [
         "CSV: Tabular data storage",
         "JSON: Structured configuration and data",
         "XML: Hierarchical data representation",
-        "Binary formats (HDF5, Pickle, Parquet)"
+        "Binary formats (HDF5, Pickle, Parquet)",
       ],
       detailedExplanation: [
         "CSV for tabular data:",
@@ -276,7 +329,7 @@ for data_point in stream:
         "- Memory mapping large files",
         "- Streaming processing",
         "- Compression options",
-        "- Versioning and schema evolution"
+        "- Versioning and schema evolution",
       ],
       code: {
         python: `# File Handling for ML
@@ -320,18 +373,20 @@ import xml.etree.ElementTree as ET
 tree = ET.parse('config.xml')
 root = tree.getroot()
 params = {child.tag: child.text for child in root}`,
-        complexity: "CSV/JSON: O(n), Binary formats: O(n) with better constant factors"
-      }
+        complexity:
+          "CSV/JSON: O(n), Binary formats: O(n) with better constant factors",
+      },
     },
     {
       title: "📊 Data Visualization",
       id: "visualization",
-      description: "Exploring and communicating insights from ML data and results.",
+      description:
+        "Exploring and communicating insights from ML data and results.",
       keyPoints: [
         "Histograms: Distribution of features",
         "Box plots: Statistical summaries",
         "Scatter plots: Relationships between variables",
-        "Advanced plots (violin, pair, heatmaps)"
+        "Advanced plots (violin, pair, heatmaps)",
       ],
       detailedExplanation: [
         "Exploratory data analysis:",
@@ -356,7 +411,7 @@ params = {child.tag: child.text for child in root}`,
         "- Choosing appropriate chart types",
         "- Effective labeling and legends",
         "- Color palette selection",
-        "- Accessibility considerations"
+        "- Accessibility considerations",
       ],
       code: {
         python: `# Data Visualization for ML
@@ -405,257 +460,245 @@ plt.show()
 sns.pairplot(data.sample(100), vars=['feature_0', 'feature_1', 'feature_2'], hue='target')
 plt.suptitle('Multivariate Feature Relationships', y=1.02)
 plt.show()`,
-        complexity: "Basic plots: O(n), Complex plots: O(n²) for pairwise relationships"
-      }
-    }
+        complexity:
+          "Basic plots: O(n), Complex plots: O(n²) for pairwise relationships",
+      },
+    },
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdf4)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #059669, #10b981)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-violet-50 to-purple-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-violet-400 to-purple-400"
+            : "bg-gradient-to-r from-violet-600 to-purple-600"
+        } mb-8 sm:mb-12`}
+      >
         Python for Machine Learning
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(5, 150, 105, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #059669'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '1rem'
-        }}>Programming for ML</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
-          Python is the dominant language for machine learning due to its simplicity and rich ecosystem.
-          This section covers essential Python programming concepts specifically tailored for ML workflows,
-          from basic syntax to advanced data handling and visualization.
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-violet-900/20" : "bg-violet-100"
+        } border-l-4 border-violet-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-violet-500 text-violet-800">
+          Programming for ML
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+          Python is the dominant language for machine learning due to its
+          simplicity and rich ecosystem. This section covers essential Python
+          programming concepts specifically tailored for ML workflows, from
+          basic syntax to advanced data handling and visualization.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #d1fae5',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#059669'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #059669, #10b981)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(5, 150, 105, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-violet-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-violet-300" : "text-violet-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-violet-600 dark:text-violet-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#ecfdf5',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#f0fdf4',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>ML Applications</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#dcfce7',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #a7f3d0'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      ML Applications
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      ML Implementation
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Comparison Table */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #d1fae5'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '2rem'
-        }}>Python Tools for ML Workflows</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#059669',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-violet-300" : "text-violet-800"
+          }`}
+        >
+          Python Tools for ML Workflows
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-violet-900" : "bg-violet-600"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Category</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Key Libraries</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>ML Application</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Performance Tip</th>
+                <th className="p-4 text-left">Category</th>
+                <th className="p-4 text-left">Key Libraries</th>
+                <th className="p-4 text-left">ML Application</th>
+                <th className="p-4 text-left">Performance Tip</th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["Numerical Computing", "NumPy, SciPy", "Linear algebra, optimization", "Use vectorized operations"],
-                ["Data Handling", "Pandas, Polars", "Data cleaning, feature engineering", "Avoid row-wise operations"],
-                ["Visualization", "Matplotlib, Seaborn", "EDA, model evaluation", "Use figure-level functions"],
-                ["File I/O", "H5Py, PyArrow", "Large dataset storage", "Use memory mapping"],
-                ["Advanced ML", "Scikit-learn, XGBoost", "Model training, evaluation", "Prefer fit-transform"]
+                [
+                  "Numerical Computing",
+                  "NumPy, SciPy",
+                  "Linear algebra, optimization",
+                  "Use vectorized operations",
+                ],
+                [
+                  "Data Handling",
+                  "Pandas, Polars",
+                  "Data cleaning, feature engineering",
+                  "Avoid row-wise operations",
+                ],
+                [
+                  "Visualization",
+                  "Matplotlib, Seaborn",
+                  "EDA, model evaluation",
+                  "Use figure-level functions",
+                ],
+                [
+                  "File I/O",
+                  "H5Py, PyArrow",
+                  "Large dataset storage",
+                  "Use memory mapping",
+                ],
+                [
+                  "Advanced ML",
+                  "Scikit-learn, XGBoost",
+                  "Model training, evaluation",
+                  "Prefer fit-transform",
+                ],
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0fdf4' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -667,98 +710,83 @@ plt.show()`,
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#ecfdf5',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #d1fae5'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '1.5rem'
-        }}>ML Engineer's Best Practices</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>Python Coding Standards</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Follow PEP 8 style guide for consistent code
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Use type hints for better maintainability
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Document functions with docstrings
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Structure projects with modular packages
-              </li>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-violet-900/30" : "bg-violet-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-violet-300" : "text-violet-800"
+          }`}
+        >
+          ML Engineer's Best Practices
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-violet-300" : "text-violet-800"
+              }`}
+            >
+              Python Coding Standards
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>Follow PEP 8 style guide for consistent code</li>
+              <li>Use type hints for better maintainability</li>
+              <li>Document functions with docstrings</li>
+              <li>Structure projects with modular packages</li>
             </ul>
           </div>
-          
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>Performance Optimization</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              <strong>Vectorization:</strong> Prefer NumPy over native Python loops<br/>
-              <strong>Memory:</strong> Use generators for large datasets<br/>
-              <strong>Parallelism:</strong> Leverage multiprocessing for CPU-bound tasks<br/>
+
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-violet-300" : "text-violet-800"
+              }`}
+            >
+              Performance Optimization
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>Vectorization:</strong> Prefer NumPy over native Python
+              loops
+              <br />
+              <strong>Memory:</strong> Use generators for large datasets
+              <br />
+              <strong>Parallelism:</strong> Leverage multiprocessing for
+              CPU-bound tasks
+              <br />
               <strong>JIT:</strong> Consider Numba for numerical code
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>Advanced Python for ML</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              <strong>Metaprogramming:</strong> Dynamic model generation<br/>
-              <strong>Decorators:</strong> Timing, logging, validation<br/>
-              <strong>Context Managers:</strong> Resource handling<br/>
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-violet-300" : "text-violet-800"
+              }`}
+            >
+              Advanced Python for ML
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>Metaprogramming:</strong> Dynamic model generation
+              <br />
+              <strong>Decorators:</strong> Timing, logging, validation
+              <br />
+              <strong>Context Managers:</strong> Resource handling
+              <br />
               <strong>Descriptors:</strong> Custom model attributes
             </p>
           </div>

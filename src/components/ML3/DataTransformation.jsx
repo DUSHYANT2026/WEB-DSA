@@ -1,12 +1,61 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-yellow-100 dark:border-yellow-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-fuchsia-500 to-purple-500 hover:from-fuchsia-600 hover:to-purple-600 dark:from-fuchsia-600 dark:to-purple-600 dark:hover:from-fuchsia-700 dark:hover:to-purple-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 dark:focus:ring-fuchsia-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function DataTransformation() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
+  const formatDescription = (desc) => {
+    return desc.split("\n").map((paragraph, i) => (
+      <p
+        key={i}
+        className="mb-4 whitespace-pre-line dark:text-gray-300 text-gray-800"
+      >
+        {paragraph}
+      </p>
+    ));
   };
 
   const content = [
@@ -318,217 +367,169 @@ for train_index, test_index in gkf.split(data, groups=data['group']):
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-fuchsia-50 to-purple-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-fuchsia-400 to-purple-400"
+            : "bg-gradient-to-r from-fuchsia-600 to-purple-600"
+        } mb-8 sm:mb-12`}
+      >
         Data Transformation for ML
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #0ea5e9'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1rem'
-        }}>Data Preprocessing → Data Transformation</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-fuchsia-900/20" : "bg-fuchsia-100"
+        } border-l-4 border-fuchsia-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-fuchsia-500 text-fuchsia-800">
+          Data Preprocessing → Data Transformation
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
           Transforming raw data into a format suitable for machine learning models is crucial for model performance.
           This section covers the essential techniques for cleaning, transforming, and preparing data.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #bae6fd',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#0ea5e9'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #0ea5e9, #38bdf8)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(14, 165, 233, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-fuchsia-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-fuchsia-600 dark:text-fuchsia-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#bae6fd',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Technical Details</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #7dd3fc'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Details
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      Implementation Example
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Best Practices */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '2rem'
-        }}>Data Transformation Best Practices</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+          }`}
+        >
+          Data Transformation Best Practices
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
               title: "Reproducibility",
@@ -555,73 +556,70 @@ for train_index, test_index in gkf.split(data, groups=data['group']):
               content: "Document all transformations applied for future reference and model interpretability"
             }
           ].map((item, index) => (
-            <div key={index} style={{
-              backgroundColor: '#e0f2fe',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              borderLeft: '4px solid #0ea5e9'
-            }}>
-              <h3 style={{
-                fontSize: '1.3rem',
-                fontWeight: '600',
-                color: '#0ea5e9',
-                marginBottom: '0.75rem'
-              }}>{item.title}</h3>
-              <p style={{ color: '#374151' }}>{item.content}</p>
+            <div
+              key={index}
+              className={`p-6 rounded-xl border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600"
+                  : "bg-fuchsia-50 border-fuchsia-200"
+              }`}
+            >
+              <h3
+                className={`text-xl font-bold mb-2 ${
+                  darkMode ? "text-fuchsia-300" : "text-fuchsia-700"
+                }`}
+              >
+                {item.title}
+              </h3>
+              <p className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {item.content}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#f0f9ff',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1.5rem'
-        }}>ML Practitioner Insights</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Common Pitfalls</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-fuchsia-900/30" : "bg-fuchsia-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+          }`}
+        >
+          ML Practitioner Insights
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+              }`}
+            >
+              Common Pitfalls
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>
                 Applying transformations to entire dataset before train-test split
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Not considering the impact of scaling on interpretability
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Over-engineering features that don't generalize
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Ignoring the computational cost of complex transformations
               </li>
             </ul>
           </div>
-          
           <div style={{
             backgroundColor: 'white',
             padding: '1.5rem',

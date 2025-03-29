@@ -1,12 +1,50 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-amber-100 dark:border-amber-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-amber-500 to-amber-700 hover:from-amber-600 hover:to-amber-800 dark:from-amber-600 dark:to-amber-800 dark:hover:from-amber-700 dark:hover:to-amber-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:focus:ring-amber-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function RegularizationBasics() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
   };
 
   const content = [
@@ -320,232 +358,181 @@ class Net(nn.Module):
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-amber-50 to-amber-100"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-amber-400 to-amber-600"
+            : "bg-gradient-to-r from-amber-600 to-amber-800"
+        } mb-8 sm:mb-12`}
+      >
         Regularization Techniques
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #0ea5e9'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '1rem'
-        }}>Model Evaluation and Optimization → Regularization Techniques</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-amber-900/20" : "bg-amber-100"
+        } border-l-4 border-amber-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-amber-500 text-amber-800">
+          Model Evaluation and Optimization → Regularization Techniques
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
           Regularization methods prevent overfitting by adding constraints or penalties to model parameters,
           leading to better generalization on unseen data. These techniques are essential for building robust
           machine learning models.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #bae6fd',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#0369a1'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(3, 105, 161, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-amber-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-amber-300" : "text-amber-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-amber-600 dark:text-amber-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#f0f9ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Technical Details</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#ecfdf5',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0369a1',
-                  marginBottom: '1rem'
-                }}>Implementation</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #bae6fd'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Details
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-amber-900/30" : "bg-amber-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-amber-400 text-amber-600">
+                      Implementation
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      Computational Complexity: {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Comparison Table */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '2rem'
-        }}>Regularization Techniques Comparison</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#0369a1',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-amber-300" : "text-amber-800"
+          }`}
+        >
+          Regularization Techniques Comparison
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-amber-900" : "bg-amber-600"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Technique</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Best For</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Pros</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Cons</th>
+                <th className="p-4 text-left">Technique</th>
+                <th className="p-4 text-left">Best For</th>
+                <th className="p-4 text-left">Pros</th>
+                <th className="p-4 text-left">Cons</th>
               </tr>
             </thead>
             <tbody>
@@ -555,15 +542,27 @@ class Net(nn.Module):
                 ["Elastic Net", "High-dimensional correlated data", "Combines L1/L2 benefits, selects groups of features", "Two parameters to tune"],
                 ["Dropout", "Large neural networks", "Effective regularization, works like ensemble", "Increases training time"]
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0f9ff' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -575,71 +574,48 @@ class Net(nn.Module):
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#ecfdf5',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #a7f3d0'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0369a1',
-          marginBottom: '1.5rem'
-        }}>Regularization Best Practices</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Choosing the Right Technique</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Use L1 when you need feature selection or interpretability
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Prefer L2 for small datasets or correlated features
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Elastic Net offers a good compromise between L1 and L2
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Dropout is particularly effective for large neural networks
-              </li>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-amber-900/30" : "bg-amber-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-amber-300" : "text-amber-800"
+          }`}
+        >
+          Regularization Best Practices
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-amber-300" : "text-amber-800"
+              }`}
+            >
+              Choosing the Right Technique
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>Use L1 when you need feature selection or interpretability</li>
+              <li>Prefer L2 for small datasets or correlated features</li>
+              <li>Elastic Net offers a good compromise between L1 and L2</li>
+              <li>Dropout is particularly effective for large neural networks</li>
             </ul>
           </div>
           
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Implementation Tips</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-amber-300" : "text-amber-800"
+            }`}>
+              Implementation Tips
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               <strong>Feature Scaling:</strong> Always standardize features before L1/L2 regularization<br/>
               <strong>Hyperparameter Tuning:</strong> Use cross-validation to find optimal λ values<br/>
               <strong>Early Stopping:</strong> Can be viewed as implicit regularization<br/>
@@ -647,23 +623,15 @@ class Net(nn.Module):
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0369a1',
-              marginBottom: '0.75rem'
-            }}>Advanced Considerations</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-amber-300" : "text-amber-800"
+            }`}>
+              Advanced Considerations
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               <strong>Adaptive Regularization:</strong> Layer-wise or parameter-wise λ values<br/>
               <strong>Structured Sparsity:</strong> Group lasso for structured feature selection<br/>
               <strong>Bayesian Approaches:</strong> Regularization through priors<br/>

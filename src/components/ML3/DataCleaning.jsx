@@ -1,24 +1,74 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-yellow-100 dark:border-yellow-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-sky-500 to-cyan-500 hover:from-sky-600 hover:to-cyan-600 dark:from-sky-600 dark:to-cyan-600 dark:hover:from-sky-700 dark:hover:to-cyan-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-sky-500 dark:focus:ring-sky-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function DataCleaning() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
+  const formatDescription = (desc) => {
+    return desc.split("\n").map((paragraph, i) => (
+      <p
+        key={i}
+        className="mb-4 whitespace-pre-line dark:text-gray-300 text-gray-800"
+      >
+        {paragraph}
+      </p>
+    ));
   };
 
   const content = [
     {
       title: "🧹 Handling Missing Values",
       id: "missing",
-      description: "Techniques to identify and address missing data in datasets.",
+      description:
+        "Techniques to identify and address missing data in datasets.",
       keyPoints: [
         "Identifying missing data patterns (MCAR, MAR, MNAR)",
         "Deletion methods (listwise, pairwise)",
         "Imputation methods (mean, median, mode, predictive)",
-        "Advanced techniques (multiple imputation, KNN imputation)"
+        "Advanced techniques (multiple imputation, KNN imputation)",
       ],
       detailedExplanation: [
         "Types of missingness:",
@@ -41,7 +91,7 @@ function DataCleaning() {
         "- Impact on statistical power",
         "- Preserving data distribution",
         "- Avoiding data leakage",
-        "- Tracking missingness patterns"
+        "- Tracking missingness patterns",
       ],
       code: {
         python: `# Handling Missing Values in Python
@@ -87,18 +137,19 @@ data[['age', 'income']] = knn_imputer.fit_transform(data[['age', 'income']])
 data['income'] = data.groupby('education')['income'].transform(
     lambda x: x.fillna(x.mean())
 )`,
-        complexity: "Deletion: O(n), Simple imputation: O(n), KNN: O(n²)"
-      }
+        complexity: "Deletion: O(n), Simple imputation: O(n), KNN: O(n²)",
+      },
     },
     {
       title: "📊 Outlier Detection",
       id: "outliers",
-      description: "Identifying and handling anomalous data points that may skew analysis.",
+      description:
+        "Identifying and handling anomalous data points that may skew analysis.",
       keyPoints: [
         "Statistical methods (Z-score, IQR)",
         "Visual methods (box plots, scatter plots)",
         "Machine learning approaches (Isolation Forest, DBSCAN)",
-        "Domain-specific outlier thresholds"
+        "Domain-specific outlier thresholds",
       ],
       detailedExplanation: [
         "Statistical approaches:",
@@ -123,7 +174,7 @@ data['income'] = data.groupby('education')['income'].transform(
         "- Removal: For clear measurement errors",
         "- Capping/winsorizing: For valid extreme values",
         "- Transformation: Log, Box-Cox",
-        "- Separate modeling: For important outliers"
+        "- Separate modeling: For important outliers",
       ],
       code: {
         python: `# Outlier Detection in Python
@@ -187,18 +238,20 @@ print("Z-score outliers:\n", outliers_z)
 print("IQR outliers:\n", outliers_iqr)
 print("Isolation Forest outliers:", outliers_iso)
 print("LOF outliers:", outliers_lof)`,
-        complexity: "Z-score/IQR: O(n), Isolation Forest: O(n log n), LOF: O(n²)"
-      }
+        complexity:
+          "Z-score/IQR: O(n), Isolation Forest: O(n log n), LOF: O(n²)",
+      },
     },
     {
       title: "🔄 Data Transformation",
       id: "transformation",
-      description: "Techniques to modify data distributions and scale features appropriately.",
+      description:
+        "Techniques to modify data distributions and scale features appropriately.",
       keyPoints: [
         "Normalization (Min-Max, Z-score)",
         "Logarithmic and power transformations",
         "Encoding categorical variables",
-        "Feature scaling for algorithms"
+        "Feature scaling for algorithms",
       ],
       detailedExplanation: [
         "Scaling methods:",
@@ -223,7 +276,7 @@ print("LOF outliers:", outliers_lof)`,
         "- TF-IDF: Term frequency-inverse doc freq",
         "- Word embeddings: Learned representations",
         "- Bag-of-words: Simple frequency counts",
-        "- Hashing trick: Fixed-dimensional representation"
+        "- Hashing trick: Fixed-dimensional representation",
       ],
       code: {
         python: `# Data Transformation in Python
@@ -284,18 +337,19 @@ corpus = [
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(corpus)
 print(pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names_out()))`,
-        complexity: "Scaling: O(n), Encoding: O(n), Box-Cox: O(n log n)"
-      }
+        complexity: "Scaling: O(n), Encoding: O(n), Box-Cox: O(n log n)",
+      },
     },
     {
       title: "🔗 Handling Duplicates",
       id: "duplicates",
-      description: "Identifying and resolving duplicate or near-duplicate records in datasets.",
+      description:
+        "Identifying and resolving duplicate or near-duplicate records in datasets.",
       keyPoints: [
         "Exact duplicate detection",
         "Fuzzy matching for near-duplicates",
         "Record linkage techniques",
-        "Deduplication strategies"
+        "Deduplication strategies",
       ],
       detailedExplanation: [
         "Exact duplicates:",
@@ -319,7 +373,7 @@ print(pd.DataFrame(X.toarray(), columns=vectorizer.get_feature_names_out()))`,
         "- Keep first/last occurrence",
         "- Aggregate values from duplicates",
         "- Manual review for critical cases",
-        "- Create consolidated records"
+        "- Create consolidated records",
       ],
       code: {
         python: `# Handling Duplicates in Python
@@ -384,18 +438,20 @@ def consolidate(group):
     })
 
 deduped_consolidated = data.groupby('email').apply(consolidate)`,
-        complexity: "Exact duplicates: O(n), Fuzzy matching: O(n²), Blocking: O(n log n)"
-      }
+        complexity:
+          "Exact duplicates: O(n), Fuzzy matching: O(n²), Blocking: O(n log n)",
+      },
     },
     {
       title: "📝 Data Validation",
       id: "validation",
-      description: "Ensuring data quality through systematic checks and constraints.",
+      description:
+        "Ensuring data quality through systematic checks and constraints.",
       keyPoints: [
         "Range and constraint checking",
         "Data type validation",
         "Cross-field validation",
-        "Schema enforcement"
+        "Schema enforcement",
       ],
       detailedExplanation: [
         "Validation techniques:",
@@ -420,7 +476,7 @@ deduped_consolidated = data.groupby('email').apply(consolidate)`,
         "- Logging validation failures",
         "- Creating data quality reports",
         "- Automated correction where possible",
-        "- Manual review for complex cases"
+        "- Manual review for complex cases",
       ],
       code: {
         python: `# Data Validation in Python
@@ -514,352 +570,313 @@ def validate_data(df):
 errors = validate_data(data)
 if errors:
     print("Data validation errors:", errors)`,
-        complexity: "Basic checks: O(n), Schema validation: O(n), Great Expectations: O(n)"
-      }
-    }
+        complexity:
+          "Basic checks: O(n), Schema validation: O(n), Great Expectations: O(n)",
+      },
+    },
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #ecfdf5, #f0fdf4)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #059669, #10b981)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-sky-50 to-cyan-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-sky-400 to-cyan-400"
+            : "bg-gradient-to-r from-sky-600 to-cyan-600"
+        } mb-8 sm:mb-12`}
+      >
         Data Cleaning for Machine Learning
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(5, 150, 105, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #059669'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '1rem'
-        }}>Data Preprocessing → Data Cleaning</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
-          Data cleaning is the crucial first step in any machine learning pipeline, transforming raw data into 
-          a reliable foundation for analysis and modeling. This section covers essential techniques for handling 
-          real-world data quality issues.
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-sky-900/20" : "bg-sky-100"
+        } border-l-4 border-sky-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-sky-500 text-sky-800">
+          Data Preprocessing → Data Cleaning
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+          Data cleaning is the crucial first step in any machine learning
+          pipeline, transforming raw data into a reliable foundation for
+          analysis and modeling. This section covers essential techniques for
+          handling real-world data quality issues.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #d1fae5',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#059669'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #059669, #10b981)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(5, 150, 105, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-sky-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-sky-300" : "text-sky-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-sky-600 dark:text-sky-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#ecfdf5',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#f0fdf4',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>Technical Deep Dive</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#dcfce7',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#059669',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #a7f3d0'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Deep Dive
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      Implementation
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Workflow Diagram */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #d1fae5'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '2rem'
-        }}>Data Cleaning Workflow</h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '1rem',
-          textAlign: 'center'
-        }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-sky-300" : "text-sky-800"
+          }`}
+        >
+          Data Cleaning Workflow
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            ["🔍 Data Profiling", "Understand structure and quality"],
-            ["🧹 Missing Data", "Identify and handle gaps"],
-            ["📊 Outliers", "Detect and address anomalies"],
-            ["🔄 Transformation", "Normalize and encode"],
-            ["🔗 Deduplication", "Remove duplicate records"],
-            ["✅ Validation", "Ensure data quality"]
-          ].map(([title, desc], index) => (
-            <div key={index} style={{
-              backgroundColor: '#ecfdf5',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              border: '1px solid #a7f3d0'
-            }}>
-              <div style={{
-                fontSize: '2rem',
-                marginBottom: '0.5rem'
-              }}>{title.split(' ')[0]}</div>
-              <h3 style={{
-                fontSize: '1.2rem',
-                fontWeight: '600',
-                color: '#059669',
-                marginBottom: '0.5rem'
-              }}>{title.split(' ').slice(1).join(' ')}</h3>
-              <p style={{ color: '#374151' }}>{desc}</p>
+            {
+              icon: "🔍",
+              title: "Data Profiling",
+              description: "Understand structure and quality",
+            },
+            {
+              icon: "🧹",
+              title: "Missing Data",
+              description: "Identify and handle gaps",
+            },
+            {
+              icon: "📊",
+              title: "Outliers",
+              description: "Detect and address anomalies",
+            },
+            {
+              icon: "🔄",
+              title: "Transformation",
+              description: "Normalize and encode",
+            },
+            {
+              icon: "🔗",
+              title: "Deduplication",
+              description: "Remove duplicate records",
+            },
+            {
+              icon: "✅",
+              title: "Validation",
+              description: "Ensure data quality",
+            },
+          ].map((step, index) => (
+            <div
+              key={index}
+              className={`p-6 rounded-xl border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600"
+                  : "bg-sky-50 border-sky-200"
+              }`}
+            >
+              <div className="text-3xl mb-3">{step.icon}</div>
+              <h3
+                className={`text-xl font-bold mb-2 ${
+                  darkMode ? "text-sky-300" : "text-sky-700"
+                }`}
+              >
+                {step.title}
+              </h3>
+              <p className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+                {step.description}
+              </p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Best Practices */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#ecfdf5',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #d1fae5'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#059669',
-          marginBottom: '1.5rem'
-        }}>Data Cleaning Best Practices</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>Process Guidelines</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Always profile data before cleaning
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Document all cleaning steps for reproducibility
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Validate after each major cleaning operation
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Maintain raw data separately from cleaned versions
-              </li>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-sky-900/30" : "bg-sky-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-sky-300" : "text-sky-800"
+          }`}
+        >
+          Data Cleaning Best Practices
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-sky-300" : "text-sky-800"
+              }`}
+            >
+              Process Guidelines
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>Always profile data before cleaning</li>
+              <li>Document all cleaning steps for reproducibility</li>
+              <li>Validate after each major cleaning operation</li>
+              <li>Maintain raw data separately from cleaned versions</li>
             </ul>
           </div>
-          
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>Technical Recommendations</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              <strong>Automation:</strong> Create reusable cleaning pipelines<br/>
-              <strong>Versioning:</strong> Track changes to cleaning procedures<br/>
-              <strong>Testing:</strong> Implement data quality tests<br/>
+
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-sky-300" : "text-sky-800"
+              }`}
+            >
+              Technical Recommendations
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>Automation:</strong> Create reusable cleaning pipelines
+              <br />
+              <strong>Versioning:</strong> Track changes to cleaning procedures
+              <br />
+              <strong>Testing:</strong> Implement data quality tests
+              <br />
               <strong>Monitoring:</strong> Set up alerts for data quality issues
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#059669',
-              marginBottom: '0.75rem'
-            }}>ML-Specific Considerations</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              <strong>Train-test consistency:</strong> Apply same cleaning to all splits<br/>
-              <strong>Feature engineering:</strong> Clean in context of feature creation<br/>
-              <strong>Model sensitivity:</strong> Tailor cleaning to model requirements<br/>
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-sky-300" : "text-sky-800"
+              }`}
+            >
+              ML-Specific Considerations
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>Train-test consistency:</strong> Apply same cleaning to
+              all splits
+              <br />
+              <strong>Feature engineering:</strong> Clean in context of feature
+              creation
+              <br />
+              <strong>Model sensitivity:</strong> Tailor cleaning to model
+              requirements
+              <br />
               <strong>Monitoring:</strong> Track data drift in production
             </p>
           </div>

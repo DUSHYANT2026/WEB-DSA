@@ -1,12 +1,50 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-green-100 dark:border-green-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 dark:from-green-700 dark:to-green-800 dark:hover:from-green-800 dark:hover:to-green-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 dark:focus:ring-green-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function BiasVarianceTradeoff() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
   };
 
   const content = [
@@ -247,233 +285,182 @@ plt.show()`,
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #eff6ff, #e0f2fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #1d4ed8, #3b82f6)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-green-50 to-green-100"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-green-400 to-green-500"
+            : "bg-gradient-to-r from-green-600 to-green-700"
+        } mb-8 sm:mb-12`}
+      >
         Bias-Variance Tradeoff
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(29, 78, 216, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #1d4ed8'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#1d4ed8',
-          marginBottom: '1rem'
-        }}>Model Evaluation and Optimization</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-green-900/20" : "bg-green-100"
+        } border-l-4 border-green-600`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-green-500 text-green-800">
+          Model Evaluation and Optimization
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
           The bias-variance tradeoff is a fundamental concept that helps explain model behavior
           and guides the selection and tuning of machine learning algorithms. Understanding this
           tradeoff is crucial for building models that generalize well to unseen data.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #bfdbfe',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#1d4ed8'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #1d4ed8, #3b82f6)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(29, 78, 216, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-green-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-green-300" : "text-green-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-green-600 dark:text-green-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#eff6ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#1d4ed8',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#1d4ed8',
-                  marginBottom: '1rem'
-                }}>Technical Deep Dive</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#dbeafe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#1d4ed8',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #93c5fd'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-yellow-900/30" : "bg-yellow-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-yellow-400 text-yellow-600">
+                      Technical Deep Dive
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Implementation Example
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      Computational Complexity: {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Diagnostic Table */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bfdbfe'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#1d4ed8',
-          marginBottom: '2rem'
-        }}>Bias-Variance Diagnostics</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#1d4ed8',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-green-300" : "text-green-800"
+          }`}
+        >
+          Bias-Variance Diagnostics
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-green-900" : "bg-green-700"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Symptom</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Training Error</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Validation Error</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Likely Issue</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Solution</th>
+                <th className="p-4 text-left">Symptom</th>
+                <th className="p-4 text-left">Training Error</th>
+                <th className="p-4 text-left">Validation Error</th>
+                <th className="p-4 text-left">Likely Issue</th>
+                <th className="p-4 text-left">Solution</th>
               </tr>
             </thead>
             <tbody>
@@ -484,15 +471,27 @@ plt.show()`,
                 ["Error decreases with more data", "Decreasing", "Decreasing", "High variance", "Get more training data"],
                 ["Error plateaus with more data", "Stable", "Stable", "High bias", "Change model architecture"]
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f8fafc' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -504,71 +503,50 @@ plt.show()`,
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#eff6ff',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bfdbfe'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#1d4ed8',
-          marginBottom: '1.5rem'
-        }}>Practical Guidelines</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#1d4ed8',
-              marginBottom: '0.75rem'
-            }}>Model Selection Strategy</h4>
-            <ol style={{
-              listStyleType: 'decimal',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Start with a simple model to establish a baseline
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Gradually increase complexity while monitoring validation performance
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Stop when validation error stops improving or starts increasing
-              </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Apply regularization if the model shows signs of overfitting
-              </li>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-green-900/30" : "bg-green-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-green-300" : "text-green-800"
+          }`}
+        >
+          Practical Guidelines
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-green-300" : "text-green-800"
+              }`}
+            >
+              Model Selection Strategy
+            </h4>
+            <ol className={`list-decimal pl-6 space-y-2 ${
+              darkMode ? "text-gray-200" : "text-gray-800"
+            }`}>
+              <li>Start with a simple model to establish a baseline</li>
+              <li>Gradually increase complexity while monitoring validation performance</li>
+              <li>Stop when validation error stops improving or starts increasing</li>
+              <li>Apply regularization if the model shows signs of overfitting</li>
             </ol>
           </div>
           
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#1d4ed8',
-              marginBottom: '0.75rem'
-            }}>Algorithm-Specific Tips</h4>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-              gap: '1rem'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-green-300" : "text-green-800"
+            }`}>
+              Algorithm-Specific Tips
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
                 ["Linear Models", "Control bias with feature engineering, variance with regularization"],
                 ["Decision Trees", "Control variance with max_depth/min_samples_leaf"],
@@ -576,40 +554,27 @@ plt.show()`,
                 ["SVM", "Control bias-variance with C and kernel parameters"],
                 ["Ensembles", "Bagging reduces variance, boosting reduces bias"]
               ].map(([algorithm, tip], index) => (
-                <div key={index} style={{
-                  backgroundColor: '#eff6ff',
-                  padding: '1rem',
-                  borderRadius: '8px'
-                }}>
-                  <h5 style={{
-                    fontSize: '1.1rem',
-                    fontWeight: '600',
-                    color: '#1d4ed8',
-                    marginBottom: '0.5rem'
-                  }}>{algorithm}</h5>
-                  <p style={{ color: '#374151' }}>{tip}</p>
+                <div key={index} className={`p-4 rounded-lg ${
+                  darkMode ? "bg-gray-700" : "bg-green-50"
+                }`}>
+                  <h5 className={`font-semibold ${
+                    darkMode ? "text-green-300" : "text-green-700"
+                  }`}>{algorithm}</h5>
+                  <p className={`${darkMode ? "text-gray-200" : "text-gray-700"}`}>{tip}</p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#1d4ed8',
-              marginBottom: '0.75rem'
-            }}>When to Collect More Data</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div className={`p-6 rounded-xl shadow-sm ${
+            darkMode ? "bg-gray-800" : "bg-white"
+          }`}>
+            <h4 className={`text-xl font-semibold mb-4 ${
+              darkMode ? "text-green-300" : "text-green-800"
+            }`}>
+              When to Collect More Data
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
               More training data primarily helps with <strong>high variance</strong> problems:
               <br/><br/>
               - If your model performs well on training data but poorly on validation data<br/>
