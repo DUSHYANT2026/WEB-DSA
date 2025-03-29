@@ -356,7 +356,9 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
               justifyContent: "space-between",
               alignItems: "center",
               marginBottom: "1.5rem",
+              cursor: "pointer",
             }}
+            onClick={() => toggleSection(section.id)}
           >
             <h2
               style={{
@@ -367,27 +369,49 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
             >
               {section.title}
             </h2>
-            <button
-              onClick={() => toggleSection(section.id)}
+            <div
               style={{
-                background: "linear-gradient(to right, #4f46e5, #7c3aed)",
-                color: "white",
-                padding: "0.75rem 1.5rem",
-                borderRadius: "8px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "600",
-                transition: "all 0.2s ease",
+                width: "36px",
+                height: "36px",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: darkMode
+                  ? "rgba(79, 70, 229, 0.2)"
+                  : "rgba(79, 70, 229, 0.1)",
+                transition: "all 0.3s ease",
+                transform:
+                  visibleSection === section.id
+                    ? "rotate(180deg)"
+                    : "rotate(0deg)",
                 ":hover": {
-                  transform: "scale(1.05)",
-                  boxShadow: "0 5px 15px rgba(79, 70, 229, 0.4)",
+                  transform:
+                    visibleSection === section.id
+                      ? "rotate(180deg) scale(1.1)"
+                      : "rotate(0deg) scale(1.1)",
+                  backgroundColor: darkMode
+                    ? "rgba(79, 70, 229, 0.3)"
+                    : "rgba(79, 70, 229, 0.2)",
                 },
               }}
             >
-              {visibleSection === section.id
-                ? "Collapse Section"
-                : "Expand Section"}
-            </button>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke={darkMode ? "#e2e8f0" : "#4f46e5"}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
 
           {visibleSection === section.id && (
@@ -506,7 +530,9 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
                   style={{
                     borderRadius: "8px",
                     overflow: "hidden",
-                    border: darkMode ? "2px solid #5b21b6" : "2px solid #e9d5ff",
+                    border: darkMode
+                      ? "2px solid #5b21b6"
+                      : "2px solid #e9d5ff",
                   }}
                 >
                   <SyntaxHighlighter
@@ -840,4 +866,4 @@ compressed = U[:, :k] @ np.diag(s[:k]) @ Vt[:k, :]`,
   );
 }
 
-export default LinearAlgebra;   
+export default LinearAlgebra;
