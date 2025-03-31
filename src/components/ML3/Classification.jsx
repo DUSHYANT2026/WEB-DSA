@@ -1,24 +1,63 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-amber-100 dark:border-amber-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 dark:from-orange-600 dark:to-amber-600 dark:hover:from-orange-700 dark:hover:to-amber-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function Classification() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
   };
 
   const content = [
     {
       title: "📊 Logistic Regression",
       id: "logistic",
-      description: "A fundamental linear classification algorithm that models probabilities using a sigmoid function.",
+      description:
+        "A fundamental linear classification algorithm that models probabilities using a sigmoid function.",
       keyPoints: [
         "Binary classification using sigmoid activation",
         "Linear decision boundary",
         "Outputs class probabilities",
-        "Regularized variants (L1/L2)"
+        "Regularized variants (L1/L2)",
       ],
       detailedExplanation: [
         "How it works:",
@@ -40,7 +79,7 @@ function Classification() {
         "Hyperparameters:",
         "- Regularization strength (C)",
         "- Penalty type (L1/L2/elasticnet)",
-        "- Solver algorithm (liblinear, saga, etc.)"
+        "- Solver algorithm (liblinear, saga, etc.)",
       ],
       code: {
         python: `# Logistic Regression Example
@@ -73,18 +112,20 @@ print("Class probabilities for first sample:", probs[0])
 # Feature importance
 print("Coefficients:", model.coef_)
 print("Intercept:", model.intercept_)`,
-        complexity: "Training: O(n_samples × n_features), Prediction: O(n_features)"
-      }
+        complexity:
+          "Training: O(n_samples × n_features), Prediction: O(n_features)",
+      },
     },
     {
       title: "🌳 Decision Trees",
       id: "trees",
-      description: "Non-parametric models that learn hierarchical decision rules from data.",
+      description:
+        "Non-parametric models that learn hierarchical decision rules from data.",
       keyPoints: [
         "Recursive binary splitting of feature space",
         "Split criteria: Gini impurity or entropy",
         "Prone to overfitting without regularization",
-        "Can handle non-linear relationships"
+        "Can handle non-linear relationships",
       ],
       detailedExplanation: [
         "Learning process:",
@@ -107,7 +148,7 @@ print("Intercept:", model.intercept_)`,
         "- Maximum depth",
         "- Minimum samples per leaf",
         "- Minimum impurity decrease",
-        "- Cost complexity pruning"
+        "- Cost complexity pruning",
       ],
       code: {
         python: `# Decision Tree Classifier
@@ -138,18 +179,20 @@ for feature, importance in zip(features, importances):
 # Evaluate
 print(f"Training accuracy: {tree.score(X_train, y_train):.2f}")
 print(f"Test accuracy: {tree.score(X_test, y_test):.2f}")`,
-        complexity: "Training: O(n_samples × n_features × depth), Prediction: O(depth)"
-      }
+        complexity:
+          "Training: O(n_samples × n_features × depth), Prediction: O(depth)",
+      },
     },
     {
       title: "🌲 Random Forest",
       id: "forest",
-      description: "Ensemble method that combines multiple decision trees via bagging.",
+      description:
+        "Ensemble method that combines multiple decision trees via bagging.",
       keyPoints: [
         "Builds many trees on random subsets of data/features",
         "Averages predictions for better generalization",
         "Reduces variance compared to single trees",
-        "Built-in feature importance"
+        "Built-in feature importance",
       ],
       detailedExplanation: [
         "How it works:",
@@ -173,7 +216,7 @@ print(f"Test accuracy: {tree.score(X_test, y_test):.2f}")`,
         "- Extremely Randomized Trees (ExtraTrees)",
         "- Feature importance scores",
         "- Out-of-bag error estimation",
-        "- Partial dependence plots"
+        "- Partial dependence plots",
       ],
       code: {
         python: `# Random Forest Classifier
@@ -205,18 +248,20 @@ plt.barh(features, importances, xerr=std, align='center')
 plt.xlabel("Feature Importance")
 plt.title("Random Forest Feature Importance")
 plt.show()`,
-        complexity: "Training: O(n_trees × n_samples × n_features × depth), Prediction: O(n_trees × depth)"
-      }
+        complexity:
+          "Training: O(n_trees × n_samples × n_features × depth), Prediction: O(n_trees × depth)",
+      },
     },
     {
       title: "⚡ Support Vector Machines (SVM)",
       id: "svm",
-      description: "Powerful classifiers that find optimal separating hyperplanes in high-dimensional spaces.",
+      description:
+        "Powerful classifiers that find optimal separating hyperplanes in high-dimensional spaces.",
       keyPoints: [
         "Finds maximum-margin decision boundary",
         "Kernel trick for non-linear classification",
         "Effective in high-dimensional spaces",
-        "Memory intensive for large datasets"
+        "Memory intensive for large datasets",
       ],
       detailedExplanation: [
         "Key concepts:",
@@ -239,7 +284,7 @@ plt.show()`,
         "- Scaling features is critical",
         "- Regularization parameter C controls margin",
         "- Kernel choice affects performance",
-        "- Can be memory intensive"
+        "- Can be memory intensive",
       ],
       code: {
         python: `# SVM Classifier
@@ -289,18 +334,20 @@ def plot_decision_boundary(clf, X, y):
 
 # For 2D data only:
 # plot_decision_boundary(svm, X_train[:, :2], y_train)`,
-        complexity: "Training: O(n_samples² to n_samples³), Prediction: O(n_support_vectors × n_features)"
-      }
+        complexity:
+          "Training: O(n_samples² to n_samples³), Prediction: O(n_support_vectors × n_features)",
+      },
     },
     {
       title: "🧠 Neural Networks for Classification",
       id: "nn",
-      description: "Flexible function approximators that can learn complex decision boundaries.",
+      description:
+        "Flexible function approximators that can learn complex decision boundaries.",
       keyPoints: [
         "Multi-layer perceptrons (MLPs) for classification",
         "Backpropagation for training",
         "Non-linear activation functions",
-        "Requires careful hyperparameter tuning"
+        "Requires careful hyperparameter tuning",
       ],
       detailedExplanation: [
         "Architecture components:",
@@ -324,7 +371,7 @@ def plot_decision_boundary(clf, X, y):
         "- Feature scaling is essential",
         "- Batch normalization helps training",
         "- Early stopping prevents overfitting",
-        "- Architecture search is important"
+        "- Architecture search is important",
       ],
       code: {
         python: `# Neural Network Classifier
@@ -384,257 +431,245 @@ history = model.fit(X_train, y_train,
                     batch_size=32,
                     validation_split=0.2)
 """`,
-        complexity: "Training: O(n_samples × n_features × width × depth × epochs), Prediction: O(width × depth × n_features)"
-      }
-    }
+        complexity:
+          "Training: O(n_samples × n_features × width × depth × epochs), Prediction: O(width × depth × n_features)",
+      },
+    },
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f0f9ff, #e0f2fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #0369a1, #0ea5e9)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-orange-50 to-amber-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-orange-400 to-amber-400"
+            : "bg-gradient-to-r from-orange-600 to-amber-600"
+        } mb-8 sm:mb-12`}
+      >
         Classification Algorithms
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(14, 165, 233, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #0ea5e9'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1rem'
-        }}>Supervised Learning → Classification</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
-          Classification algorithms predict discrete class labels from input features. 
-          This section covers fundamental classification methods from linear models to 
-          deep neural networks, with practical implementation examples.
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-orange-900/20" : "bg-orange-100"
+        } border-l-4 border-orange-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-orange-500 text-orange-800">
+          Supervised Learning → Classification
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+          Classification algorithms predict discrete class labels from input
+          features. This section covers fundamental classification methods from
+          linear models to deep neural networks, with practical implementation
+          examples.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #bae6fd',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#0ea5e9'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #0ea5e9, #38bdf8)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(14, 165, 233, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-amber-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-orange-300" : "text-orange-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-orange-600 dark:text-orange-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#e0f2fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#f0f9ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Technical Details</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: '#bae6fd',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Implementation</h3>
-                <p style={{
-                  color: '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: '2px solid #7dd3fc'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Details
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-amber-900/30" : "bg-amber-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-amber-400 text-amber-600">
+                      Implementation
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      Computational Complexity: {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Comparison Table */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '2rem'
-        }}>Classification Algorithm Comparison</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#0ea5e9',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-orange-300" : "text-orange-800"
+          }`}
+        >
+          Classification Algorithm Comparison
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-orange-900" : "bg-orange-600"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Algorithm</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Strengths</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Weaknesses</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Best Use Cases</th>
+                <th className="p-4 text-left">Algorithm</th>
+                <th className="p-4 text-left">Strengths</th>
+                <th className="p-4 text-left">Weaknesses</th>
+                <th className="p-4 text-left">Best Use Cases</th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["Logistic Regression", "Fast, interpretable, probabilistic", "Linear decision boundary", "Baseline, linearly separable data"],
-                ["Decision Trees", "Non-linear, feature importance", "Prone to overfitting", "Interpretable models, mixed data types"],
-                ["Random Forest", "Robust, handles non-linearity", "Less interpretable", "General purpose, feature importance"],
-                ["SVM", "Effective in high-D, kernel trick", "Memory intensive", "Small/medium datasets, clear margin"],
-                ["Neural Networks", "Flexible, state-of-the-art", "Data hungry, complex tuning", "Complex patterns, large datasets"]
+                [
+                  "Logistic Regression",
+                  "Fast, interpretable, probabilistic",
+                  "Linear decision boundary",
+                  "Baseline, linearly separable data",
+                ],
+                [
+                  "Decision Trees",
+                  "Non-linear, feature importance",
+                  "Prone to overfitting",
+                  "Interpretable models, mixed data types",
+                ],
+                [
+                  "Random Forest",
+                  "Robust, handles non-linearity",
+                  "Less interpretable",
+                  "General purpose, feature importance",
+                ],
+                [
+                  "SVM",
+                  "Effective in high-D, kernel trick",
+                  "Memory intensive",
+                  "Small/medium datasets, clear margin",
+                ],
+                [
+                  "Neural Networks",
+                  "Flexible, state-of-the-art",
+                  "Data hungry, complex tuning",
+                  "Complex patterns, large datasets",
+                ],
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 ? '#f0f9ff' : 'white',
-                  borderBottom: '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -646,101 +681,89 @@ history = model.fit(X_train, y_train,
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#e0f2fe',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #bae6fd'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1.5rem'
-        }}>Classification Best Practices</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Model Selection Guidelines</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-orange-900/30" : "bg-orange-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-orange-300" : "text-orange-800"
+          }`}
+        >
+          Classification Best Practices
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-orange-300" : "text-orange-800"
+              }`}
+            >
+              Model Selection Guidelines
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>
                 Start simple (logistic regression) before trying complex models
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Use tree-based models for interpretability and mixed data types
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Choose neural networks for complex patterns and large datasets
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Consider SVM for small/medium datasets with clear margins
-              </li>
+              <li>Consider SVM for small/medium datasets with clear margins</li>
             </ul>
           </div>
-          
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Evaluation Metrics</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              Beyond accuracy, consider:
-              <br/><br/>
-              - <strong>Precision/Recall</strong>: For imbalanced classes<br/>
-              - <strong>ROC AUC</strong>: Overall ranking performance<br/>
-              - <strong>F1 Score</strong>: Balance of precision and recall<br/>
-              - <strong>Confusion Matrix</strong>: Detailed error analysis
+
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-orange-300" : "text-orange-800"
+              }`}
+            >
+              Evaluation Metrics
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>Beyond accuracy, consider:</strong>
+              <br />
+              <br />
+              - Precision/Recall: For imbalanced classes
+              <br />
+              - ROC AUC: Overall ranking performance
+              <br />
+              - F1 Score: Balance of precision and recall
+              <br />- Confusion Matrix: Detailed error analysis
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Practical Tips</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              - Scale features for SVM and neural networks<br/>
-              - Handle class imbalance with weighting or resampling<br/>
-              - Use cross-validation for reliable performance estimates<br/>
-              - Monitor training/validation curves for overfitting
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-orange-300" : "text-orange-800"
+              }`}
+            >
+              Practical Tips
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              - Scale features for SVM and neural networks
+              <br />
+              - Handle class imbalance with weighting or resampling
+              <br />
+              - Use cross-validation for reliable performance estimates
+              <br />- Monitor training/validation curves for overfitting
             </p>
           </div>
         </div>

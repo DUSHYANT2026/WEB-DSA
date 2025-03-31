@@ -1,9 +1,28 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
+import { useTheme } from "../../ThemeContext.jsx";
+
+const TimelineItem = ({ year, event, darkMode }) => (
+  <div className="flex items-center space-x-4">
+    <div
+      className={`px-3 py-1 rounded-full font-semibold ${
+        darkMode ? "bg-rose-600 text-white" : "bg-rose-500 text-white"
+      }`}
+    >
+      {year}
+    </div>
+    <div className={`${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+      {event}
+    </div>
+  </div>
+);
 
 function HistoryML() {
+  const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
@@ -13,12 +32,13 @@ function HistoryML() {
     {
       title: "🕰️ Origins of Machine Learning",
       id: "origins",
-      description: "The foundational ideas and early developments that shaped modern machine learning.",
+      description:
+        "The foundational ideas and early developments that shaped modern machine learning.",
       keyPoints: [
         "1940s-50s: Birth of neural networks and cybernetics",
         "1950: Alan Turing's 'Computing Machinery and Intelligence'",
         "1956: Dartmouth Workshop - birth of AI as a field",
-        "1957: Frank Rosenblatt's Perceptron"
+        "1957: Frank Rosenblatt's Perceptron",
       ],
       detailedExplanation: [
         "Early Pioneers:",
@@ -35,25 +55,26 @@ function HistoryML() {
         "- Norbert Wiener's Cybernetics (1948)",
         "- Claude Shannon's Information Theory",
         "- Frank Rosenblatt's Perceptron Convergence Theorem",
-        "- Marvin Minsky's work on AI foundations"
+        "- Marvin Minsky's work on AI foundations",
       ],
       timeline: [
         ["1943", "McCulloch-Pitts neuron model"],
         ["1950", "Turing's seminal paper on machine intelligence"],
         ["1956", "Dartmouth Conference - AI founding event"],
         ["1957", "Rosenblatt's Perceptron"],
-        ["1959", "Arthur Samuel defines machine learning"]
-      ]
+        ["1959", "Arthur Samuel defines machine learning"],
+      ],
     },
     {
       title: "📉 AI Winters and Resurgences",
       id: "winters",
-      description: "Periods of reduced funding and interest followed by renewed excitement in AI/ML.",
+      description:
+        "Periods of reduced funding and interest followed by renewed excitement in AI/ML.",
       keyPoints: [
         "1974-80: First AI winter (Perceptron limitations)",
         "1987-93: Second AI winter (expert systems plateau)",
         "1990s: Resurgence with statistical approaches",
-        "2000s: Emergence of practical applications"
+        "2000s: Emergence of practical applications",
       ],
       detailedExplanation: [
         "First AI Winter (1974-1980):",
@@ -74,25 +95,26 @@ function HistoryML() {
         "Factors in Resurgence:",
         "- Increased computational power",
         "- Availability of large datasets",
-        "- Improved algorithms and theoretical understanding"
+        "- Improved algorithms and theoretical understanding",
       ],
       timeline: [
         ["1969", "Minsky & Papert expose Perceptron limitations"],
         ["1974", "First AI winter begins"],
         ["1986", "Backpropagation rediscovered"],
         ["1987", "Second AI winter begins"],
-        ["1995", "Support Vector Machines introduced"]
-      ]
+        ["1995", "Support Vector Machines introduced"],
+      ],
     },
     {
       title: "🚀 Modern Machine Learning Era",
       id: "modern",
-      description: "The explosion of machine learning in the 21st century and current state of the field.",
+      description:
+        "The explosion of machine learning in the 21st century and current state of the field.",
       keyPoints: [
         "2006: Deep learning breakthrough (Hinton et al.)",
         "2012: AlexNet dominates ImageNet competition",
         "2015: ResNet enables very deep networks",
-        "2017: Transformer architecture revolutionizes NLP"
+        "2017: Transformer architecture revolutionizes NLP",
       ],
       detailedExplanation: [
         "Key Developments:",
@@ -111,25 +133,26 @@ function HistoryML() {
         "- Widespread industry adoption",
         "- Ethical concerns and responsible AI",
         "- Hardware specialization (TPUs, neuromorphic chips)",
-        "- Multimodal models and AGI research"
+        "- Multimodal models and AGI research",
       ],
       timeline: [
         ["2006", "Deep learning renaissance begins"],
         ["2012", "AlexNet wins ImageNet"],
         ["2015", "ResNet enables 100+ layer networks"],
         ["2017", "Transformer architecture introduced"],
-        ["2020", "GPT-3 demonstrates few-shot learning"]
-      ]
+        ["2020", "GPT-3 demonstrates few-shot learning"],
+      ],
     },
     {
       title: "🔮 Future Directions",
       id: "future",
-      description: "Emerging trends and potential future developments in machine learning.",
+      description:
+        "Emerging trends and potential future developments in machine learning.",
       keyPoints: [
         "Self-supervised and unsupervised learning",
         "Neuromorphic computing and brain-inspired architectures",
         "Explainable AI (XAI) and interpretability",
-        "AI safety and alignment research"
+        "AI safety and alignment research",
       ],
       detailedExplanation: [
         "Technical Frontiers:",
@@ -154,286 +177,236 @@ function HistoryML() {
         "- Quantum machine learning",
         "- Biological learning systems",
         "- Artificial general intelligence",
-        "- Human-AI collaboration frameworks"
+        "- Human-AI collaboration frameworks",
       ],
       timeline: [
         ["2022", "Large language models become mainstream"],
         ["2025", "Projected growth in edge AI"],
         ["2030", "Potential AGI milestones"],
-        ["2040", "Speculative brain-computer interfaces"]
-      ]
-    }
+        ["2040", "Speculative brain-computer interfaces"],
+      ],
+    },
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: 'linear-gradient(to bottom right, #f5f3ff, #ede9fe)',
-      borderRadius: '20px',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #7c3aed, #8b5cf6)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-rose-50 to-pink-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-rose-400 to-pink-400"
+            : "bg-gradient-to-r from-rose-600 to-pink-600"
+        } mb-8 sm:mb-12`}
+      >
         History of Machine Learning
       </h1>
 
-      <div style={{
-        backgroundColor: 'rgba(124, 58, 237, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #7c3aed'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#7c3aed',
-          marginBottom: '1rem'
-        }}>Introduction to Machine Learning → History</h2>
-        <p style={{
-          color: '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
-          Machine learning has evolved through decades of research, setbacks, and breakthroughs. 
-          Understanding this history provides context for current techniques and insights into 
-          future developments in artificial intelligence.
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-rose-900/20" : "bg-rose-100"
+        } border-l-4 border-rose-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-rose-500 text-rose-800">
+          Introduction to Machine Learning → History
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+          Machine learning has evolved through decades of research, setbacks,
+          and breakthroughs. Understanding this history provides context for
+          current techniques and insights into future developments in artificial
+          intelligence.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: 'white',
-            borderRadius: '16px',
-            boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: '1px solid #ddd6fe',
-            ':hover': {
-              boxShadow: '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#7c3aed'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #7c3aed, #8b5cf6)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(124, 58, 237, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-rose-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-rose-300" : "text-rose-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-rose-600 dark:text-rose-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: '#f5f3ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#7c3aed',
-                  marginBottom: '1rem'
-                }}>Key Developments</h3>
-                <p style={{
-                  color: '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: '#ede9fe',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#7c3aed',
-                  marginBottom: '1rem'
-                }}>Historical Context</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Key Developments
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
                     </p>
-                  ))}
-                </div>
-              </div>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
 
-              <div style={{
-                backgroundColor: '#e9d5ff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#7c3aed',
-                  marginBottom: '1rem'
-                }}>Timeline</h3>
-                <div style={{
-                  display: 'grid',
-                  gap: '0.5rem',
-                  gridTemplateColumns: 'auto 1fr',
-                  alignItems: 'center'
-                }}>
-                  {section.timeline.map(([year, event], index) => (
-                    <React.Fragment key={index}>
-                      <div style={{
-                        backgroundColor: '#7c3aed',
-                        color: 'white',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '20px',
-                        fontWeight: '600',
-                        justifySelf: 'start'
-                      }}>
-                        {year}
-                      </div>
-                      <div style={{ color: '#374151' }}>{event}</div>
-                    </React.Fragment>
-                  ))}
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Historical Context
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      Timeline
+                    </h3>
+                    <div className="space-y-3">
+                      {section.timeline.map(([year, event], index) => (
+                        <TimelineItem
+                          key={index}
+                          year={year}
+                          event={event}
+                          darkMode={darkMode}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Key Figures */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #ddd6fe'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#7c3aed',
-          marginBottom: '2rem'
-        }}>Pioneers of Machine Learning</h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: '1.5rem'
-        }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-rose-300" : "text-rose-800"
+          }`}
+        >
+          Pioneers of Machine Learning
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
             {
               name: "Alan Turing",
-              contribution: "Theoretical foundations of computation and learning",
-              period: "1930s-1950s"
+              contribution:
+                "Theoretical foundations of computation and learning",
+              period: "1930s-1950s",
             },
             {
               name: "Frank Rosenblatt",
               contribution: "Invented the Perceptron (early neural network)",
-              period: "1950s-1960s"
+              period: "1950s-1960s",
             },
             {
               name: "Geoffrey Hinton",
               contribution: "Backpropagation, Deep Learning revival",
-              period: "1980s-present"
+              period: "1980s-present",
             },
             {
               name: "Yann LeCun",
               contribution: "Convolutional Neural Networks",
-              period: "1980s-present"
+              period: "1980s-present",
             },
             {
               name: "Yoshua Bengio",
               contribution: "Probabilistic models, sequence learning",
-              period: "1990s-present"
+              period: "1990s-present",
             },
             {
               name: "Andrew Ng",
               contribution: "Popularizing ML education, practical applications",
-              period: "2000s-present"
-            }
+              period: "2000s-present",
+            },
           ].map((person, index) => (
-            <div key={index} style={{
-              backgroundColor: '#f5f3ff',
-              padding: '1.5rem',
-              borderRadius: '12px',
-              borderLeft: '4px solid #7c3aed'
-            }}>
-              <h3 style={{
-                fontSize: '1.3rem',
-                fontWeight: '700',
-                color: '#7c3aed',
-                marginBottom: '0.5rem'
-              }}>{person.name}</h3>
-              <p style={{ color: '#374151', marginBottom: '0.5rem' }}>{person.contribution}</p>
-              <div style={{
-                display: 'inline-block',
-                backgroundColor: '#ede9fe',
-                color: '#7c3aed',
-                padding: '0.25rem 0.75rem',
-                borderRadius: '20px',
-                fontSize: '0.9rem',
-                fontWeight: '600'
-              }}>
+            <div
+              key={index}
+              className={`p-6 rounded-xl border ${
+                darkMode
+                  ? "bg-gray-700 border-gray-600"
+                  : "bg-rose-50 border-rose-200"
+              }`}
+            >
+              <h3
+                className={`text-xl font-bold mb-2 ${
+                  darkMode ? "text-rose-300" : "text-rose-700"
+                }`}
+              >
+                {person.name}
+              </h3>
+              <p
+                className={`${
+                  darkMode ? "text-gray-300" : "text-gray-700"
+                } mb-3`}
+              >
+                {person.contribution}
+              </p>
+              <div
+                className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${
+                  darkMode
+                    ? "bg-rose-900 text-rose-200"
+                    : "bg-rose-200 text-rose-800"
+                }`}
+              >
                 {person.period}
               </div>
             </div>
@@ -442,103 +415,119 @@ function HistoryML() {
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: '#f5f3ff',
-        borderRadius: '16px',
-        boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-        border: '1px solid #ddd6fe'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#7c3aed',
-          marginBottom: '1.5rem'
-        }}>Lessons from ML History</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#7c3aed',
-              marginBottom: '0.75rem'
-            }}>Patterns of Progress</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-rose-900/30" : "bg-rose-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-rose-300" : "text-rose-800"
+          }`}
+        >
+          Lessons from ML History
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-rose-300" : "text-rose-800"
+              }`}
+            >
+              Patterns of Progress
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>
                 Alternating cycles of hype and disillusionment (AI winters)
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Theoretical breakthroughs often precede practical applications by decades
+              <li>
+                Theoretical breakthroughs often precede practical applications
+                by decades
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
+              <li>
                 Hardware advances frequently enable algorithmic breakthroughs
               </li>
-              <li style={{ color: '#374151', fontSize: '1.1rem' }}>
-                Interdisciplinary cross-pollination drives innovation
-              </li>
+              <li>Interdisciplinary cross-pollination drives innovation</li>
             </ul>
           </div>
           
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#7c3aed',
-              marginBottom: '0.75rem'
-            }}>Historical Context for Current ML</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              Many "new" concepts in machine learning have deep historical roots:
-              <br/><br/>
-              - Modern neural networks build on 1940s neurobiological models<br/>
-              - Attention mechanisms relate to 1990s memory networks<br/>
-              - GANs extend earlier work on adversarial training<br/>
-              - Transfer learning concepts date to 1970s psychological theories
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "1.5rem",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <h4
+              style={{
+                fontSize: "1.3rem",
+                fontWeight: "600",
+                color: "#7c3aed",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Historical Context for Current ML
+            </h4>
+            <p
+              style={{
+                color: "#374151",
+                fontSize: "1.1rem",
+                lineHeight: "1.6",
+              }}
+            >
+              Many "new" concepts in machine learning have deep historical
+              roots:
+              <br />
+              <br />
+              - Modern neural networks build on 1940s neurobiological models
+              <br />
+              - Attention mechanisms relate to 1990s memory networks
+              <br />
+              - GANs extend earlier work on adversarial training
+              <br />- Transfer learning concepts date to 1970s psychological
+              theories
             </p>
           </div>
 
-          <div style={{
-            backgroundColor: 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#7c3aed',
-              marginBottom: '0.75rem'
-            }}>Future Outlook</h4>
-            <p style={{
-              color: '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "1.5rem",
+              borderRadius: "12px",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            }}
+          >
+            <h4
+              style={{
+                fontSize: "1.3rem",
+                fontWeight: "600",
+                color: "#7c3aed",
+                marginBottom: "0.75rem",
+              }}
+            >
+              Future Outlook
+            </h4>
+            <p
+              style={{
+                color: "#374151",
+                fontSize: "1.1rem",
+                lineHeight: "1.6",
+              }}
+            >
               Based on historical patterns, we can anticipate:
-              <br/><br/>
-              - Continued cycles of hype and consolidation<br/>
-              - Gradual progress toward more general AI capabilities<br/>
-              - Increasing focus on ethical and societal impacts<br/>
-              - Convergence of symbolic and connectionist approaches
+              <br />
+              <br />
+              - Continued cycles of hype and consolidation
+              <br />
+              - Gradual progress toward more general AI capabilities
+              <br />
+              - Increasing focus on ethical and societal impacts
+              <br />- Convergence of symbolic and connectionist approaches
             </p>
           </div>
         </div>

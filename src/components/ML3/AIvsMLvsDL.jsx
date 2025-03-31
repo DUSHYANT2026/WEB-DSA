@@ -1,26 +1,74 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { ChevronDown, ChevronUp } from "react-feather";
 import { useTheme } from "../../ThemeContext.jsx";
+
+const CodeExample = React.memo(({ code, darkMode }) => (
+  <div className="rounded-lg overflow-hidden border-2 border-yellow-100 dark:border-yellow-900 transition-all duration-300">
+    <SyntaxHighlighter
+      language="python"
+      style={tomorrow}
+      showLineNumbers
+      wrapLines
+      customStyle={{
+        padding: "1.5rem",
+        fontSize: "0.95rem",
+        background: darkMode ? "#1e293b" : "#f9f9f9",
+        borderRadius: "0.5rem",
+      }}
+    >
+      {code}
+    </SyntaxHighlighter>
+  </div>
+));
+
+const ToggleCodeButton = ({ isVisible, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`inline-block bg-gradient-to-r from-fuchsia-500 to-purple-500 hover:from-fuchsia-600 hover:to-purple-600 dark:from-fuchsia-600 dark:to-purple-600 dark:hover:from-fuchsia-700 dark:hover:to-purple-700 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-fuchsia-500 dark:focus:ring-fuchsia-600 focus:ring-offset-2`}
+    aria-expanded={isVisible}
+  >
+    {isVisible ? "Hide Python Code" : "Show Python Code"}
+  </button>
+);
 
 function AIvsMLvsDL() {
   const { darkMode } = useTheme();
   const [visibleSection, setVisibleSection] = useState(null);
+  const [showCode, setShowCode] = useState(false);
 
   const toggleSection = (section) => {
     setVisibleSection(visibleSection === section ? null : section);
+    setShowCode(false);
+  };
+
+  const toggleCodeVisibility = () => {
+    setShowCode(!showCode);
+  };
+
+  const formatDescription = (desc) => {
+    return desc.split("\n").map((paragraph, i) => (
+      <p
+        key={i}
+        className="mb-4 whitespace-pre-line dark:text-gray-300 text-gray-800"
+      >
+        {paragraph}
+      </p>
+    ));
   };
 
   const content = [
     {
       title: "🤖 Artificial Intelligence (AI)",
       id: "ai",
-      description: "The broad discipline of creating intelligent machines capable of performing tasks that typically require human intelligence.",
+      description:
+        "The broad discipline of creating intelligent machines capable of performing tasks that typically require human intelligence.",
       keyPoints: [
         "Encompasses all approaches to machine intelligence",
         "Includes both symbolic and sub-symbolic methods",
         "Goal: Create systems that can reason, learn, and act",
-        "Applications: Robotics, NLP, expert systems, planning"
+        "Applications: Robotics, NLP, expert systems, planning",
       ],
       detailedExplanation: [
         "AI Characteristics:",
@@ -41,7 +89,7 @@ function AIvsMLvsDL() {
         "- 1950: Turing Test proposed",
         "- 1956: Dartmouth Conference (AI founding)",
         "- 1997: Deep Blue beats chess champion",
-        "- 2011: IBM Watson wins Jeopardy"
+        "- 2011: IBM Watson wins Jeopardy",
       ],
       code: {
         python: `# Simple Expert System (Rule-Based AI)
@@ -63,18 +111,19 @@ class MedicalDiagnosisSystem:
 # Usage
 system = MedicalDiagnosisSystem()
 print(system.diagnose(['fever', 'cough']))  # Output: ['flu']`,
-        complexity: "Rule-based systems: O(n) where n is number of rules"
-      }
+        complexity: "Rule-based systems: O(n) where n is number of rules",
+      },
     },
     {
       title: "📊 Machine Learning (ML)",
       id: "ml",
-      description: "A subset of AI focused on developing algorithms that improve automatically through experience and data-driven pattern recognition.",
+      description:
+        "A subset of AI focused on developing algorithms that improve automatically through experience and data-driven pattern recognition.",
       keyPoints: [
         "Learns from data without explicit programming",
         "Three main types: Supervised, Unsupervised, Reinforcement",
         "Requires feature engineering",
-        "Applications: Recommendation systems, fraud detection"
+        "Applications: Recommendation systems, fraud detection",
       ],
       detailedExplanation: [
         "ML Characteristics:",
@@ -101,7 +150,7 @@ print(system.diagnose(['fever', 'cough']))  # Output: ['flu']`,
         "2. Feature engineering",
         "3. Model training",
         "4. Evaluation",
-        "5. Deployment"
+        "5. Deployment",
       ],
       code: {
         python: `# Complete ML Pipeline Example
@@ -133,18 +182,19 @@ print(f"Accuracy: {accuracy_score(y_test, predictions):.2f}")
 # Feature importance
 importances = ml_pipeline.named_steps['classifier'].feature_importances_
 print("Feature importances:", importances)`,
-        complexity: "Random Forest: O(m*n log n), where m=features, n=samples"
-      }
+        complexity: "Random Forest: O(m*n log n), where m=features, n=samples",
+      },
     },
     {
       title: "🧠 Deep Learning (DL)",
       id: "dl",
-      description: "A specialized subset of ML using hierarchical neural networks to model complex patterns in large datasets.",
+      description:
+        "A specialized subset of ML using hierarchical neural networks to model complex patterns in large datasets.",
       keyPoints: [
         "Uses artificial neural networks with multiple layers",
         "Automates feature extraction",
         "Excels with unstructured data (images, text, audio)",
-        "Applications: Computer vision, speech recognition"
+        "Applications: Computer vision, speech recognition",
       ],
       detailedExplanation: [
         "DL Characteristics:",
@@ -171,7 +221,7 @@ print("Feature importances:", importances)`,
         "- Requires large datasets",
         "- GPU/TPU acceleration essential",
         "- Hyperparameter tuning critical",
-        "- Regularization techniques important"
+        "- Regularization techniques important",
       ],
       code: {
         python: `# Deep Learning with PyTorch
@@ -229,336 +279,316 @@ class CNN(nn.Module):
         x = nn.functional.relu(self.fc1(x))
         x = self.fc2(x)
         return x`,
-        complexity: "Training: O(n × (k × d + m)), n=layers, k=kernel size, d=depth, m=parameters"
-      }
-    }
+        complexity:
+          "Training: O(n × (k × d + m)), n=layers, k=kernel size, d=depth, m=parameters",
+      },
+    },
   ];
 
   return (
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      padding: '2rem',
-      background: darkMode 
-        ? 'linear-gradient(to bottom right, #1e293b, #0f172a)' 
-        : 'linear-gradient(to bottom right, #f0f9ff, #f0fdf4)',
-      borderRadius: '20px',
-      boxShadow: darkMode ? '0 10px 30px rgba(0,0,0,0.3)' : '0 10px 30px rgba(0,0,0,0.1)',
-      color: darkMode ? '#e2e8f0' : '#1e293b'
-    }}>
-      <h1 style={{
-        fontSize: '3.5rem',
-        fontWeight: '800',
-        textAlign: 'center',
-        background: 'linear-gradient(to right, #0ea5e9, #10b981)',
-        WebkitBackgroundClip: 'text',
-        backgroundClip: 'text',
-        color: 'transparent',
-        marginBottom: '3rem'
-      }}>
+    <div
+      className={`container mx-auto px-4 sm:px-6 py-14 rounded-2xl shadow-xl max-w-7xl ${
+        darkMode
+          ? "bg-gradient-to-br from-gray-900 to-gray-800"
+          : "bg-gradient-to-br from-fuchsia-50 to-purple-50"
+      }`}
+    >
+      <h1
+        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+          darkMode
+            ? "bg-gradient-to-r from-fuchsia-400 to-purple-400"
+            : "bg-gradient-to-r from-fuchsia-600 to-purple-600"
+        } mb-8 sm:mb-12`}
+      >
         AI vs ML vs DL: Understanding the Differences
       </h1>
 
-      <div style={{
-        backgroundColor: darkMode ? 'rgba(14, 165, 233, 0.2)' : 'rgba(14, 165, 233, 0.1)',
-        padding: '2rem',
-        borderRadius: '12px',
-        marginBottom: '3rem',
-        borderLeft: '4px solid #0ea5e9'
-      }}>
-        <h2 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1rem'
-        }}>Introduction to Machine Learning → Differences</h2>
-        <p style={{
-          color: darkMode ? '#e2e8f0' : '#374151',
-          fontSize: '1.1rem',
-          lineHeight: '1.6'
-        }}>
-          Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning (DL) are often used 
-          interchangeably but represent distinct concepts with hierarchical relationships. 
-          This section clarifies their differences and relationships.
+      <div
+        className={`p-6 rounded-xl mb-8 ${
+          darkMode ? "bg-fuchsia-900/20" : "bg-fuchsia-100"
+        } border-l-4 border-fuchsia-500`}
+      >
+        <h2 className="text-2xl font-bold mb-4 dark:text-fuchsia-500 text-fuchsia-800">
+          Introduction to Machine Learning → Differences
+        </h2>
+        <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+          Artificial Intelligence (AI), Machine Learning (ML), and Deep Learning
+          (DL) are often used interchangeably but represent distinct concepts
+          with hierarchical relationships. This section clarifies their
+          differences and relationships.
         </p>
       </div>
 
-      {content.map((section) => (
-        <div
-          key={section.id}
-          style={{
-            marginBottom: '3rem',
-            padding: '2rem',
-            backgroundColor: darkMode ? '#1e293b' : 'white',
-            borderRadius: '16px',
-            boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
-            transition: 'all 0.3s ease',
-            border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe',
-            ':hover': {
-              boxShadow: darkMode ? '0 8px 25px rgba(0,0,0,0.4)' : '0 8px 25px rgba(0,0,0,0.1)',
-              transform: 'translateY(-2px)'
-            }
-          }}
-        >
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem'
-          }}>
-            <h2 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: '#0ea5e9'
-            }}>{section.title}</h2>
-            <button
-              onClick={() => toggleSection(section.id)}
-              style={{
-                background: 'linear-gradient(to right, #0ea5e9, #10b981)',
-                color: 'white',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '8px',
-                border: 'none',
-                cursor: 'pointer',
-                fontWeight: '600',
-                transition: 'all 0.2s ease',
-                ':hover': {
-                  transform: 'scale(1.05)',
-                  boxShadow: '0 5px 15px rgba(14, 165, 233, 0.4)'
-                }
-              }}
-            >
-              {visibleSection === section.id ? "Collapse Section" : "Expand Section"}
-            </button>
-          </div>
+      <div className="space-y-8">
+        {content.map((section) => (
+          <article
+            key={section.id}
+            className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
+              darkMode
+                ? "bg-gray-800 border-gray-700"
+                : "bg-white border-fuchsia-100"
+            }`}
+          >
+            <header className="mb-6">
+              <button
+                onClick={() => toggleSection(section.id)}
+                className="w-full flex justify-between items-center focus:outline-none"
+              >
+                <h2
+                  className={`text-2xl sm:text-3xl font-bold text-left ${
+                    darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+                  }`}
+                >
+                  {section.title}
+                </h2>
+                <span className="text-fuchsia-600 dark:text-fuchsia-400">
+                  {visibleSection === section.id ? (
+                    <ChevronUp size={24} />
+                  ) : (
+                    <ChevronDown size={24} />
+                  )}
+                </span>
+              </button>
 
-          {visibleSection === section.id && (
-            <div style={{ display: 'grid', gap: '2rem' }}>
-              <div style={{
-                backgroundColor: darkMode ? '#1e3a8a' : '#ecfdf5',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Core Concepts</h3>
-                <p style={{
-                  color: darkMode ? '#e2e8f0' : '#374151',
-                  fontSize: '1.1rem',
-                  lineHeight: '1.6',
-                  marginBottom: '1rem'
-                }}>
-                  {section.description}
-                </p>
-                <ul style={{
-                  listStyleType: 'disc',
-                  paddingLeft: '1.5rem',
-                  display: 'grid',
-                  gap: '0.5rem'
-                }}>
-                  {section.keyPoints.map((point, index) => (
-                    <li key={index} style={{
-                      color: darkMode ? '#e2e8f0' : '#374151',
-                      fontSize: '1.1rem'
-                    }}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{
-                backgroundColor: darkMode ? '#164e63' : '#ecfeff',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Technical Deep Dive</h3>
-                <div style={{ display: 'grid', gap: '1rem' }}>
-                  {section.detailedExplanation.map((paragraph, index) => (
-                    <p key={index} style={{
-                      color: darkMode ? '#e2e8f0' : '#374151',
-                      fontSize: '1.1rem',
-                      lineHeight: '1.6',
-                      margin: paragraph === '' ? '0.5rem 0' : '0'
-                    }}>
-                      {paragraph}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div style={{
-                backgroundColor: darkMode ? '#064e3b' : '#f0fdfa',
-                padding: '1.5rem',
-                borderRadius: '12px'
-              }}>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '600',
-                  color: '#0ea5e9',
-                  marginBottom: '1rem'
-                }}>Implementation Example</h3>
-                <p style={{
-                  color: darkMode ? '#e2e8f0' : '#374151',
-                  fontWeight: '600',
-                  marginBottom: '1rem',
-                  fontSize: '1.1rem'
-                }}>{section.code.complexity}</p>
-                <div style={{
-                  borderRadius: '8px',
-                  overflow: 'hidden',
-                  border: darkMode ? '2px solid #0c4a6e' : '2px solid #a5f3fc'
-                }}>
-                  <SyntaxHighlighter
-                    language="python"
-                    style={tomorrow}
-                    customStyle={{
-                      padding: "1.5rem",
-                      fontSize: "0.95rem",
-                      background: darkMode ? "#1e293b" : "#f9f9f9",
-                      borderRadius: "0.5rem",
-                    }}
+              {visibleSection === section.id && (
+                <div className="space-y-6 mt-4">
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-blue-900/30" : "bg-blue-50"
+                    }`}
                   >
-                    {section.code.python}
-                  </SyntaxHighlighter>
+                    <h3 className="text-xl font-bold mb-4 dark:text-blue-400 text-blue-600">
+                      Core Concepts
+                    </h3>
+                    <p
+                      className={`${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.description}
+                    </p>
+                    <ul
+                      className={`list-disc pl-6 space-y-2 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.keyPoints.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-green-900/30" : "bg-green-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-green-400 text-green-600">
+                      Technical Deep Dive
+                    </h3>
+                    <div
+                      className={`space-y-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.detailedExplanation.map((paragraph, index) => (
+                        <p
+                          key={index}
+                          className={paragraph === "" ? "my-2" : ""}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div
+                    className={`p-6 rounded-lg ${
+                      darkMode ? "bg-purple-900/30" : "bg-purple-50"
+                    }`}
+                  >
+                    <h3 className="text-xl font-bold mb-4 dark:text-purple-400 text-purple-600">
+                      Implementation Example
+                    </h3>
+                    <p
+                      className={`font-semibold mb-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      {section.code.complexity}
+                    </p>
+                    <div className="flex gap-4 mb-4">
+                      <ToggleCodeButton
+                        isVisible={showCode}
+                        onClick={toggleCodeVisibility}
+                      />
+                    </div>
+                    {showCode && (
+                      <CodeExample
+                        code={section.code.python}
+                        darkMode={darkMode}
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
-        </div>
-      ))}
+              )}
+            </header>
+          </article>
+        ))}
+      </div>
 
       {/* Hierarchical Relationship */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: darkMode ? '#1e293b' : 'white',
-        borderRadius: '16px',
-        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
-        border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '2rem'
-        }}>Hierarchical Relationship</h2>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          gap: '1rem'
-        }}>
-          <div style={{
-            backgroundColor: '#0ea5e9',
-            color: 'white',
-            padding: '1.5rem 3rem',
-            borderRadius: '8px',
-            fontSize: '1.5rem',
-            fontWeight: '700',
-            textAlign: 'center',
-            width: '300px'
-          }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+          }`}
+        >
+          Hierarchical Relationship
+        </h2>
+        <div className="flex flex-col items-center gap-4">
+          <div
+            className={`px-8 py-4 rounded-lg font-bold text-xl text-center ${
+              darkMode
+                ? "bg-fuchsia-700 text-white"
+                : "bg-fuchsia-600 text-white"
+            }`}
+          >
             Artificial Intelligence
           </div>
-          <div style={{ fontSize: '2rem', color: '#0ea5e9' }}>↓</div>
-          <div style={{
-            backgroundColor: '#10b981',
-            color: 'white',
-            padding: '1.25rem 2.5rem',
-            borderRadius: '8px',
-            fontSize: '1.3rem',
-            fontWeight: '700',
-            textAlign: 'center',
-            width: '250px'
-          }}>
+          <div
+            className={`text-2xl ${
+              darkMode ? "text-fuchsia-400" : "text-fuchsia-600"
+            }`}
+          >
+            ↓
+          </div>
+          <div
+            className={`px-6 py-3 rounded-lg font-bold text-lg text-center ${
+              darkMode ? "bg-purple-700 text-white" : "bg-purple-600 text-white"
+            }`}
+          >
             Machine Learning
           </div>
-          <div style={{ fontSize: '2rem', color: '#10b981' }}>↓</div>
-          <div style={{
-            backgroundColor: '#059669',
-            color: 'white',
-            padding: '1rem 2rem',
-            borderRadius: '8px',
-            fontSize: '1.1rem',
-            fontWeight: '700',
-            textAlign: 'center',
-            width: '200px'
-          }}>
+          <div
+            className={`text-2xl ${
+              darkMode ? "text-purple-400" : "text-purple-600"
+            }`}
+          >
+            ↓
+          </div>
+          <div
+            className={`px-4 py-2 rounded-lg font-bold text-base text-center ${
+              darkMode ? "bg-violet-700 text-white" : "bg-violet-600 text-white"
+            }`}
+          >
             Deep Learning
           </div>
         </div>
-        <p style={{
-          color: darkMode ? '#e2e8f0' : '#374151',
-          fontSize: '1.1rem',
-          textAlign: 'center',
-          marginTop: '2rem',
-          lineHeight: '1.6'
-        }}>
-          Deep Learning is a specialized subset of Machine Learning, which itself is a subset of Artificial Intelligence.<br/>
-          This hierarchy represents increasing specialization and technical complexity.
+        <p
+          className={`mt-6 text-center ${
+            darkMode ? "text-gray-300" : "text-gray-700"
+          }`}
+        >
+          Deep Learning is a specialized subset of Machine Learning, which
+          itself is a subset of Artificial Intelligence.
+          <br />
+          This hierarchy represents increasing specialization and technical
+          complexity.
         </p>
       </div>
 
       {/* Comparative Analysis */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: darkMode ? '#1e293b' : 'white',
-        borderRadius: '16px',
-        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
-        border: darkMode ? '1px solid #334155' : '1px solid #e0f2fe'
-      }}>
-        <h2 style={{
-          fontSize: '2rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '2rem'
-        }}>Comparative Analysis</h2>
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            textAlign: 'left'
-          }}>
-            <thead style={{
-              backgroundColor: '#0ea5e9',
-              color: 'white'
-            }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-gray-800" : "bg-white"
+        }`}
+      >
+        <h2
+          className={`text-3xl font-bold mb-6 ${
+            darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+          }`}
+        >
+          Comparative Analysis
+        </h2>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead
+              className={`${
+                darkMode ? "bg-fuchsia-900" : "bg-fuchsia-600"
+              } text-white`}
+            >
               <tr>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>Characteristic</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>AI</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>ML</th>
-                <th style={{ padding: '1rem', fontSize: '1.1rem', fontWeight: '600' }}>DL</th>
+                <th className="p-4 text-left">Characteristic</th>
+                <th className="p-4 text-left">AI</th>
+                <th className="p-4 text-left">ML</th>
+                <th className="p-4 text-left">DL</th>
               </tr>
             </thead>
             <tbody>
               {[
-                ["Scope", "Broadest (All intelligent systems)", "Subset of AI", "Subset of ML"],
-                ["Data Dependency", "Rules-based or Data-driven", "Requires structured data", "Requires big data"],
-                ["Hardware Needs", "Basic computing", "Medium resources", "GPUs/TPUs required"],
-                ["Interpretability", "High (Rule-based)", "Moderate", "Low (Black box)"],
-                ["Development Approach", "Symbolic logic + Learning", "Statistical learning", "Neural architectures"],
-                ["Example Systems", "Expert systems, Chatbots", "Spam filters, Recommendation engines", "Self-driving cars, GPT models"]
+                [
+                  "Scope",
+                  "Broadest (All intelligent systems)",
+                  "Subset of AI",
+                  "Subset of ML",
+                ],
+                [
+                  "Data Dependency",
+                  "Rules-based or Data-driven",
+                  "Requires structured data",
+                  "Requires big data",
+                ],
+                [
+                  "Hardware Needs",
+                  "Basic computing",
+                  "Medium resources",
+                  "GPUs/TPUs required",
+                ],
+                [
+                  "Interpretability",
+                  "High (Rule-based)",
+                  "Moderate",
+                  "Low (Black box)",
+                ],
+                [
+                  "Development Approach",
+                  "Symbolic logic + Learning",
+                  "Statistical learning",
+                  "Neural architectures",
+                ],
+                [
+                  "Example Systems",
+                  "Expert systems, Chatbots",
+                  "Spam filters, Recommendation engines",
+                  "Self-driving cars, GPT models",
+                ],
               ].map((row, index) => (
-                <tr key={index} style={{
-                  backgroundColor: index % 2 === 0 
-                    ? (darkMode ? '#334155' : '#f0fdf4') 
-                    : (darkMode ? '#1e293b' : 'white'),
-                  borderBottom: darkMode ? '1px solid #334155' : '1px solid #e2e8f0'
-                }}>
+                <tr
+                  key={index}
+                  className={`${
+                    index % 2 === 0
+                      ? darkMode
+                        ? "bg-gray-700"
+                        : "bg-gray-50"
+                      : darkMode
+                      ? "bg-gray-800"
+                      : "bg-white"
+                  } border-b ${
+                    darkMode ? "border-gray-700" : "border-gray-200"
+                  }`}
+                >
                   {row.map((cell, cellIndex) => (
-                    <td key={cellIndex} style={{
-                      padding: '1rem',
-                      color: darkMode ? '#e2e8f0' : '#334155'
-                    }}>
+                    <td
+                      key={cellIndex}
+                      className={`p-4 ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
                       {cell}
                     </td>
                   ))}
@@ -570,129 +600,116 @@ class CNN(nn.Module):
       </div>
 
       {/* Key Takeaways */}
-      <div style={{
-        marginTop: '3rem',
-        padding: '2rem',
-        backgroundColor: darkMode ? '#1e3a8a' : '#ecfdf5',
-        borderRadius: '16px',
-        boxShadow: darkMode ? '0 5px 15px rgba(0,0,0,0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
-        border: darkMode ? '1px solid #1e40af' : '1px solid #d1fae5'
-      }}>
-        <h3 style={{
-          fontSize: '1.8rem',
-          fontWeight: '700',
-          color: '#0ea5e9',
-          marginBottom: '1.5rem'
-        }}>Practical Implications</h3>
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
-          <div style={{
-            backgroundColor: darkMode ? '#1e293b' : 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>When to Use Each Approach</h4>
-            <ul style={{
-              listStyleType: 'disc',
-              paddingLeft: '1.5rem',
-              display: 'grid',
-              gap: '0.75rem'
-            }}>
-              <li style={{ 
-                color: darkMode ? '#e2e8f0' : '#374151', 
-                fontSize: '1.1rem' 
-              }}>
+      <div
+        className={`mt-8 p-6 sm:p-8 rounded-2xl shadow-lg ${
+          darkMode ? "bg-fuchsia-900/30" : "bg-fuchsia-50"
+        }`}
+      >
+        <h3
+          className={`text-2xl font-bold mb-6 ${
+            darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+          }`}
+        >
+          Practical Implications
+        </h3>
+        <div className="grid gap-6">
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+              }`}
+            >
+              When to Use Each Approach
+            </h4>
+            <ul className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <li>
                 <strong>AI:</strong> When explicit rules can solve the problem
               </li>
-              <li style={{ 
-                color: darkMode ? '#e2e8f0' : '#374151', 
-                fontSize: '1.1rem' 
-              }}>
+              <li>
                 <strong>ML:</strong> When patterns exist in structured data
               </li>
-              <li style={{ 
-                color: darkMode ? '#e2e8f0' : '#374151', 
-                fontSize: '1.1rem' 
-              }}>
-                <strong>DL:</strong> When dealing with unstructured data or complex patterns
+              <li>
+                <strong>DL:</strong> When dealing with unstructured data or
+                complex patterns
               </li>
-              <li style={{ 
-                color: darkMode ? '#e2e8f0' : '#374151', 
-                fontSize: '1.1rem' 
-              }}>
-                <strong>Hybrid:</strong> Often combine approaches for best results
+              <li>
+                <strong>Hybrid:</strong> Often combine approaches for best
+                results
               </li>
             </ul>
           </div>
-          
-          <div style={{
-            backgroundColor: darkMode ? '#1e293b' : 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Technology Evolution</h4>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-              gap: '1rem'
-            }}>
+
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+              }`}
+            >
+              Technology Evolution
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
                 ["1950s-70s", "Symbolic AI and Expert Systems"],
                 ["1980s-2000s", "Machine Learning foundations"],
                 ["2010s", "Deep Learning revolution"],
-                ["2020s", "Large Language Models"]
+                ["2020s", "Large Language Models"],
               ].map(([era, description], index) => (
-                <div key={index} style={{
-                  backgroundColor: darkMode ? '#334155' : '#f0fdf4',
-                  padding: '1rem',
-                  borderRadius: '8px',
-                  borderLeft: '4px solid #10b981'
-                }}>
-                  <div style={{
-                    fontWeight: '700',
-                    color: '#059669',
-                    marginBottom: '0.5rem'
-                  }}>{era}</div>
-                  <div style={{ 
-                    color: darkMode ? '#e2e8f0' : '#374151' 
-                  }}>{description}</div>
+                <div
+                  key={index}
+                  className={`p-4 rounded-lg border-l-4 ${
+                    darkMode
+                      ? "bg-gray-700 border-fuchsia-500"
+                      : "bg-fuchsia-50 border-fuchsia-400"
+                  }`}
+                >
+                  <div
+                    className={`font-bold ${
+                      darkMode ? "text-fuchsia-400" : "text-fuchsia-700"
+                    }`}
+                  >
+                    {era}
+                  </div>
+                  <div
+                    className={`${
+                      darkMode ? "text-gray-300" : "text-gray-700"
+                    }`}
+                  >
+                    {description}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{
-            backgroundColor: darkMode ? '#1e293b' : 'white',
-            padding: '1.5rem',
-            borderRadius: '12px',
-            boxShadow: darkMode ? '0 2px 8px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.05)'
-          }}>
-            <h4 style={{
-              fontSize: '1.3rem',
-              fontWeight: '600',
-              color: '#0ea5e9',
-              marginBottom: '0.75rem'
-            }}>Application Spectrum</h4>
-            <p style={{
-              color: darkMode ? '#e2e8f0' : '#374151',
-              fontSize: '1.1rem',
-              lineHeight: '1.6'
-            }}>
-              <strong>AI:</strong> Comprehensive problem-solving across domains<br/>
-              <strong>ML:</strong> Pattern recognition in structured data<br/>
-              <strong>DL:</strong> Complex feature detection in unstructured data<br/>
-              <br/>
+          <div
+            className={`p-6 rounded-xl shadow-sm ${
+              darkMode ? "bg-gray-800" : "bg-white"
+            }`}
+          >
+            <h4
+              className={`text-xl font-semibold mb-4 ${
+                darkMode ? "text-fuchsia-300" : "text-fuchsia-800"
+              }`}
+            >
+              Application Spectrum
+            </h4>
+            <p className={`${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+              <strong>AI:</strong> Comprehensive problem-solving across domains
+              <br />
+              <strong>ML:</strong> Pattern recognition in structured data
+              <br />
+              <strong>DL:</strong> Complex feature detection in unstructured
+              data
+              <br />
+              <br />
               Most real-world systems combine elements of all three approaches.
             </p>
           </div>
