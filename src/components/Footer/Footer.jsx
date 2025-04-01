@@ -1,4 +1,3 @@
-// import React from "react";
 import { NavLink } from "react-router-dom";
 
 export default function Footer() {
@@ -7,8 +6,8 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-gray-300 py-6">
-      <div className="container mx-auto px-6 md:px-12 lg:px-20 ">
+    <footer className="bg-gray-900 text-gray-300 py-6 relative z-20">
+      <div className="container mx-auto px-6 md:px-12 lg:px-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Section 1 */}
           <div>
@@ -20,6 +19,7 @@ export default function Footer() {
                 <a
                   href="https://codolio.com/"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center text-gray-400 hover:text-orange-400 transition duration-300"
                 >
                   <span className="mr-2">🚀</span>
@@ -29,15 +29,14 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Section 2 */}
           <div>
             <h2 className="text-xl font-bold text-white mb-6">Resources</h2>
             <ul className="space-y-3">
               <li>
                 <NavLink
                   to="/"
-                  onClick={() => {
-                    scrollToTop();
-                  }}
+                  onClick={scrollToTop}
                   className={({ isActive }) =>
                     isActive
                       ? "text-orange-400 font-semibold flex items-center"
@@ -51,9 +50,7 @@ export default function Footer() {
               <li>
                 <NavLink
                   to="/about"
-                  onClick={() => {
-                    scrollToTop();
-                  }}
+                  onClick={scrollToTop}
                   className={({ isActive }) =>
                     isActive
                       ? "text-orange-400 font-semibold flex items-center"
@@ -67,9 +64,7 @@ export default function Footer() {
               <li>
                 <NavLink
                   to="/contact"
-                  onClick={() => {
-                    scrollToTop();
-                  }}
+                  onClick={scrollToTop}
                   className={({ isActive }) =>
                     isActive
                       ? "text-orange-400 font-semibold flex items-center"
@@ -83,6 +78,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Section 3 */}
           <div>
             <h2 className="text-xl font-bold text-white mb-6">Media</h2>
             <ul className="space-y-3">
@@ -111,6 +107,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Section 4 */}
           <div>
             <h2 className="text-xl font-bold text-white mb-6">
               Coding Platforms
@@ -137,6 +134,7 @@ export default function Footer() {
                   key={name}
                   href={link}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm bg-gray-800 py-2 px-3 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300 flex items-center justify-center"
                 >
                   {name}
@@ -176,6 +174,7 @@ export default function Footer() {
                 key={name}
                 href={link}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-sm bg-gray-800 py-2 px-4 rounded-lg hover:bg-orange-500 hover:text-white transition duration-300"
               >
                 {name}
