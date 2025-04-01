@@ -7,7 +7,7 @@ export default function About() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('3d');
+    const ctx = canvas.getContext("2d");
     let particles = [];
     const particleCount = window.innerWidth < 768 ? 30 : 80;
 
@@ -27,9 +27,9 @@ export default function About() {
           size: Math.random() * 3 + 1,
           speedX: Math.random() * 1 - 0.5,
           speedY: Math.random() * 1 - 0.5,
-          color: darkMode 
-            ? `rgba(192, 132, 252, ${Math.random() * 0.5 + 0.1})` 
-            : `rgba(249, 115, 22, ${Math.random() * 0.5 + 0.1})`
+          color: darkMode
+            ? `rgba(192, 132, 252, ${Math.random() * 0.5 + 0.1})`
+            : `rgba(249, 115, 22, ${Math.random() * 0.5 + 0.1})`,
         });
       }
     };
@@ -52,53 +52,53 @@ export default function About() {
     // Animation loop
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       // Update particles
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        
+
         // Mouse attraction
         if (mouseX !== null && mouseY !== null) {
           const dx = mouseX - p.x;
           const dy = mouseY - p.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < 100) {
             const forceDirectionX = dx / distance;
             const forceDirectionY = dy / distance;
             const force = (100 - distance) / 100;
-            
+
             p.x -= forceDirectionX * force * 2;
             p.y -= forceDirectionY * force * 2;
           }
         }
-        
+
         // Movement
         p.x += p.speedX;
         p.y += p.speedY;
-        
+
         // Bounce off edges
         if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
         if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-        
+
         // Draw particle
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
         ctx.fill();
-        
+
         // Draw connections
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dx = p.x - p2.x;
           const dy = p.y - p2.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
-          
+
           if (distance < 100) {
             ctx.beginPath();
-            ctx.strokeStyle = darkMode 
-              ? `rgba(192, 132, 252, ${1 - distance/100})` 
-              : `rgba(249, 115, 22, ${1 - distance/100})`;
+            ctx.strokeStyle = darkMode
+              ? `rgba(192, 132, 252, ${1 - distance / 100})`
+              : `rgba(249, 115, 22, ${1 - distance / 100})`;
             ctx.lineWidth = 0.5;
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
@@ -106,33 +106,37 @@ export default function About() {
           }
         }
       }
-      
+
       requestAnimationFrame(animate);
     };
 
     // Setup
     resizeCanvas();
     initParticles();
-    canvas.addEventListener('mousemove', handleMouseMove);
-    canvas.addEventListener('mouseleave', handleMouseLeave);
+    canvas.addEventListener("mousemove", handleMouseMove);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
     const animationId = requestAnimationFrame(animate);
 
     // Cleanup
     return () => {
-      canvas.removeEventListener('mousemove', handleMouseMove);
-      canvas.removeEventListener('mouseleave', handleMouseLeave);
+      canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationId);
     };
   }, [darkMode]);
 
   return (
-    <div className={`relative overflow-hidden py-20 ${darkMode ? "bg-gray-900" : "bg-gray-50"}`}>
+    <div
+      className={`relative overflow-hidden py-20 ${
+        darkMode ? "bg-gray-900" : "bg-gray-50"
+      }`}
+    >
       {/* Interactive Canvas Background */}
       <canvas
         ref={canvasRef}
         className="absolute top-0 left-0 w-full h-full pointer-events-none"
       />
-      
+
       {/* Content (same as before) */}
       <div className="relative z-10">
         <div className="container mx-auto px-8 md:px-12 xl:px-16">
@@ -169,10 +173,11 @@ export default function About() {
                 }`}
               >
                 At All About Coding, we are committed to helping you master Data
-                Structures and Algorithms (DSA) while building a strong foundation
-                for a successful tech career. Our mission is to empower learners
-                with expertly curated resources and actionable insights tailored
-                for success in academics, internships, and placements.
+                Structures and Algorithms (DSA) while building a strong
+                foundation for a successful tech career. Our mission is to
+                empower learners with expertly curated resources and actionable
+                insights tailored for success in academics, internships, and
+                placements.
               </p>
 
               {/* What We Offer Section */}
@@ -199,7 +204,7 @@ export default function About() {
                     }`}
                   >
                     <span
-                      className={`w-6 h-6 mt-1 mr-4 rounded-full flex items-center justify-center text-white font-bold ${
+                      className={`flex w-6 h-6 mt-1 mr-4 rounded-full items-center justify-center text-white font-bold ${
                         darkMode ? "bg-purple-500" : "bg-orange-500"
                       }`}
                     >
@@ -216,9 +221,9 @@ export default function About() {
                   darkMode ? "text-gray-300" : "text-gray-800"
                 }`}
               >
-                Whether you're just beginning or honing your expertise, All About
-                Coding ensures an engaging and effective learning experience. Join
-                us and unlock your full potential!
+                Whether you're just beginning or honing your expertise, All
+                About Coding ensures an engaging and effective learning
+                experience. Join us and unlock your full potential!
               </p>
 
               {/* Call-to-Action Button */}
