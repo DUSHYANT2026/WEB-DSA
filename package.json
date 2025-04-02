@@ -5,12 +5,13 @@
   "type": "module",
   "homepage": "https://Dushyant2026.github.io/WEB-DSA",
   "scripts": {
+    "clean": "rm -rf build dist",
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
+    "build": "npm run clean && vite build",
+    "lint": "eslint . --fix",
     "preview": "vite preview",
     "predeploy": "npm run build && cp .nojekyll build/",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -b main -d build"
   },
   "dependencies": {
     "cors": "^2.8.5",
