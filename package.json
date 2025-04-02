@@ -10,7 +10,7 @@
     "build": "npm run clean && vite build",
     "lint": "eslint . --fix",
     "preview": "vite preview",
-    "predeploy": "npm run build && cp .nojekyll build/",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -b main -d build"
   },
   "dependencies": {
