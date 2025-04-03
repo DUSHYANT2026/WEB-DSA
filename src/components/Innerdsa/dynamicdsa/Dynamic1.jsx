@@ -61,7 +61,6 @@ const getBorderColor = (language, darkMode) => {
   }
 };
 
-
 const LanguageLogo = ({ language, size = 24, darkMode }) => {
   const baseClasses = "rounded-md p-1 flex items-center justify-center";
   
@@ -126,14 +125,12 @@ const getButtonColor = (language, darkMode) => {
   switch (language) {
     case "cpp":
       return darkMode
-        ? "from-blue-300 to-blue-500  hover:from-blue-400 hover:to-blue-700"
-        : "from-blue-400 to-blue-600  hover:from-blue-500 hover:to-blue-700";
-    
+        ? "from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-700"
+        : "from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700";
     case "java":
       return darkMode
         ? "from-red-700 to-red-900 hover:from-red-800 hover:to-red-950"
         : "from-red-500 to-red-700 hover:from-red-600 hover:to-red-800";
-    
     case "python":
       return darkMode
         ? "from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
@@ -193,8 +190,14 @@ const CollapsibleSection = ({
             <ul className="space-y-2 list-disc pl-5 marker:text-opacity-60">
               {content.map((item, i) => (
                 <li key={i} className="pl-2">
-                  <span className="font-semibold">{item.split(':')[0]}:</span>
-                  {item.split(':').slice(1).join(':')}
+                  {item.includes(':') ? (
+                    <>
+                      <span className="font-semibold">{item.split(':')[0]}:</span>
+                      {item.split(':').slice(1).join(':')}
+                    </>
+                  ) : (
+                    item
+                  )}
                 </li>
               ))}
             </ul>
@@ -224,21 +227,7 @@ const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
     aria-controls={`${language}-code`}
   >
     <LanguageLogo language={language} size={18} darkMode={darkMode} className="mr-2" />
-    {isVisible
-      ? ` ${
-          language === "cpp" 
-            ? "CPP" 
-            : language === "java" 
-            ? "Java" 
-            : "Python"
-        } `
-      : ` ${
-          language === "cpp" 
-            ? "CPP" 
-            : language === "java" 
-            ? "Java" 
-            : "Python"
-        } `}
+    {language === "cpp" ? "C++" : language === "java" ? "Java" : "Python"}
   </button>
 );
 
@@ -295,24 +284,24 @@ function Dynamic1() {
 using namespace std;
 
 class Solution {
-  private:
+private:
     long long int mode = 1000000007;
-    long long int dpsolve1(int n, vector<long long int> &dp){
+    long long int dpsolve1(int n, vector<long long int> &dp) {
         if(n == 0) return 0;
         if(n == 1) return 1;
         
         if(dp[n] != -1) return dp[n];
         return dp[n] = (dpsolve1(n-1,dp) + dpsolve1(n-2,dp))%mode;
     }
-  public:
+public:
     long long int topDown(int n) {
         vector<long long int> dp(n+1,-1);
         return dpsolve1(n,dp);
     }
     long long int bottomUp(int n) {
-        vector<long long int> dp(n+1,-1);
+        vector<long long int> dp(n+1);
         dp[0] = 0; dp[1] = 1;
-        for(int i=2; i<=n; i++){
+        for(int i=2; i<=n; i++) {
             dp[i] = (dp[i-1] + dp[i-2])%mode;
         }
         return dp[n];
@@ -328,12 +317,11 @@ int main() {
         Solution obj;
         long long int topDownans = obj.topDown(n);
         long long int bottomUpans = obj.bottomUp(n);
-        if (topDownans != bottomUpans) cout << -1 << "\n";
-        cout << topDownans << "\n";
-        cout << "~" << "\n";
+        if (topDownans != bottomUpans) cout << -1 << "\\n";
+        cout << topDownans << "\\n";
+        cout << "~" << "\\n";
     } 
-}
-`,
+}`,
       javacode: `import java.util.*;
 
 public class FibonacciDP {
@@ -422,19 +410,17 @@ if __name__ == "__main__":
       complexity: "Time Complexity: O(n), Space Complexity: O(n) (optimizable to O(1) for bottom-up)",
       link: "https://www.geeksforgeeks.org/problems/introduction-to-dp/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=introduction-to-dp",
     },
-
-
     {
-      "title": "Climbing Stairs with Dynamic Programming",
-      "description": "Calculates the number of distinct ways to climb a staircase with n steps where you can take either 1 or 2 steps at a time. Uses memoization to store computed results for efficiency.",
-      "approach": [
+      title: "Climbing Stairs with Dynamic Programming",
+      description: "Calculates the number of distinct ways to climb a staircase with n steps where you can take either 1 or 2 steps at a time. Uses memoization to store computed results for efficiency.",
+      approach: [
         "Top-Down (Memoization) Approach:",
         "- Uses recursion with memoization to store computed results",
         "- Base case: 1 way for 0 or 1 step (n <= 1 returns 1)",
         "- Recursive case: Sum of ways for (n-1) steps and (n-2) steps",
         "- Stores results in a DP array to avoid redundant calculations"
       ],
-      "algorithmCharacteristics": [
+      algorithmCharacteristics: [
         "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
         "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
         "Memoization: Used to store intermediate results",
@@ -443,97 +429,93 @@ if __name__ == "__main__":
         "The space complexity can be optimized to O(1) by using variables to track only the last two values",
         "The problem demonstrates a classic application of dynamic programming to avoid recomputation"
       ],
-      "complexityDetails": {
-        "time": "O(n) (each step computed only once)",
-        "space": "O(n) (for DP array), can be optimized to O(1)",
-        "explanation": "The DP approach avoids the exponential time complexity of naive recursion by storing intermediate results. The space complexity comes from storing the DP array."
+      complexityDetails: {
+        time: "O(n) (each step computed only once)",
+        space: "O(n) (for DP array), can be optimized to O(1)",
+        explanation: "The DP approach avoids the exponential time complexity of naive recursion by storing intermediate results. The space complexity comes from storing the DP array."
       },
-      "cppcode": `#include<bits/stdc++.h>
+      cppcode: `#include<bits/stdc++.h>
 using namespace std;
 
 int climbStairs1(int n) {
-    if(n <= 1) return 1;   // using recursion(time limit)
+    if(n <= 1) return 1;
     return climbStairs1(n-1) + climbStairs1(n-2);
 }
 
-int climbStairs2(int n) {           // using memoization (memory limit)
+int climbStairs2(int n) {
     vector<int> nums(n+1,-1); 
-
     if(n <= 1) return 1;
     if(nums[n] != -1) return nums[n];
-
     return nums[n] = climbStairs2(n-1) + climbStairs2(n-2);
 }
 
-int climbStairs3(int n) {          // using tabulation
-    vector<int> dp(n+1,-1);
-    dp[0] = 1;  dp[1] = 1;
-    for(int i=2;i<=n;i++){
+int climbStairs3(int n) {
+    vector<int> dp(n+1);
+    dp[0] = 1; dp[1] = 1;
+    for(int i=2; i<=n; i++) {
         dp[i] = dp[i-1] + dp[i-2];
     }
     return dp[n];
 }
 
-int climbStairs4(int n) {              // optimized space complexcity
-    if(n == 1) return 1;
-    int ans = 0;  int first = 1;  int second = 1;
-
-    for(int i=2;i<=n;i++){
+int climbStairs4(int n) {
+    if(n <= 1) return 1;
+    int first = 1, second = 1, ans;
+    for(int i=2; i<=n; i++) {
         ans = first + second;
         second = first;
         first = ans;
     }
     return ans;
 }
-int main(){
+
+int main() {
     int n;
-    cout<<"ENTER THE NUMBER "<< endl; cin>>n;
-    
-    cout<<climbStairs1(n);
+    cout << "Enter the number of stairs: ";
+    cin >> n;
+    cout << "Number of ways: " << climbStairs1(n);
     return 0;
-}
-    
-    `,
-      "javacode": `import java.util.*;
+}`,
+      javacode: `import java.util.*;
 
 public class ClimbingStairs {
-    // Using recursion (time limit)
+    // Recursive approach (inefficient)
     public static int climbStairs1(int n) {
-        if (n <= 1) return 1;
-        return climbStairs1(n - 1) + climbStairs1(n - 2);
+        if(n <= 1) return 1;
+        return climbStairs1(n-1) + climbStairs1(n-2);
     }
 
-    // Using memoization (memory limit)
+    // Memoization approach
     public static int climbStairs2(int n) {
-        int[] nums = new int[n + 1];
-        Arrays.fill(nums, -1);
-        return helper(n, nums);
+        int[] memo = new int[n+1];
+        Arrays.fill(memo, -1);
+        return helper(n, memo);
+    }
+    
+    private static int helper(int n, int[] memo) {
+        if(n <= 1) return 1;
+        if(memo[n] != -1) return memo[n];
+        memo[n] = helper(n-1, memo) + helper(n-2, memo);
+        return memo[n];
     }
 
-    private static int helper(int n, int[] nums) {
-        if (n <= 1) return 1;
-        if (nums[n] != -1) return nums[n];
-        nums[n] = helper(n - 1, nums) + helper(n - 2, nums);
-        return nums[n];
-    }
-
-    // Using tabulation
+    // Tabulation approach
     public static int climbStairs3(int n) {
-        if (n <= 1) return 1;
-        int[] dp = new int[n + 1];
+        if(n <= 1) return 1;
+        int[] dp = new int[n+1];
         dp[0] = 1;
         dp[1] = 1;
-        for (int i = 2; i <= n; i++) {
-            dp[i] = dp[i - 1] + dp[i - 2];
+        for(int i=2; i<=n; i++) {
+            dp[i] = dp[i-1] + dp[i-2];
         }
         return dp[n];
     }
 
-    // Optimized space complexity
+    // Space optimized approach
     public static int climbStairs4(int n) {
-        if (n <= 1) return 1;
+        if(n <= 1) return 1;
         int first = 1, second = 1, ans = 0;
-        for (int i = 2; i <= n; i++) {
+        for(int i=2; i<=n; i++) {
             ans = first + second;
             second = first;
             first = ans;
@@ -543,38 +525,36 @@ public class ClimbingStairs {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("ENTER THE NUMBER");
+        System.out.print("Enter the number of stairs: ");
         int n = sc.nextInt();
-        
-        System.out.println(climbStairs1(n));
+        System.out.println("Number of ways: " + climbStairs1(n));
     }
-}
-    `,
-      "pythoncode": `def climb_stairs1(n):  # Using recursion (time limit)
+}`,
+      pythoncode: `def climb_stairs1(n):  # Recursive approach
     if n <= 1:
         return 1
-    return climb_stairs1(n - 1) + climb_stairs1(n - 2)
+    return climb_stairs1(n-1) + climb_stairs1(n-2)
 
-def climb_stairs2(n, memo=None):  # Using memoization (memory limit)
+def climb_stairs2(n, memo=None):  # Memoization approach
     if memo is None:
         memo = [-1] * (n + 1)
     if n <= 1:
         return 1
     if memo[n] != -1:
         return memo[n]
-    memo[n] = climb_stairs2(n - 1, memo) + climb_stairs2(n - 2, memo)
+    memo[n] = climb_stairs2(n-1, memo) + climb_stairs2(n-2, memo)
     return memo[n]
 
-def climb_stairs3(n):  # Using tabulation
+def climb_stairs3(n):  # Tabulation approach
     if n <= 1:
         return 1
     dp = [0] * (n + 1)
     dp[0], dp[1] = 1, 1
     for i in range(2, n + 1):
-        dp[i] = dp[i - 1] + dp[i - 2]
+        dp[i] = dp[i-1] + dp[i-2]
     return dp[n]
 
-def climb_stairs4(n):  # Optimized space complexity
+def climb_stairs4(n):  # Space optimized approach
     if n <= 1:
         return 1
     first, second = 1, 1
@@ -582,21 +562,233 @@ def climb_stairs4(n):  # Optimized space complexity
         ans = first + second
         second = first
         first = ans
-    return ans
+    return first
 
 if __name__ == "__main__":
-    n = int(input("ENTER THE NUMBER\n"))
-    print(climb_stairs1(n))
-    `,
-      "language": "cpp",
-      "javaLanguage": "java",
-      "pythonlanguage": "python",
-      "complexity": "Time Complexity: O(n), Space Complexity: O(n)",
-      "link": "https://leetcode.com/problems/climbing-stairs/",
+    n = int(input("Enter the number of stairs: "))
+    print("Number of ways:", climb_stairs1(n))`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      link: "https://leetcode.com/problems/climbing-stairs/",
     },
+    {
+      title: "Frog Jump Problem with Dynamic Programming",
+      description: "A frog needs to jump from stair 0 to stair N-1, where each stair has a height represented by array 'nums'. The frog can jump either 1 or 2 steps at a time, with energy cost equal to the absolute height difference between current and landing stairs. Find the minimum total energy required to reach the top.",
+      approach: [
+        "1. Top-Down (Memoization):",
+        "- Uses recursion with memoization to store computed energy costs",
+        "- Starts from the target stair and breaks down into subproblems",
+        "- Stores results to avoid redundant calculations",
+        "- Base case: 0 energy needed at starting position (stair 0)",
+        "",
+        "2. Bottom-Up (Tabulation):",
+        "- Builds solution iteratively from base cases",
+        "- Computes minimum energy for each stair sequentially",
+        "- More space-efficient than naive recursion",
+        "- Base cases:",
+        "  - dp[0] = 0 (starting position)",
+        "  - dp[1] = abs(nums[1] - nums[0])",
+        "",
+        "3. Space Optimized DP:",
+        "- Tracks only the last two energy values",
+        "- Eliminates need for full DP array",
+        "- Maintains same time complexity with constant space"
+      ],
+      algorithmCharacteristics: [
+        "Optimal Substructure: Minimum energy to reach stair i depends on stairs i-1 and i-2",
+        "Overlapping Subproblems: Same subproblems are solved multiple times",
+        "Memoization: Used in top-down approach to cache results",
+        "Tabulation: Used in bottom-up approach to build solution iteratively",
+        "Space Optimization: Possible by tracking only last two values"
+      ],
+      complexityDetails: {
+        time: "O(n) for all approaches (each stair computed once)",
+        space: {
+          topDown: "O(n) for recursion stack + memoization table",
+          bottomUp: "O(n) for DP table",
+          optimized: "O(1) (constant space)"
+        },
+        explanation: "All approaches avoid exponential time by storing intermediate results. The space complexity varies based on implementation."
+      },
+      cppcode: `#include <bits/stdc++.h>
+using namespace std;
 
+class Solution {
+private:
+    int dpcheck(vector<int> &nums, int index, vector<int> &dp) {
+        if(index == 0) return 0;
+        if(dp[index] != -1) return dp[index];
+        
+        int left = dpcheck(nums, index-1, dp) + abs(nums[index] - nums[index-1]);
+        int right = INT_MAX;
+        if(index > 1) {
+            right = dpcheck(nums, index-2, dp) + abs(nums[index] - nums[index-2]);
+        }
+        return dp[index] = min(left, right);
+    }
+public:
+    int minimumEnergy(vector<int>& nums, int n) {
+        vector<int> dp(n, -1);
+        return dpcheck(nums, n-1, dp);
+    }
+};
 
-  ]
+class Solution1 {
+public:
+    int minimumEnergy(vector<int>& nums, int n) {
+        vector<int> dp(n);
+        dp[0] = 0;
+        dp[1] = abs(nums[1] - nums[0]);
+        
+        for(int i=2; i<n; i++) {
+            int left = dp[i-1] + abs(nums[i] - nums[i-1]);
+            int right = dp[i-2] + abs(nums[i] - nums[i-2]);
+            dp[i] = min(left, right);
+        }
+        return dp[n-1];
+    }
+};
+
+class Solution3 {
+public:
+    int minimumEnergy(vector<int>& nums, int n) {
+        int prev2 = 0, prev1 = abs(nums[1] - nums[0]);
+        
+        for(int i=2; i<n; i++) {
+            int curr = min(
+                prev1 + abs(nums[i] - nums[i-1]),
+                prev2 + abs(nums[i] - nums[i-2])
+            );
+            prev2 = prev1;
+            prev1 = curr;
+        }
+        return prev1;
+    }
+};
+
+int main() {
+    vector<int> heights = {10, 20, 30, 10};
+    Solution obj;
+    cout << "Minimum energy required: " << obj.minimumEnergy(heights, heights.size());
+    return 0;
+}`,
+      javacode: `import java.util.*;
+
+public class FrogJump {
+    // Memoization approach
+    static class Solution {
+        private int dpcheck(int[] nums, int index, int[] dp) {
+            if(index == 0) return 0;
+            if(dp[index] != -1) return dp[index];
+            
+            int left = dpcheck(nums, index-1, dp) + Math.abs(nums[index] - nums[index-1]);
+            int right = Integer.MAX_VALUE;
+            if(index > 1) {
+                right = dpcheck(nums, index-2, dp) + Math.abs(nums[index] - nums[index-2]);
+            }
+            return dp[index] = Math.min(left, right);
+        }
+        
+        public int minimumEnergy(int[] nums, int n) {
+            int[] dp = new int[n];
+            Arrays.fill(dp, -1);
+            return dpcheck(nums, n-1, dp);
+        }
+    }
+
+    // Tabulation approach
+    static class Solution1 {
+        public int minimumEnergy(int[] nums, int n) {
+            int[] dp = new int[n];
+            dp[0] = 0;
+            dp[1] = Math.abs(nums[1] - nums[0]);
+            
+            for(int i=2; i<n; i++) {
+                int left = dp[i-1] + Math.abs(nums[i] - nums[i-1]);
+                int right = dp[i-2] + Math.abs(nums[i] - nums[i-2]);
+                dp[i] = Math.min(left, right);
+            }
+            return dp[n-1];
+        }
+    }
+
+    // Space optimized approach
+    static class Solution3 {
+        public int minimumEnergy(int[] nums, int n) {
+            int prev2 = 0, prev1 = Math.abs(nums[1] - nums[0]);
+            
+            for(int i=2; i<n; i++) {
+                int curr = Math.min(
+                    prev1 + Math.abs(nums[i] - nums[i-1]),
+                    prev2 + Math.abs(nums[i] - nums[i-2])
+                );
+                prev2 = prev1;
+                prev1 = curr;
+            }
+            return prev1;
+        }
+    }
+
+    public static void main(String[] args) {
+        int[] heights = {10, 20, 30, 10};
+        Solution obj = new Solution();
+        System.out.println("Minimum energy required: " + obj.minimumEnergy(heights, heights.length));
+    }
+}`,
+      pythoncode: `def minimum_energy_memo(nums, n):
+    dp = [-1] * n
+    
+    def dpcheck(index):
+        if index == 0:
+            return 0
+        if dp[index] != -1:
+            return dp[index]
+        
+        left = dpcheck(index-1) + abs(nums[index] - nums[index-1])
+        right = float('inf')
+        if index > 1:
+            right = dpcheck(index-2) + abs(nums[index] - nums[index-2])
+        dp[index] = min(left, right)
+        return dp[index]
+    
+    return dpcheck(n-1)
+
+def minimum_energy_tab(nums, n):
+    dp = [0] * n
+    dp[0] = 0
+    dp[1] = abs(nums[1] - nums[0])
+    
+    for i in range(2, n):
+        left = dp[i-1] + abs(nums[i] - nums[i-1])
+        right = dp[i-2] + abs(nums[i] - nums[i-2])
+        dp[i] = min(left, right)
+    
+    return dp[-1]
+
+def minimum_energy_opt(nums, n):
+    prev2 = 0
+    prev1 = abs(nums[1] - nums[0])
+    
+    for i in range(2, n):
+        curr = min(
+            prev1 + abs(nums[i] - nums[i-1]),
+            prev2 + abs(nums[i] - nums[i-2])
+        )
+        prev2, prev1 = prev1, curr
+    
+    return prev1
+
+if __name__ == "__main__":
+    heights = [10, 20, 30, 10]
+    print("Minimum energy required:", minimum_energy_memo(heights, len(heights)))`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+  
+      link: "https://www.geeksforgeeks.org/problems/geek-jump/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=geek-jump",
+    }
+  ];
 
   return (
     <div
@@ -635,7 +827,6 @@ if __name__ == "__main__":
                 {example.title}
               </h2>
   
-              {/* Description Section */}
               <div
                 className={`p-4 sm:p-6 rounded-lg border transition-colors ${
                   darkMode
@@ -653,15 +844,13 @@ if __name__ == "__main__":
                 <div
                   className={`${
                     darkMode ? "text-gray-300" : "text-gray-900"
-                  } font-medium leading-relaxed space-y-2  text-bold`}
+                  } font-medium leading-relaxed space-y-2`}
                 >
                   {formatDescription(example.description, darkMode)}
                 </div>
               </div>
   
-              {/* Collapsible Sections */}
               <div className="space-y-4 mt-6">
-                {/* Approach Section */}
                 <CollapsibleSection
                   title="Approach"
                   content={example.approach}
@@ -677,7 +866,6 @@ if __name__ == "__main__":
                   }}
                 />
   
-                {/* Algorithm Characteristics Section */}
                 <CollapsibleSection
                   title="Algorithm Characteristics"
                   content={example.algorithmCharacteristics}
@@ -693,7 +881,6 @@ if __name__ == "__main__":
                   }}
                 />
   
-                {/* Complexity Section */}
                 <CollapsibleSection
                   title="Complexity Analysis"
                   content={
@@ -708,7 +895,9 @@ if __name__ == "__main__":
                         <div className={`px-3 py-2 rounded-lg ${darkMode ? 'bg-green-900/30 border border-green-800' : 'bg-green-100'}`}>
                           <div className={`text-xs font-semibold ${darkMode ? 'text-green-300' : 'text-green-600'}`}>SPACE COMPLEXITY</div>
                           <div className={`font-bold ${darkMode ? 'text-green-100' : 'text-green-800'}`}>
-                            {example.complexityDetails.space}
+                            {typeof example.complexityDetails.space === 'string' 
+                              ? example.complexityDetails.space 
+                              : `Top-Down: ${example.complexityDetails.space.topDown}, Bottom-Up: ${example.complexityDetails.space.bottomUp}, Optimized: ${example.complexityDetails.space.optimized}`}
                           </div>
                         </div>
                       </div>
@@ -730,50 +919,30 @@ if __name__ == "__main__":
                   }}
                 />
               </div>
-  
-              {/* Enhanced Summary Section */}
-              {/* <div className={`mt-6 p-4 rounded-lg ${darkMode ? 'bg-gray-700/50' : 'bg-gray-100'}`}>
-                <div className="flex items-start">
-                  <span className={`mr-2 mt-1 ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                  </span>
-                  <div>
-                    <h4 className={`font-bold ${darkMode ? 'text-indigo-300' : 'text-indigo-700'}`}>Key Points</h4>
-                    <p className={`${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-                      {example.complexity}
-                    </p>
-                  </div>
-                </div>
-              </div> */}
             </header>
   
-            {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 mb-6">
-            <a
-  href={example.link}
-  target="_blank"
-  rel="noopener noreferrer"
-  className={`inline-flex items-center justify-center bg-gradient-to-r ${
-    darkMode
-      ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
-      : "from-gray-600 to-gray-800 hover:from-gray-600 hover:to-gray-900"
-  } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
-    darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
-  }`}
->
-  <img 
-    src={darkMode 
-      ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg" 
-      : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"}
-    alt="LeetCode Logo" 
-    className="w-6 h-6 mr-2"
-  />
-  LeetCode
-</a>
-
-
+              <a
+                href={example.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center justify-center bg-gradient-to-r ${
+                  darkMode
+                    ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
+                    : "from-gray-600 to-gray-800 hover:from-gray-600 hover:to-gray-900"
+                } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
+                  darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
+                }`}
+              >
+                <img 
+                  src={darkMode 
+                    ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg" 
+                    : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"}
+                  alt="LeetCode Logo" 
+                  className="w-6 h-6 mr-2"
+                />
+                View Problem
+              </a>
   
               <ToggleCodeButton
                 language="cpp"
@@ -797,7 +966,6 @@ if __name__ == "__main__":
               />
             </div>
   
-            {/* Code Examples */}
             <div className="space-y-4">
               <CodeExample
                 example={example}
