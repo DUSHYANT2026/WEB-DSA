@@ -52,9 +52,9 @@ const getBorderColor = (language, darkMode) => {
   const base = darkMode ? "border-gray-700" : "border-gray-100";
   switch (language) {
     case "cpp":
-      return darkMode ? "border-indigo-900" : "border-indigo-100";
+      return darkMode ? "border-blue-900" : "border-blue-100";
     case "java":
-      return darkMode ? "border-green-900" : "border-green-100";
+      return darkMode ? "border-red-900" : "border-red-100";
     case "python":
       return darkMode ? "border-yellow-900" : "border-yellow-100";
     default:
@@ -62,16 +62,79 @@ const getBorderColor = (language, darkMode) => {
   }
 };
 
+
+const LanguageLogo = ({ language, size = 24, darkMode }) => {
+  const baseClasses = "rounded-md p-1 flex items-center justify-center";
+  
+  const getGradient = (language) => {
+    switch (language) {
+      case "cpp":
+        return darkMode 
+          ? "bg-gradient-to-br from-blue-600 to-red-600" 
+          : "bg-gradient-to-br from-blue-500 to-red-500";
+      case "java":
+        return darkMode 
+          ? "bg-gradient-to-br from-red-600 to-teal-600" 
+          : "bg-gradient-to-br from-red-500 to-teal-500";
+      case "python":
+        return darkMode 
+          ? "bg-gradient-to-br from-yellow-600 to-orange-600" 
+          : "bg-gradient-to-br from-yellow-500 to-orange-500";
+      default:
+        return darkMode 
+          ? "bg-gradient-to-br from-gray-600 to-blue-600" 
+          : "bg-gradient-to-br from-gray-500 to-blue-500";
+    }
+  };
+
+  const getLogo = (language) => {
+    switch (language) {
+      case "cpp":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path fill="#00599C" d="M115.17 30.91l-50.15-29.61c-2.17-1.3-4.81-1.3-7.02 0l-50.15 29.61c-2.17 1.28-3.48 3.58-3.48 6.03v59.18c0 2.45 1.31 4.75 3.48 6.03l50.15 29.61c2.21 1.3 4.85 1.3 7.02 0l50.15-29.61c2.17-1.28 3.48-3.58 3.48-6.03v-59.18c0-2.45-1.31-4.75-3.48-6.03zM70.77 103.47c-15.64 0-27.89-11.84-27.89-27.47 0-15.64 12.25-27.47 27.89-27.47 6.62 0 11.75 1.61 16.3 4.41l-3.32 5.82c-3.42-2.01-7.58-3.22-12.38-3.22-10.98 0-19.09 7.49-19.09 18.46 0 10.98 8.11 18.46 19.09 18.46 5.22 0 9.56-1.41 13.38-3.82l3.32 5.62c-4.81 3.22-10.58 5.21-17.2 5.21zm37.91-1.61h-5.62v-25.5h5.62v25.5zm0-31.51h-5.62v-6.62h5.62v6.62z"></path>
+          </svg>
+        );
+      case "java":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path fill="#0074BD" d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zM44.629 84.455s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z"></path>
+            <path fill="#EA2D2E" d="M69.802 61.271c6.025 6.935-1.58 13.134-1.58 13.134s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.223z"></path>
+            <path fill="#0074BD" d="M102.123 108.229s3.781 2.439-3.901 5.795c-13.199 5.591-49.921 5.775-65.14.132-4.461 0 0 3.188 4.667 18.519 6.338 15.104 1.643 39.252-.603 50.522-7.704zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.556 3.238-54.731-2.958 0 0 5.163-2.053 19.644-4.643z"></path>
+            <path fill="#EA2D2E" d="M76.491 1.587s12.968 12.976-12.303 32.923c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815 8.542-12.834 27.998-39.667 26.998-39.667z"></path>
+          </svg>
+        );
+      case "python":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path fill="#3776AB" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"></path>
+            <path fill="#FFDC41" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.283 16.221 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.678-8.084 2.491-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"></path>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className={`${baseClasses} ${getGradient(language)}`}>
+      {getLogo(language)}
+    </div>
+  );
+};
+
 const getButtonColor = (language, darkMode) => {
   switch (language) {
     case "cpp":
       return darkMode
-        ? "from-pink-600 to-red-600 hover:from-pink-700 hover:to-red-700"
-        : "from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600";
+        ? "from-blue-600 to-blue-800  hover:from-blue-700 hover:to-blue-900"
+        : "from-blue-400 to-blue-600  hover:from-blue-500 hover:to-blue-700";
+    
     case "java":
       return darkMode
-        ? "from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700"
-        : "from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600";
+        ? "from-red-700 to-red-900 hover:from-red-800 hover:to-red-950"
+        : "from-red-500 to-red-700 hover:from-red-600 hover:to-red-800";
+    
     case "python":
       return darkMode
         ? "from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
@@ -148,23 +211,24 @@ const CollapsibleSection = ({
 const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
   <button
     onClick={onClick}
-    className={`inline-block bg-gradient-to-r ${getButtonColor(
+    className={`inline-flex items-center bg-gradient-to-r ${getButtonColor(
       language,
       darkMode
     )} text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
       language === "cpp"
-        ? "focus:ring-pink-500 dark:focus:ring-pink-600"
+        ? "focus:ring-pink-500 dark:focus:ring-blue-600"
         : language === "java"
-        ? "focus:ring-green-500 dark:focus:ring-green-600"
+        ? "focus:ring-green-500 dark:focus:ring-red-600"
         : "focus:ring-yellow-500 dark:focus:ring-yellow-600"
     }`}
     aria-expanded={isVisible}
     aria-controls={`${language}-code`}
   >
+    <LanguageLogo language={language} size={18} darkMode={darkMode} className="mr-2" />
     {isVisible
       ? ` ${
           language === "cpp" 
-            ? "C++" 
+            ? "CPP" 
             : language === "java" 
             ? "Java" 
             : "Python"
@@ -204,32 +268,163 @@ function Dynamic1() {
 
   const codeExamples = [
     {
-      title: "Bubble Sort",
-      description:
-        "Bubble Sort is a simple sorting algorithm that repeatedly steps through the list, compares adjacent elements, and swaps them if they are in the wrong order. This process is repeated until the list is sorted.",
-      approach: "The algorithm works by repeatedly swapping adjacent elements if they are in the wrong order. Each pass through the list places the next largest element in its correct position. The algorithm can be optimized by stopping early if no swaps are needed in a pass, indicating the list is already sorted.",
+      title: "Fibonacci Sequence with Dynamic Programming",
+      description: "Calculates the nth Fibonacci number using both top-down (memoization) and bottom-up (tabulation) dynamic programming approaches. The result is returned modulo 1000000007 to handle large numbers.",
+      approach: [
+        "Top-Down (Memoization):",
+        "- Uses recursion with memoization to store computed Fibonacci numbers",
+        "- Starts from the target number and breaks down into subproblems",
+        "- Stores results to avoid redundant calculations",
+        "",
+        "Bottom-Up (Tabulation):",
+        "- Builds the solution iteratively from the base cases",
+        "- Computes Fibonacci numbers in sequence up to the target number",
+        "- More space-efficient than naive recursion"
+      ],
       algorithmCharacteristics: [
-        "Stable: Yes (does not change the relative order of equal elements)",
-        "In-place: Yes (only requires a constant amount of additional memory space)",
-        "Adaptive: Yes (can take advantage of existing order in the input)",
-        "Online: No (cannot sort a list as it receives it)"
+        "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
+        "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
+        "Memoization: Used in top-down approach",
+        "Tabulation: Used in bottom-up approach"
       ],
       complexityDetails: {
-        time: "O(n²) in worst and average cases, O(n) in best case (when array is already sorted)",
-        space: "O(1) auxiliary space",
-        explanation: "The nested loops result in quadratic time complexity. The space complexity is constant as it sorts in place."
+        time: "O(n) for both approaches (each number computed once)",
+        space: "O(n) for both approaches (for DP table), can be optimized to O(1) for bottom-up",
+        explanation: "Both approaches avoid exponential time by storing intermediate results. The space complexity comes from storing the DP table."
       },
-      cppcode: `/* Bubble Sort implementation in C++ */\n#include <iostream>\n#include <vector>\nusing namespace std;\n\nvoid bubbleSort(vector<int>& arr) {\n  int n = arr.size();\n  bool swapped;\n  for (int i = 0; i < n - 1; ++i) {\n    swapped = false;\n    for (int j = 0; j < n - i - 1; ++j) {\n      if (arr[j] > arr[j + 1]) {\n        swap(arr[j], arr[j + 1]);\n        swapped = true;\n      }\n    }\n    if (!swapped) break;\n  }\n}\n\nint main() {\n  vector<int> arr = {64, 34, 25, 12, 22, 11, 90};\n  bubbleSort(arr);\n  return 0;\n}`,
-      javacode: `/* Bubble Sort implementation in Java */\npublic class BubbleSort {\n  public static void bubbleSort(int[] arr) {\n    int n = arr.length;\n    boolean swapped;\n    for (int i = 0; i < n - 1; i++) {\n      swapped = false;\n      for (int j = 0; j < n - i - 1; j++) {\n        if (arr[j] > arr[j + 1]) {\n          int temp = arr[j];\n          arr[j] = arr[j + 1];\n          arr[j + 1] = temp;\n          swapped = true;\n        }\n      }\n      if (!swapped) break;\n    }\n  }\n}`,
-      pythoncode: `# Bubble Sort implementation in Python\ndef bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(0, n-i-1):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n                swapped = True\n        if not swapped:\n            break`,
+      cppcode: `
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+  private:
+    long long int mode = 1000000007;
+    long long int dpsolve1(int n, vector<long long int> &dp){
+        if(n == 0) return 0;
+        if(n == 1) return 1;
+        
+        if(dp[n] != -1) return dp[n];
+        return dp[n] = (dpsolve1(n-1,dp) + dpsolve1(n-2,dp))%mode;
+    }
+  public:
+    long long int topDown(int n) {
+        vector<long long int> dp(n+1,-1);
+        return dpsolve1(n,dp);
+    }
+    long long int bottomUp(int n) {
+        vector<long long int> dp(n+1,-1);
+        dp[0] = 0; dp[1] = 1;
+        for(int i=2; i<=n; i++){
+            dp[i] = (dp[i-1] + dp[i-2])%mode;
+        }
+        return dp[n];
+    }
+};
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        Solution obj;
+        long long int topDownans = obj.topDown(n);
+        long long int bottomUpans = obj.bottomUp(n);
+        if (topDownans != bottomUpans) cout << -1 << "\n";
+        cout << topDownans << "\n";
+        cout << "~" << "\n";
+    } 
+}
+`,
+      javacode: `import java.util.*;
+
+public class FibonacciDP {
+    private static final long MODE = 1000000007;
+    
+    private long dpsolve1(int n, long[] dp) {
+        if(n == 0) return 0;
+        if(n == 1) return 1;
+        
+        if(dp[n] != -1) return dp[n];
+        return dp[n] = (dpsolve1(n-1, dp) + dpsolve1(n-2, dp)) % MODE;
+    }
+    
+    public long topDown(int n) {
+        long[] dp = new long[n+1];
+        Arrays.fill(dp, -1);
+        return dpsolve1(n, dp);
+    }
+    
+    public long bottomUp(int n) {
+        if(n == 0) return 0;
+        long[] dp = new long[n+1];
+        dp[0] = 0;
+        dp[1] = 1;
+        for(int i = 2; i <= n; i++) {
+            dp[i] = (dp[i-1] + dp[i-2]) % MODE;
+        }
+        return dp[n];
+    }
+    
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        FibonacciDP obj = new FibonacciDP();
+        while(t-- > 0) {
+            int n = sc.nextInt();
+            long topDownAns = obj.topDown(n);
+            long bottomUpAns = obj.bottomUp(n);
+            if(topDownAns != bottomUpAns) System.out.println(-1);
+            System.out.println(topDownAns);
+            System.out.println("~");
+        }
+    }
+}`,
+      pythoncode: `class Solution:
+    def __init__(self):
+        self.mode = 1000000007
+        
+    def dpsolve1(self, n, dp):
+        if n == 0:
+            return 0
+        if n == 1:
+            return 1
+        if dp[n] != -1:
+            return dp[n]
+        dp[n] = (self.dpsolve1(n-1, dp) + self.dpsolve1(n-2, dp)) % self.mode
+        return dp[n]
+    
+    def topDown(self, n):
+        dp = [-1] * (n + 1)
+        return self.dpsolve1(n, dp)
+    
+    def bottomUp(self, n):
+        if n == 0:
+            return 0
+        dp = [0] * (n + 1)
+        dp[1] = 1
+        for i in range(2, n + 1):
+            dp[i] = (dp[i-1] + dp[i-2]) % self.mode
+        return dp[n]
+
+if __name__ == "__main__":
+    t = int(input())
+    obj = Solution()
+    for _ in range(t):
+        n = int(input())
+        top_down_ans = obj.topDown(n)
+        bottom_up_ans = obj.bottomUp(n)
+        if top_down_ans != bottom_up_ans:
+            print(-1)
+        print(top_down_ans)
+        print("~")`,
       language: "cpp",
       javaLanguage: "java",
       pythonlanguage: "python",
-      complexity: "Time Complexity: O(n^2), Space Complexity: O(1)",
-      link: "https://www.geeksforgeeks.org/bubble-sort/",
+      complexity: "Time Complexity: O(n), Space Complexity: O(n) (optimizable to O(1) for bottom-up)",
+      link: "https://www.geeksforgeeks.org/problems/introduction-to-dp/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=introduction-to-dp",
     },
-    // Add more sorting algorithms as needed
-  ];
+  ]
 
   return (
     <div
@@ -246,7 +441,7 @@ function Dynamic1() {
             : "bg-gradient-to-r from-indigo-600 to-purple-700"
         }`}
       >
-        Sorting Algorithms
+        Dynamic Programming
       </h1>
   
       <div className="space-y-8">
@@ -285,8 +480,8 @@ function Dynamic1() {
                 </h3>
                 <div
                   className={`${
-                    darkMode ? "text-gray-300" : "text-gray-700"
-                  } font-medium leading-relaxed space-y-2`}
+                    darkMode ? "text-gray-300" : "text-gray-900"
+                  } font-medium leading-relaxed space-y-2  text-bold`}
                 >
                   {formatDescription(example.description, darkMode)}
                 </div>
@@ -384,20 +579,29 @@ function Dynamic1() {
   
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3 mb-6">
-              <a
-                href={example.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center justify-center bg-gradient-to-r ${
-                  darkMode
-                    ? "from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600"
-                    : "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                } text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ${
-                  darkMode ? "focus:ring-offset-gray-800" : "focus:ring-offset-white"
-                }`}
-              >
-                View Problem
-              </a>
+            <a
+  href={example.link}
+  target="_blank"
+  rel="noopener noreferrer"
+  className={`inline-flex items-center justify-center bg-gradient-to-r ${
+    darkMode
+      ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
+      : "from-gray-200 to-gray-400 hover:from-gray-300 hover:to-gray-500"
+  } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
+    darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
+  }`}
+>
+  <img 
+    src={darkMode 
+      ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg" 
+      : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"}
+    alt="LeetCode Logo" 
+    className="w-6 h-6 mr-2"
+  />
+  LeetCode
+</a>
+
+
   
               <ToggleCodeButton
                 language="cpp"
