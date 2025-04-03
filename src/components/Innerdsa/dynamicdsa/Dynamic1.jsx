@@ -4,7 +4,6 @@ import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { ChevronDown } from "react-feather";
 import { useTheme } from "../../../ThemeContext.jsx";
 
-// Define formatDescription before it's used
 const formatDescription = (desc, darkMode) => {
   if (Array.isArray(desc)) {
     return (
@@ -127,7 +126,7 @@ const getButtonColor = (language, darkMode) => {
   switch (language) {
     case "cpp":
       return darkMode
-        ? "from-blue-600 to-blue-800  hover:from-blue-700 hover:to-blue-900"
+        ? "from-blue-300 to-blue-500  hover:from-blue-400 hover:to-blue-700"
         : "from-blue-400 to-blue-600  hover:from-blue-500 hover:to-blue-700";
     
     case "java":
@@ -292,8 +291,7 @@ function Dynamic1() {
         space: "O(n) for both approaches (for DP table), can be optimized to O(1) for bottom-up",
         explanation: "Both approaches avoid exponential time by storing intermediate results. The space complexity comes from storing the DP table."
       },
-      cppcode: `
-#include <bits/stdc++.h>
+      cppcode: `#include <bits/stdc++.h>
 using namespace std;
 
 class Solution {
@@ -424,6 +422,180 @@ if __name__ == "__main__":
       complexity: "Time Complexity: O(n), Space Complexity: O(n) (optimizable to O(1) for bottom-up)",
       link: "https://www.geeksforgeeks.org/problems/introduction-to-dp/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=introduction-to-dp",
     },
+
+
+    {
+      "title": "Climbing Stairs with Dynamic Programming",
+      "description": "Calculates the number of distinct ways to climb a staircase with n steps where you can take either 1 or 2 steps at a time. Uses memoization to store computed results for efficiency.",
+      "approach": [
+        "Top-Down (Memoization) Approach:",
+        "- Uses recursion with memoization to store computed results",
+        "- Base case: 1 way for 0 or 1 step (n <= 1 returns 1)",
+        "- Recursive case: Sum of ways for (n-1) steps and (n-2) steps",
+        "- Stores results in a DP array to avoid redundant calculations"
+      ],
+      "algorithmCharacteristics": [
+        "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
+        "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
+        "Memoization: Used to store intermediate results",
+        "Recursive Solution: Converted to efficient DP solution",
+        "This problem is essentially the Fibonacci sequence shifted by 1 position",
+        "The space complexity can be optimized to O(1) by using variables to track only the last two values",
+        "The problem demonstrates a classic application of dynamic programming to avoid recomputation"
+      ],
+      "complexityDetails": {
+        "time": "O(n) (each step computed only once)",
+        "space": "O(n) (for DP array), can be optimized to O(1)",
+        "explanation": "The DP approach avoids the exponential time complexity of naive recursion by storing intermediate results. The space complexity comes from storing the DP array."
+      },
+      "cppcode": `#include<bits/stdc++.h>
+using namespace std;
+
+int climbStairs1(int n) {
+    if(n <= 1) return 1;   // using recursion(time limit)
+    return climbStairs1(n-1) + climbStairs1(n-2);
+}
+
+int climbStairs2(int n) {           // using memoization (memory limit)
+    vector<int> nums(n+1,-1); 
+
+    if(n <= 1) return 1;
+    if(nums[n] != -1) return nums[n];
+
+    return nums[n] = climbStairs2(n-1) + climbStairs2(n-2);
+}
+
+int climbStairs3(int n) {          // using tabulation
+    vector<int> dp(n+1,-1);
+    dp[0] = 1;  dp[1] = 1;
+    for(int i=2;i<=n;i++){
+        dp[i] = dp[i-1] + dp[i-2];
+    }
+    return dp[n];
+}
+
+int climbStairs4(int n) {              // optimized space complexcity
+    if(n == 1) return 1;
+    int ans = 0;  int first = 1;  int second = 1;
+
+    for(int i=2;i<=n;i++){
+        ans = first + second;
+        second = first;
+        first = ans;
+    }
+    return ans;
+}
+int main(){
+    int n;
+    cout<<"ENTER THE NUMBER "<< endl; cin>>n;
+    
+    cout<<climbStairs1(n);
+    return 0;
+}
+    
+    `,
+      "javacode": `import java.util.*;
+
+public class ClimbingStairs {
+    // Using recursion (time limit)
+    public static int climbStairs1(int n) {
+        if (n <= 1) return 1;
+        return climbStairs1(n - 1) + climbStairs1(n - 2);
+    }
+
+    // Using memoization (memory limit)
+    public static int climbStairs2(int n) {
+        int[] nums = new int[n + 1];
+        Arrays.fill(nums, -1);
+        return helper(n, nums);
+    }
+
+    private static int helper(int n, int[] nums) {
+        if (n <= 1) return 1;
+        if (nums[n] != -1) return nums[n];
+        nums[n] = helper(n - 1, nums) + helper(n - 2, nums);
+        return nums[n];
+    }
+
+    // Using tabulation
+    public static int climbStairs3(int n) {
+        if (n <= 1) return 1;
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        dp[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            dp[i] = dp[i - 1] + dp[i - 2];
+        }
+        return dp[n];
+    }
+
+    // Optimized space complexity
+    public static int climbStairs4(int n) {
+        if (n <= 1) return 1;
+        int first = 1, second = 1, ans = 0;
+        for (int i = 2; i <= n; i++) {
+            ans = first + second;
+            second = first;
+            first = ans;
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("ENTER THE NUMBER");
+        int n = sc.nextInt();
+        
+        System.out.println(climbStairs1(n));
+    }
+}
+    `,
+      "pythoncode": `def climb_stairs1(n):  # Using recursion (time limit)
+    if n <= 1:
+        return 1
+    return climb_stairs1(n - 1) + climb_stairs1(n - 2)
+
+def climb_stairs2(n, memo=None):  # Using memoization (memory limit)
+    if memo is None:
+        memo = [-1] * (n + 1)
+    if n <= 1:
+        return 1
+    if memo[n] != -1:
+        return memo[n]
+    memo[n] = climb_stairs2(n - 1, memo) + climb_stairs2(n - 2, memo)
+    return memo[n]
+
+def climb_stairs3(n):  # Using tabulation
+    if n <= 1:
+        return 1
+    dp = [0] * (n + 1)
+    dp[0], dp[1] = 1, 1
+    for i in range(2, n + 1):
+        dp[i] = dp[i - 1] + dp[i - 2]
+    return dp[n]
+
+def climb_stairs4(n):  # Optimized space complexity
+    if n <= 1:
+        return 1
+    first, second = 1, 1
+    for _ in range(2, n + 1):
+        ans = first + second
+        second = first
+        first = ans
+    return ans
+
+if __name__ == "__main__":
+    n = int(input("ENTER THE NUMBER\n"))
+    print(climb_stairs1(n))
+    `,
+      "language": "cpp",
+      "javaLanguage": "java",
+      "pythonlanguage": "python",
+      "complexity": "Time Complexity: O(n), Space Complexity: O(n)",
+      "link": "https://leetcode.com/problems/climbing-stairs/",
+    },
+
+
   ]
 
   return (
@@ -586,7 +758,7 @@ if __name__ == "__main__":
   className={`inline-flex items-center justify-center bg-gradient-to-r ${
     darkMode
       ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
-      : "from-gray-200 to-gray-400 hover:from-gray-300 hover:to-gray-500"
+      : "from-gray-600 to-gray-800 hover:from-gray-600 hover:to-gray-900"
   } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
     darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
   }`}
