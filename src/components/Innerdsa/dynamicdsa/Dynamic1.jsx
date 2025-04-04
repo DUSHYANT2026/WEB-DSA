@@ -787,7 +787,653 @@ if __name__ == "__main__":
       pythonlanguage: "python",
   
       link: "https://www.geeksforgeeks.org/problems/geek-jump/1?utm_source=youtube&utm_medium=collab_striver_ytdescription&utm_campaign=geek-jump",
+    },
+
+
+
+    {
+      "title": "Minimize Cost Problem with Dynamic Programming",
+      "description": "Calculates the minimum cost to reach the end of an array where from each position you can jump up to k steps forward, using both top-down (memoization) and bottom-up (tabulation) dynamic programming approaches.",
+      "approach": [
+        "Top-Down (Memoization):",
+        "- Uses recursion with memoization to store computed minimum costs",
+        "- For each position, considers all possible k previous positions",
+        "- Stores results to avoid redundant calculations",
+        "",
+        "Bottom-Up (Tabulation):",
+        "- Builds the solution iteratively from the base case",
+        "- Computes minimum cost for each position by looking back k positions",
+        "- More space-efficient than recursion"
+      ],
+      "algorithmCharacteristics": [
+        "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
+        "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
+        "Memoization: Used in top-down approach (commented out in code)",
+        "Tabulation: Used in bottom-up approach"
+      ],
+      "complexityDetails": {
+        "time": "O(n*k) for both approaches (each position checks up to k previous positions)",
+        "space": "O(n) for both approaches (for DP table)",
+        "explanation": "Both approaches avoid exponential time by storing intermediate results. The time complexity comes from the nested loop checking k previous positions for each of n positions."
+      },
+      "cppcode": `#include <bits/stdc++.h>
+    using namespace std;
+    
+    class Solution {
+    private:
+        int dpcheck(int k, vector<int> &nums, vector<int>& dp, int index) {
+            if(index == 0) return 0;
+            
+            if(dp[index] != -1) return dp[index];
+            
+            int ans = INT_MAX;
+            for(int i = 1; i <= k; i++) {
+                if(index - i >= 0) {
+                    int step = dpcheck(k, nums, dp, index-i) + abs(nums[index] - nums[index-i]);
+                    ans = min(step, ans);
+                }
+            }
+            return dp[index] = ans;
+        }
+        
+    public:
+        int minimizeCost(int k, vector<int>& nums) {
+            // Uncomment for memoization approach
+            // int n = nums.size();
+            // vector<int> dp(n, -1);
+            // return dpcheck(k, nums, dp, n-1);
+            
+            // Tabulation approach
+            int n = nums.size();
+            vector<int> dp(n, -1);
+            dp[0] = 0;
+            
+            for(int i = 1; i < n; i++) {
+                int ans = INT_MAX;
+                for(int j = 1; j <= k; j++) {
+                    if(i - j >= 0) {
+                        int step = dp[i-j] + abs(nums[i] - nums[i-j]);
+                        ans = min(ans, step);
+                    }
+                }
+                dp[i] = ans;
+            }
+            return dp[n-1];
+        }
+    };
+    
+    int main() {
+        string ts;
+        getline(cin, ts);
+        int t = stoi(ts);
+        while (t--) {
+            string ks;
+            getline(cin, ks);
+            int k = stoi(ks);
+            
+            vector<int> arr;
+            string input;
+            getline(cin, input);
+            stringstream ss(input);
+            int number;
+            while (ss >> number) {
+                arr.push_back(number);
+            }
+            
+            Solution obj;
+            int res = obj.minimizeCost(k, arr);
+            cout << res << endl;
+        }
+        return 0;
+    }`,
+      "javacode": `import java.util.*;
+    
+    public class MinimizeCost {
+        private int dpcheck(int k, int[] nums, int[] dp, int index) {
+            if(index == 0) return 0;
+            
+            if(dp[index] != -1) return dp[index];
+            
+            int ans = Integer.MAX_VALUE;
+            for(int i = 1; i <= k; i++) {
+                if(index - i >= 0) {
+                    int step = dpcheck(k, nums, dp, index-i) + Math.abs(nums[index] - nums[index-i]);
+                    ans = Math.min(step, ans);
+                }
+            }
+            return dp[index] = ans;
+        }
+        
+        public int minimizeCostTopDown(int k, int[] nums) {
+            int n = nums.length;
+            int[] dp = new int[n];
+            Arrays.fill(dp, -1);
+            return dpcheck(k, nums, dp, n-1);
+        }
+        
+        public int minimizeCostBottomUp(int k, int[] nums) {
+            int n = nums.length;
+            int[] dp = new int[n];
+            dp[0] = 0;
+            
+            for(int i = 1; i < n; i++) {
+                int ans = Integer.MAX_VALUE;
+                for(int j = 1; j <= k; j++) {
+                    if(i - j >= 0) {
+                        int step = dp[i-j] + Math.abs(nums[i] - nums[i-j]);
+                        ans = Math.min(ans, step);
+                    }
+                }
+                dp[i] = ans;
+            }
+            return dp[n-1];
+        }
+        
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            int t = Integer.parseInt(sc.nextLine());
+            while (t-- > 0) {
+                int k = Integer.parseInt(sc.nextLine());
+                String[] input = sc.nextLine().split(" ");
+                int[] nums = new int[input.length];
+                for(int i = 0; i < input.length; i++) {
+                    nums[i] = Integer.parseInt(input[i]);
+                }
+                
+                MinimizeCost obj = new MinimizeCost();
+                int res = obj.minimizeCostBottomUp(k, nums);
+                System.out.println(res);
+            }
+        }
+    }`,
+      "pythoncode": `class Solution:
+        def dpcheck(self, k, nums, dp, index):
+            if index == 0:
+                return 0
+            if dp[index] != -1:
+                return dp[index]
+            
+            ans = float('inf')
+            for i in range(1, k+1):
+                if index - i >= 0:
+                    step = self.dpcheck(k, nums, dp, index-i) + abs(nums[index] - nums[index-i])
+                    ans = min(step, ans)
+            dp[index] = ans
+            return dp[index]
+        
+        def minimize_cost_top_down(self, k, nums):
+            n = len(nums)
+            dp = [-1] * n
+            return self.dpcheck(k, nums, dp, n-1)
+        
+        def minimize_cost_bottom_up(self, k, nums):
+            n = len(nums)
+            dp = [0] * n
+            
+            for i in range(1, n):
+                ans = float('inf')
+                for j in range(1, k+1):
+                    if i - j >= 0:
+                        step = dp[i-j] + abs(nums[i] - nums[i-j])
+                        ans = min(ans, step)
+                dp[i] = ans
+            return dp[-1]
+    
+    if __name__ == "__main__":
+        t = int(input())
+        for _ in range(t):
+            k = int(input())
+            nums = list(map(int, input().split()))
+            obj = Solution()
+            print(obj.minimize_cost_bottom_up(k, nums))`,
+      "language": "cpp",
+      "javaLanguage": "java",
+      "pythonlanguage": "python",
+      "complexity": "Time Complexity: O(n*k), Space Complexity: O(n)",
+      "link": "https://www.geeksforgeeks.org/minimize-cost-to-reach-end-of-an-array-by-jumping/",
+      "notes": [
+        "The problem is similar to the frog jump problem but with variable jump length (up to k steps)",
+        "Both approaches give identical results but with different implementation styles",
+        "For large k (k ≈ n), the time complexity approaches O(n²)"
+      ]
+    },
+
+    
+    {
+      "title": "House Robber Problem with Dynamic Programming",
+      "description": "Calculates the maximum amount of money a robber can steal without robbing adjacent houses, using both top-down (memoization) and bottom-up (tabulation) dynamic programming approaches.",
+      "approach": [
+        "Top-Down (Memoization):",
+        "- Uses recursion with memoization to store computed results",
+        "- Starts from the last house and breaks down into subproblems",
+        "- Stores results to avoid redundant calculations",
+        "",
+        "Bottom-Up (Tabulation):",
+        "- Builds the solution iteratively from the base cases",
+        "- Computes the maximum amount for each house in sequence",
+        "- More space-efficient than naive recursion"
+      ],
+      "algorithmCharacteristics": [
+        "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
+        "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
+        "Memoization: Used in top-down approach",
+        "Tabulation: Used in bottom-up approach"
+      ],
+      "complexityDetails": {
+        "time": "O(n) for both approaches (each house is processed once)",
+        "space": "O(n) for both approaches (for DP table), can be optimized to O(1) for bottom-up",
+        "explanation": "Both approaches avoid exponential time by storing intermediate results. The space complexity comes from storing the DP table."
+      },
+      "cppcode": `#include <bits/stdc++.h>
+    using namespace std;
+    
+    class Solution {
+    private: 
+        int dpcheck(vector<int> &nums, int index, vector<int> &dp) {
+            if(index < 0) return 0;
+            if(index == 0) return nums[index];
+            if(dp[index] != -1) return dp[index];
+    
+            int pick = nums[index] + dpcheck(nums, index-2, dp);
+            int notpick = dpcheck(nums, index-1, dp);
+            return dp[index] = max(pick, notpick);
+        }
+    public:
+        int rob(vector<int>& nums) {
+            int n = nums.size();
+            vector<int> dp(n, -1);
+            return dpcheck(nums, n-1, dp);
+        }
+    };
+    
+    class Solution2 {
+    public:
+        int rob(vector<int>& nums) {
+            int n = nums.size();
+            if(n == 0) return 0;
+            vector<int> dp(n, -1);
+            dp[0] = nums[0];
+    
+            for(int i = 1; i < n; i++) {
+                int take = nums[i];
+                if(i > 1) {
+                    take += dp[i-2];
+                }
+                int leave = dp[i-1];
+                dp[i] = max(take, leave);
+            }
+            return dp[n-1];
+        }
+    };
+    
+    int main() {
+        int n, x; 
+        cout << "ENTER THE SIZE OF THE ARRAY" << endl;
+        cin >> n;
+    
+        vector<int> nums;
+        for(int i = 0; i < n; i++) {
+            cin >> x;
+            nums.push_back(x);
+        } 
+        Solution2 obj;
+        cout << "MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES " << obj.rob(nums) << endl;
+    }`,
+      "javacode": `import java.util.*;
+    
+    public class HouseRobber {
+        private int dpcheck(int[] nums, int index, int[] dp) {
+            if(index < 0) return 0;
+            if(index == 0) return nums[index];
+            if(dp[index] != -1) return dp[index];
+    
+            int pick = nums[index] + dpcheck(nums, index-2, dp);
+            int notpick = dpcheck(nums, index-1, dp);
+            return dp[index] = Math.max(pick, notpick);
+        }
+    
+        public int robTopDown(int[] nums) {
+            int n = nums.length;
+            int[] dp = new int[n];
+            Arrays.fill(dp, -1);
+            return dpcheck(nums, n-1, dp);
+        }
+    
+        public int robBottomUp(int[] nums) {
+            int n = nums.length;
+            if(n == 0) return 0;
+            int[] dp = new int[n];
+            dp[0] = nums[0];
+    
+            for(int i = 1; i < n; i++) {
+                int take = nums[i];
+                if(i > 1) {
+                    take += dp[i-2];
+                }
+                int leave = dp[i-1];
+                dp[i] = Math.max(take, leave);
+            }
+            return dp[n-1];
+        }
+    
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("ENTER THE SIZE OF THE ARRAY");
+            int n = sc.nextInt();
+            int[] nums = new int[n];
+            for(int i = 0; i < n; i++) {
+                nums[i] = sc.nextInt();
+            }
+            HouseRobber obj = new HouseRobber();
+            System.out.println("MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES " + obj.robBottomUp(nums));
+        }
+    }`,
+      "pythoncode": `class Solution:
+        def dpcheck(self, nums, index, dp):
+            if index < 0:
+                return 0
+            if index == 0:
+                return nums[index]
+            if dp[index] != -1:
+                return dp[index]
+    
+            pick = nums[index] + self.dpcheck(nums, index-2, dp)
+            notpick = self.dpcheck(nums, index-1, dp)
+            dp[index] = max(pick, notpick)
+            return dp[index]
+    
+        def robTopDown(self, nums):
+            n = len(nums)
+            dp = [-1] * n
+            return self.dpcheck(nums, n-1, dp)
+    
+        def robBottomUp(self, nums):
+            n = len(nums)
+            if n == 0:
+                return 0
+            dp = [0] * n
+            dp[0] = nums[0]
+    
+            for i in range(1, n):
+                take = nums[i]
+                if i > 1:
+                    take += dp[i-2]
+                leave = dp[i-1]
+                dp[i] = max(take, leave)
+            return dp[n-1]
+    
+    if __name__ == "__main__":
+        import sys
+        print("ENTER THE SIZE OF THE ARRAY")
+        n = int(sys.stdin.readline())
+        nums = list(map(int, sys.stdin.readline().split()))
+        obj = Solution()
+        print("MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES", obj.robBottomUp(nums))`,
+      "language": "cpp",
+      "javaLanguage": "java",
+      "pythonlanguage": "python",
+      "complexity": "Time Complexity: O(n), Space Complexity: O(n) (optimizable to O(1) for bottom-up)",
+      "link": "https://leetcode.com/problems/house-robber/"
+    },
+
+
+
+    {
+      "title": "House Robber Problem with Circular Arrangement",
+      "description": "Calculates the maximum amount a robber can steal from houses arranged in a circle where the first and last houses are adjacent, using both top-down (memoization) and bottom-up (tabulation) dynamic programming approaches.",
+      "approach": [
+        "Problem Variant: Houses are arranged in a circle (first and last houses are adjacent)",
+        "",
+        "Top-Down (Memoization):",
+        "- Solves two subproblems:",
+        "  1. Exclude the first house",
+        "  2. Exclude the last house",
+        "- Uses recursion with memoization to store computed results",
+        "- Combines results from both subproblems",
+        "",
+        "Bottom-Up (Tabulation):",
+        "- Solves the same two subproblems iteratively",
+        "- Builds DP table from base cases",
+        "- More space-efficient than recursion"
+      ],
+      "algorithmCharacteristics": [
+        "Optimal Substructure: Yes (problem can be broken into smaller subproblems)",
+        "Overlapping Subproblems: Yes (same subproblems are solved multiple times)",
+        "Circular Constraint Handling: Solves two linear subproblems and takes maximum",
+        "Memoization: Used in top-down approach",
+        "Tabulation: Used in bottom-up approach"
+      ],
+      "complexityDetails": {
+        "time": "O(n) for both approaches (each house is processed twice)",
+        "space": "O(n) for both approaches (for DP tables)",
+        "explanation": "The circular constraint is handled by solving two linear subproblems (excluding first/last house) and taking the maximum. Both approaches avoid exponential time through DP."
+      },
+      "cppcode": `#include<bits/stdc++.h>
+    using namespace std;
+    
+    class Solution {
+    private:
+        int dpcheck(vector<int> &dp, int index, vector<int> &nums) {
+            int n = nums.size();
+            if(index == 0) return nums[0];
+            if(index < 0) return 0;
+    
+            if(dp[index] != -1) return dp[index];
+            
+            int take = nums[index] + dpcheck(dp, index-2, nums);
+            int leave = dpcheck(dp, index-1, nums);
+    
+            return dp[index] = max(take, leave);
+        }
+    public:
+        int rob(vector<int>& nums) {
+            int n = nums.size();
+            if(n == 1) return nums[0];
+    
+            vector<int> temp1, temp2;
+            for(int i = 0; i < n; i++) {
+                if(i != 0) temp1.push_back(nums[i]);
+                if(i != n-1) temp2.push_back(nums[i]);
+            }
+            
+            int n1 = temp1.size(), n2 = temp2.size();
+            vector<int> dp1(n1, -1), dp2(n2, -1);
+            return max(dpcheck(dp1, n1-1, temp1), dpcheck(dp2, n2-1, temp2));
+        }
+    };
+    
+    class Solution2 {
+    private:
+        int dpcheck(vector<int> &nums) {
+            int n = nums.size();
+            vector<int> dp(n, -1);
+            dp[0] = nums[0];
+    
+            for(int i = 1; i < n; i++) {
+                int take = nums[i];
+                if(i > 1) take += dp[i-2];
+                int leave = dp[i-1];
+                dp[i] = max(take, leave);
+            }
+            return dp[n-1];
+        }
+    public:
+        int rob(vector<int>& nums) {
+            int n = nums.size();
+            if(n == 1) return nums[0];
+    
+            vector<int> temp1, temp2;
+            for(int i = 0; i < n; i++) {
+                if(i != 0) temp1.push_back(nums[i]);
+                if(i != n-1) temp2.push_back(nums[i]);
+            }
+            return max(dpcheck(temp1), dpcheck(temp2));
+        }
+    };
+    
+    int main() {
+        int n, x; 
+        cout << "ENTER THE SIZE OF THE ARRAY" << endl;
+        cin >> n;
+        vector<int> nums;
+        for(int i = 0; i < n; i++) {
+            cin >> x;
+            nums.push_back(x);
+        } 
+        Solution2 obj;
+        cout << "MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES " << obj.rob(nums) << endl;
+    }`,
+      "javacode": `import java.util.*;
+    
+    public class HouseRobberCircular {
+        private int dpcheck(int[] dp, int index, int[] nums) {
+            if(index == 0) return nums[0];
+            if(index < 0) return 0;
+            
+            if(dp[index] != -1) return dp[index];
+            
+            int take = nums[index] + dpcheck(dp, index-2, nums);
+            int leave = dpcheck(dp, index-1, nums);
+            
+            return dp[index] = Math.max(take, leave);
+        }
+        
+        public int robTopDown(int[] nums) {
+            int n = nums.length;
+            if(n == 1) return nums[0];
+            
+            int[] temp1 = new int[n-1];
+            int[] temp2 = new int[n-1];
+            
+            for(int i = 0; i < n; i++) {
+                if(i != 0) temp1[i-1] = nums[i];
+                if(i != n-1) temp2[i] = nums[i];
+            }
+            
+            int[] dp1 = new int[temp1.length];
+            int[] dp2 = new int[temp2.length];
+            Arrays.fill(dp1, -1);
+            Arrays.fill(dp2, -1);
+            
+            return Math.max(dpcheck(dp1, temp1.length-1, temp1), 
+                           dpcheck(dp2, temp2.length-1, temp2));
+        }
+        
+        private int dpcheckTab(int[] nums) {
+            int n = nums.length;
+            int[] dp = new int[n];
+            dp[0] = nums[0];
+            
+            for(int i = 1; i < n; i++) {
+                int take = nums[i];
+                if(i > 1) take += dp[i-2];
+                int leave = dp[i-1];
+                dp[i] = Math.max(take, leave);
+            }
+            return dp[n-1];
+        }
+        
+        public int robBottomUp(int[] nums) {
+            int n = nums.length;
+            if(n == 1) return nums[0];
+            
+            int[] temp1 = new int[n-1];
+            int[] temp2 = new int[n-1];
+            
+            for(int i = 0; i < n; i++) {
+                if(i != 0) temp1[i-1] = nums[i];
+                if(i != n-1) temp2[i] = nums[i];
+            }
+            
+            return Math.max(dpcheckTab(temp1), dpcheckTab(temp2));
+        }
+        
+        public static void main(String[] args) {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("ENTER THE SIZE OF THE ARRAY");
+            int n = sc.nextInt();
+            int[] nums = new int[n];
+            for(int i = 0; i < n; i++) {
+                nums[i] = sc.nextInt();
+            }
+            
+            HouseRobberCircular obj = new HouseRobberCircular();
+            System.out.println("MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES " + 
+                              obj.robBottomUp(nums));
+        }
+    }`,
+      "pythoncode": `class Solution:
+        def dpcheck(self, dp, index, nums):
+            if index == 0:
+                return nums[0]
+            if index < 0:
+                return 0
+            if dp[index] != -1:
+                return dp[index]
+            
+            take = nums[index] + self.dpcheck(dp, index-2, nums)
+            leave = self.dpcheck(dp, index-1, nums)
+            dp[index] = max(take, leave)
+            return dp[index]
+        
+        def rob_top_down(self, nums):
+            n = len(nums)
+            if n == 1:
+                return nums[0]
+            
+            temp1 = [nums[i] for i in range(1, n)]
+            temp2 = [nums[i] for i in range(n-1)]
+            
+            dp1 = [-1] * len(temp1)
+            dp2 = [-1] * len(temp2)
+            
+            return max(self.dpcheck(dp1, len(temp1)-1, temp1),
+                    self.dpcheck(dp2, len(temp2)-1, temp2))
+        
+        def dpcheck_tab(self, nums):
+            n = len(nums)
+            dp = [-1] * n
+            dp[0] = nums[0]
+            
+            for i in range(1, n):
+                take = nums[i]
+                if i > 1:
+                    take += dp[i-2]
+                leave = dp[i-1]
+                dp[i] = max(take, leave)
+            return dp[-1]
+        
+        def rob_bottom_up(self, nums):
+            n = len(nums)
+            if n == 1:
+                return nums[0]
+            
+            temp1 = [nums[i] for i in range(1, n)]
+            temp2 = [nums[i] for i in range(n-1)]
+            
+            return max(self.dpcheck_tab(temp1), self.dpcheck_tab(temp2))
+    
+    if __name__ == "__main__":
+        print("ENTER THE SIZE OF THE ARRAY")
+        n = int(input())
+        nums = list(map(int, input().split()))
+        obj = Solution()
+        print("MAXIMUM AMOUNT THE THIEF CAN STEAL FROM ALL THE HOUSES", 
+              obj.rob_bottom_up(nums))`,
+      "language": "cpp",
+      "javaLanguage": "java",
+      "pythonlanguage": "python",
+      "complexity": "Time Complexity: O(n), Space Complexity: O(n)",
+      "link": "https://leetcode.com/problems/house-robber-ii/",
+      "notes": [
+        "Circular constraint handled by solving two linear subproblems",
+        "Edge case: Single house handled separately",
+        "Both approaches give identical results but with different implementation styles"
+      ]
     }
+
+
+
   ];
 
   return (
