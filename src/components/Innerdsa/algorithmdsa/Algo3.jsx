@@ -1,8 +1,10 @@
+/* eslint-disable react/display-name */
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { ChevronDown, ChevronUp } from "react-feather";
 import { useTheme } from "../../../ThemeContext.jsx";
+
 
 const CodeExample = React.memo(
   ({ example, isVisible, language, code, darkMode }) => (
