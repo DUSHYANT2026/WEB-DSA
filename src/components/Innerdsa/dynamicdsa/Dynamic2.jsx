@@ -996,6 +996,195 @@ function Dynamic2() {
     },
 
 
+
+    {
+      "title": "Unique Paths III Problem",
+      "description": "Counts the number of unique paths from start to end in a grid that walk over every non-obstacle square exactly once.",
+      "approach": [
+        "Problem Understanding:",
+        "- Given a grid with start (1), end (2), obstacles (-1), and empty squares (0)",
+        "- Must walk over every empty square exactly once",
+        "- Can move in 4 directions (up, down, left, right)",
+        "- Find all possible paths from start to end covering all non-obstacle squares",
+        "",
+        "Backtracking with DFS:",
+        "- Use DFS to explore all possible paths",
+        "- Keep track of visited squares to avoid revisiting",
+        "- Count remaining squares to ensure full coverage",
+        "- Backtrack when hitting obstacles or boundaries",
+        "- Success when reaching end with all squares visited"
+      ],
+      "algorithmCharacteristics": [
+        "Depth-First Search: Explores all possible paths recursively",
+        "Backtracking: Unmarks visited squares when backtracking",
+        "State Tracking: Maintains visited status and remaining count",
+        "Complete Search: Guarantees finding all valid paths",
+        "Constraint Satisfaction: Enforces visiting all non-obstacle squares"
+      ],
+      "complexityDetails": {
+        "time": "O(3^(n*m)) - Worst case with 3 possible moves at each step (can't go back)",
+        "space": "O(n*m) - For visited matrix and recursion stack",
+        "explanation": "The complexity is exponential due to the nature of the complete search, though pruning occurs when hitting obstacles or revisiting squares."
+      },
+      "cppcode": `class Solution {
+    private:
+        int dpsolve(int i, int j, int x, int y, int n, int m, int count, 
+                   vector<vector<int>>& grid, vector<vector<bool>>& visited) {
+            // Base case: reached endpoint
+            if (i == x && j == y) {
+                return count == 0 ? 1 : 0;
+            }
+            
+            // Boundary/obstacle/visited check
+            if (i < 0 || i >= n || j < 0 || j >= m || 
+                grid[i][j] == -1 || visited[i][j]) {
+                return 0;
+            }
+            
+            visited[i][j] = true;
+            int paths = 0;
+            
+            // Explore all 4 directions
+            paths += dpsolve(i + 1, j, x, y, n, m, count - 1, grid, visited);
+            paths += dpsolve(i - 1, j, x, y, n, m, count - 1, grid, visited);
+            paths += dpsolve(i, j + 1, x, y, n, m, count - 1, grid, visited);
+            paths += dpsolve(i, j - 1, x, y, n, m, count - 1, grid, visited);
+            
+            visited[i][j] = false; // Backtrack
+            return paths;
+        }
+    
+    public:
+        int uniquePathsIII(vector<vector<int>>& grid) {
+            int n = grid.size();
+            int m = grid[0].size();
+            int start_i = 0, start_j = 0, end_i = 0, end_j = 0;
+            int count = 0; // Total squares to visit
+            
+            // Find start, end and count non-obstacle squares
+            for (int i = 0; i < n; ++i) {
+                for (int j = 0; j < m; ++j) {
+                    if (grid[i][j] == 1) {
+                        start_i = i;
+                        start_j = j;
+                        count++;
+                    } else if (grid[i][j] == 2) {
+                        end_i = i;
+                        end_j = j;
+                        count++;
+                    } else if (grid[i][j] == 0) {
+                        count++;
+                    }
+                }
+            }
+            
+            vector<vector<bool>> visited(n, vector<bool>(m, false));
+            return dpsolve(start_i, start_j, end_i, end_j, n, m, count - 1, grid, visited);
+        }
+    };`,
+      "optimizedApproach": {
+        "description": "The solution is already optimized with backtracking. Further optimizations could include:",
+        "improvements": [
+          "Early termination if remaining squares are unreachable",
+          "Memoization of intermediate states (though challenging due to path dependency)",
+          "Bitmask representation of visited squares for space efficiency"
+        ]
+      },
+      "javacode": `class Solution {
+        private int dfs(int[][] grid, int i, int j, int zeros, boolean[][] visited) {
+            if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || 
+                grid[i][j] == -1 || visited[i][j]) {
+                return 0;
+            }
+            
+            if (grid[i][j] == 2) {
+                return zeros == -1 ? 1 : 0;
+            }
+            
+            visited[i][j] = true;
+            zeros--;
+            int paths = 0;
+            
+            paths += dfs(grid, i+1, j, zeros, visited);
+            paths += dfs(grid, i-1, j, zeros, visited);
+            paths += dfs(grid, i, j+1, zeros, visited);
+            paths += dfs(grid, i, j-1, zeros, visited);
+            
+            visited[i][j] = false;
+            return paths;
+        }
+        
+        public int uniquePathsIII(int[][] grid) {
+            int startX = 0, startY = 0, zeros = 0;
+            
+            for (int i = 0; i < grid.length; i++) {
+                for (int j = 0; j < grid[0].length; j++) {
+                    if (grid[i][j] == 1) {
+                        startX = i;
+                        startY = j;
+                    } else if (grid[i][j] == 0) {
+                        zeros++;
+                    }
+                }
+            }
+            
+            boolean[][] visited = new boolean[grid.length][grid[0].length];
+            return dfs(grid, startX, startY, zeros, visited);
+        }
+    }`,
+      "pythoncode": `class Solution:
+        def uniquePathsIII(self, grid: List[List[int]]) -> int:
+            rows, cols = len(grid), len(grid[0])
+            start, end = None, None
+            empty = 0
+            
+            for r in range(rows):
+                for c in range(cols):
+                    if grid[r][c] == 1:
+                        start = (r, c)
+                    elif grid[r][c] == 2:
+                        end = (r, c)
+                    elif grid[r][c] == 0:
+                        empty += 1
+            
+            def dfs(r, c, visited, steps):
+                if (r, c) == end:
+                    return 1 if steps == empty + 1 else 0
+                
+                count = 0
+                for dr, dc in [(1,0), (-1,0), (0,1), (0,-1)]:
+                    nr, nc = r + dr, c + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] != -1 and (nr, nc) not in visited:
+                        visited.add((nr, nc))
+                        count += dfs(nr, nc, visited, steps + 1)
+                        visited.remove((nr, nc))
+                return count
+            
+            return dfs(start[0], start[1], {start}, 0)`,
+      "language": "cpp",
+      "javaLanguage": "java",
+      "pythonlanguage": "python",
+      "complexity": {
+        "time": "O(3^(n*m)) - Worst case with 3 possible moves at each step",
+        "space": "O(n*m) - For visited matrix and recursion stack"
+      },
+      "link": "https://leetcode.com/problems/unique-paths-iii/",
+      "notes": [
+        "This is a Hamiltonian path problem on a grid",
+        "The solution must cover all non-obstacle squares exactly once",
+        "Backtracking is essential to explore all possibilities",
+        "The count parameter ensures complete coverage",
+        "For larger grids (n,m > 10), this approach may be too slow"
+      ]
+    },
+
+
+
+
+
+
+
+
     {
       "title": "Minimum Path Sum Problem",
       "description": "Finds the path from the top-left corner to the bottom-right corner of a grid (M x N) with non-negative numbers that minimizes the sum of all numbers along its path, where movement is only allowed right or down, using three different dynamic programming approaches.",
