@@ -1,14 +1,38 @@
 import React, { useState } from "react";
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { ChevronDown, ChevronUp } from "react-feather";
+import { ChevronDown } from "react-feather";
 import { useTheme } from "../../../ThemeContext.jsx";
+
+const formatDescription = (desc, darkMode) => {
+  if (Array.isArray(desc)) {
+    return (
+      <ul
+        className={`list-disc pl-6 ${
+          darkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
+        {desc.map((item, i) => (
+          <li key={i} className="mb-2">
+            {item}
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  return desc.split("\n").map((paragraph, i) => (
+    <p key={i} className="mb-4 whitespace-pre-line">
+      {paragraph}
+    </p>
+  ));
+};
 
 const CodeExample = React.memo(
   ({ example, isVisible, language, code, darkMode }) => (
     <div
       className={`rounded-lg overflow-hidden border-2 ${getBorderColor(
-        language
+        language,
+        darkMode
       )} transition-all duration-300 ${isVisible ? "block" : "hidden"}`}
     >
       <SyntaxHighlighter
@@ -29,106 +53,285 @@ const CodeExample = React.memo(
   )
 );
 
-const getBorderColor = (language) => {
+const getBorderColor = (language, darkMode) => {
+  const base = darkMode ? "border-gray-700" : "border-gray-100";
   switch (language) {
     case "cpp":
-      return "border-indigo-100 dark:border-indigo-900";
+      return darkMode ? "border-blue-900" : "border-blue-100";
     case "java":
-      return "border-green-100 dark:border-green-900";
+      return darkMode ? "border-red-900" : "border-red-100";
     case "python":
-      return "border-yellow-100 dark:border-yellow-900";
+      return darkMode ? "border-yellow-900" : "border-yellow-100";
     default:
-      return "border-gray-100 dark:border-gray-800";
+      return base;
   }
 };
 
-const getButtonColor = (language) => {
+const LanguageLogo = ({ language, size = 24, darkMode }) => {
+  const baseClasses = "rounded-md p-1 flex items-center justify-center";
+
+  const getGradient = (language) => {
+    switch (language) {
+      case "cpp":
+        return darkMode
+          ? "bg-gradient-to-br from-blue-900 to-blue-600"
+          : "bg-gradient-to-br from-blue-500 to-blue-700";
+      case "java":
+        return darkMode
+          ? "bg-gradient-to-br from-red-800 to-red-600"
+          : "bg-gradient-to-br from-red-500 to-red-700";
+      case "python":
+        return darkMode
+          ? "bg-gradient-to-br from-yellow-700 to-yellow-600"
+          : "bg-gradient-to-br from-yellow-400 to-yellow-600";
+      default:
+        return darkMode
+          ? "bg-gradient-to-br from-gray-700 to-gray-600"
+          : "bg-gradient-to-br from-gray-400 to-gray-600";
+    }
+  };
+
+  const getLogo = (language) => {
+    switch (language) {
+      case "cpp":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path
+              fill="#00599C"
+              d="M115.17 30.91l-50.15-29.61c-2.17-1.3-4.81-1.3-7.02 0l-50.15 29.61c-2.17 1.28-3.48 3.58-3.48 6.03v59.18c0 2.45 1.31 4.75 3.48 6.03l50.15 29.61c2.21 1.3 4.85 1.3 7.02 0l50.15-29.61c2.17-1.28 3.48-3.58 3.48-6.03v-59.18c0-2.45-1.31-4.75-3.48-6.03zM70.77 103.47c-15.64 0-27.89-11.84-27.89-27.47 0-15.64 12.25-27.47 27.89-27.47 6.62 0 11.75 1.61 16.3 4.41l-3.32 5.82c-3.42-2.01-7.58-3.22-12.38-3.22-10.98 0-19.09 7.49-19.09 18.46 0 10.98 8.11 18.46 19.09 18.46 5.22 0 9.56-1.41 13.38-3.82l3.32 5.62c-4.81 3.22-10.58 5.21-17.2 5.21zm37.91-1.61h-5.62v-25.5h5.62v25.5zm0-31.51h-5.62v-6.62h5.62v6.62z"
+            ></path>
+          </svg>
+        );
+      case "java":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path
+              fill="#0074BD"
+              d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zM44.629 84.455s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z"
+            ></path>
+            <path
+              fill="#EA2D2E"
+              d="M69.802 61.271c6.025 6.935-1.58 13.134-1.58 13.134s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.223z"
+            ></path>
+            <path
+              fill="#0074BD"
+              d="M102.123 108.229s3.781 2.439-3.901 5.795c-13.199 5.591-49.921 5.775-65.14.132-4.461 0 0 3.188 4.667 18.519 6.338 15.104 1.643 39.252-.603 50.522-7.704zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.556 3.238-54.731-2.958 0 0 5.163-2.053 19.644-4.643z"
+            ></path>
+            <path
+              fill="#EA2D2E"
+              d="M76.491 1.587s12.968 12.976-12.303 32.923c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815 8.542-12.834 27.998-39.667 26.998-39.667z"
+            ></path>
+          </svg>
+        );
+      case "python":
+        return (
+          <svg viewBox="0 0 128 128" width={size} height={size}>
+            <path
+              fill="#3776AB"
+              d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z"
+              transform="translate(0 10.26)"
+            ></path>
+            <path
+              fill="#FFDC41"
+              d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.283 16.221 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.678-8.084 2.491-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z"
+              transform="translate(0 10.26)"
+            ></path>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className={`${baseClasses} ${getGradient(language)}`}>
+      {getLogo(language)}
+    </div>
+  );
+};
+
+const getButtonColor = (language, darkMode) => {
   switch (language) {
     case "cpp":
-      return "from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 dark:from-pink-600 dark:to-red-600 dark:hover:from-pink-700 dark:hover:to-red-700";
+      return darkMode
+        ? "from-blue-300 to-blue-500 hover:from-blue-400 hover:to-blue-700"
+        : "from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700";
     case "java":
-      return "from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 dark:from-green-600 dark:to-teal-600 dark:hover:from-green-700 dark:hover:to-teal-700";
+      return darkMode
+        ? "from-red-700 to-red-900 hover:from-red-800 hover:to-red-950"
+        : "from-red-500 to-red-700 hover:from-red-600 hover:to-red-800";
     case "python":
-      return "from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 dark:from-yellow-600 dark:to-orange-600 dark:hover:from-yellow-700 dark:hover:to-orange-700";
+      return darkMode
+        ? "from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
+        : "from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600";
     default:
-      return "from-gray-500 to-blue-500 hover:from-gray-600 hover:to-blue-600 dark:from-gray-600 dark:to-blue-600 dark:hover:from-gray-700 dark:hover:to-blue-700";
+      return darkMode
+        ? "from-gray-600 to-blue-600 hover:from-gray-700 hover:to-blue-700"
+        : "from-gray-500 to-blue-500 hover:from-gray-600 hover:to-blue-600";
   }
 };
 
-const ToggleCodeButton = ({ language, isVisible, onClick }) => (
+const CollapsibleSection = ({
+  title,
+  content,
+  isExpanded,
+  onToggle,
+  darkMode,
+  colorScheme,
+}) => (
+  <div className="group">
+    <button
+      onClick={onToggle}
+      className={`w-full flex justify-between items-center focus:outline-none p-3 rounded-lg transition-all ${
+        isExpanded
+          ? `${colorScheme.bg} ${colorScheme.border} border`
+          : "hover:bg-opacity-10 hover:bg-gray-500"
+      }`}
+      aria-expanded={isExpanded}
+    >
+      <div className="flex items-center">
+        <span className={`mr-3 text-lg ${colorScheme.icon}`}>
+          {isExpanded ? "▼" : "►"}
+        </span>
+        <h3 className={`font-bold text-lg ${colorScheme.text}`}>{title}</h3>
+      </div>
+      <span className={`transition-transform duration-200 ${colorScheme.icon}`}>
+        <ChevronDown size={20} className={isExpanded ? "rotate-180" : ""} />
+      </span>
+    </button>
+
+    {isExpanded && (
+      <div
+        className={`p-4 sm:p-6 rounded-lg border mt-1 transition-all duration-200 ${colorScheme.bg} ${colorScheme.border} animate-fadeIn`}
+      >
+        <div
+          className={`${colorScheme.text} font-medium leading-relaxed space-y-3`}
+        >
+          {typeof content === "string" ? (
+            <div className="prose prose-sm max-w-none">
+              {content.split("\n").map((paragraph, i) => (
+                <p key={i} className="mb-3 last:mb-0">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+          ) : Array.isArray(content) ? (
+            <ul className="space-y-2 list-disc pl-5 marker:text-opacity-60">
+              {content.map((item, i) => (
+                <li key={i} className="pl-2">
+                  {item.includes(":") ? (
+                    <>
+                      <span className="font-semibold">
+                        {item.split(":")[0]}:
+                      </span>
+                      {item.split(":").slice(1).join(":")}
+                    </>
+                  ) : (
+                    item
+                  )}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            content
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+);
+
+const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
   <button
     onClick={onClick}
-    className={`inline-block bg-gradient-to-r ${getButtonColor(
-      language
-    )} text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-      language === "cpp"
-        ? "focus:ring-pink-500 dark:focus:ring-pink-600"
+    className={`inline-flex items-center justify-center bg-gradient-to-br ${
+      darkMode
+        ? language === "cpp"
+          ? "from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600"
+          : language === "java"
+          ? "from-red-900 to-red-700 hover:from-red-800 hover:to-red-600"
+          : "from-yellow-800 to-yellow-600 hover:from-yellow-700 hover:to-yellow-500"
+        : language === "cpp"
+        ? "from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700"
         : language === "java"
-        ? "focus:ring-green-500 dark:focus:ring-green-600"
-        : "focus:ring-yellow-500 dark:focus:ring-yellow-600"
+        ? "from-red-600 to-red-800 hover:from-red-500 hover:to-red-700"
+        : "from-yellow-500 to-yellow-700 hover:from-yellow-400 hover:to-yellow-600"
+    } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 ${
+      language === "cpp"
+        ? "focus:ring-blue-400"
+        : language === "java"
+        ? "focus:ring-red-400"
+        : "focus:ring-yellow-400"
+    } ${
+      darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
+    } shadow-md ${
+      darkMode ? "shadow-gray-800/50" : "shadow-gray-500/40"
+    } border ${
+      darkMode
+        ? "border-gray-700/50"
+        : "border-gray-400/50"
     }`}
     aria-expanded={isVisible}
     aria-controls={`${language}-code`}
   >
-    {isVisible
-      ? `Hide ${
-          language === "cpp" ? "C++" : language === "java" ? "Java" : "Python"
-        } Code`
-      : `Show ${
-          language === "cpp" ? "C++" : language === "java" ? "Java" : "Python"
-        } Code`}
+    <LanguageLogo
+      language={language}
+      size={18}
+      darkMode={darkMode}
+      className="mr-2"
+    />
+    {language === "cpp" ? "C++" : language === "java" ? "Java" : "Python"}
   </button>
 );
 
 function Narray2() {
   const { darkMode } = useTheme();
-  const [visibleCodes, setVisibleCodes] = useState({
-    cpp: null,
-    java: null,
-    python: null,
+  const [visibleCode, setVisibleCode] = useState({
+    index: null,
+    language: null,
   });
   const [expandedSections, setExpandedSections] = useState({});
 
   const toggleCodeVisibility = (language, index) => {
-    setVisibleCodes({
-      cpp: language === "cpp" && visibleCodes.cpp !== index ? index : null,
-      java: language === "java" && visibleCodes.java !== index ? index : null,
-      python:
-        language === "python" && visibleCodes.python !== index ? index : null,
+    setVisibleCode((prev) => {
+      // If clicking the same code that's already open, close it
+      if (prev.index === index && prev.language === language) {
+        return { index: null, language: null };
+      }
+      // Otherwise open the new code
+      return { index, language };
     });
   };
 
-  const toggleDetails = (index) => {
+  const toggleDetails = (index, section) => {
     setExpandedSections((prev) => ({
       ...prev,
-      [index]: !prev[index],
+      [`${index}-${section}`]: !prev[`${index}-${section}`],
     }));
-  };
-
-  const formatDescription = (desc) => {
-    return desc.split("\n").map((paragraph, i) => (
-      <p key={i} className="mb-4 whitespace-pre-line dark:text-gray-300">
-        {paragraph}
-      </p>
-    ));
   };
 
   const codeExamples = [
     {
       title: "Implement Atoi",
       description: "Convert a string to a 32-bit signed integer (mimics C/C++'s atoi function).",
-      approach: `
-1. Discard leading whitespace
-2. Check for optional '+' or '-' sign
-3. Read in digits until non-digit or end of string
-4. Handle overflow by clamping to INT_MAX/MIN
-5. Return converted integer or 0 if no valid conversion`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(1)
-• Handles leading whitespace, signs
-• Clamps overflow values
-• Stops at first non-digit character`,
+      approach: [
+        "1. Discard leading whitespace",
+        "2. Check for optional '+' or '-' sign",
+        "3. Read in digits until non-digit or end of string",
+        "4. Handle overflow by clamping to INT_MAX/MIN",
+        "5. Return converted integer or 0 if no valid conversion"
+      ],
+      algorithmCharacteristics: [
+        "Linear Scan: Processes string in one pass",
+        "Overflow Handling: Checks for 32-bit integer limits",
+        "Sign Awareness: Properly handles positive/negative numbers",
+        "Whitespace Ignoring: Skips leading spaces"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(1)",
+        explanation: "Single iteration through the string with constant space usage"
+      },
       cppcode: `#include <climits>
 #include <string>
 using namespace std;
@@ -190,22 +393,32 @@ int myAtoi(string s) {
         result = result * 10 + digit
     
     return sign * result`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
       link: "https://leetcode.com/problems/string-to-integer-atoi/"
     },
     {
       title: "Add Binary Strings",
       description: "Given two binary strings, return their sum as a binary string.",
-      approach: `
-1. Start from end of both strings
-2. Perform bit-by-bit addition with carry
-3. Handle different length strings
-4. Reverse final result`,
-      algorithm: `
-• Time complexity: O(max(m,n))
-• Space complexity: O(max(m,n))
-• Simple bit addition with carry
-• Handles leading zeros`,
+      approach: [
+        "1. Start from end of both strings",
+        "2. Perform bit-by-bit addition with carry",
+        "3. Handle different length strings",
+        "4. Reverse final result"
+      ],
+      algorithmCharacteristics: [
+        "Bit Manipulation: Simulates binary addition",
+        "Carry Propagation: Handles carry between bits",
+        "String Reversal: Builds result in reverse order",
+        "Equal Length Handling: Works with different length inputs"
+      ],
+      complexityDetails: {
+        time: "O(max(m,n))",
+        space: "O(max(m,n))",
+        explanation: "Processes each bit once and stores result of similar length"
+      },
       cppcode: `#include <algorithm>
 #include <string>
 using namespace std;
@@ -260,22 +473,32 @@ string addBinary(string a, string b) {
         carry = sum_val // 2
     
     return ''.join(reversed(result))`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(max(m,n)), Space Complexity: O(max(m,n))",
       link: "https://leetcode.com/problems/add-binary/"
     },
     {
       title: "Anagram Check",
       description: "Check if two strings are anagrams of each other.",
-      approach: `
-1. Compare lengths of both strings
-2. Use frequency count array for one string
-3. Decrement counts for characters in second string
-4. All counts should be zero for anagrams`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(1) (fixed size count array)
-• Case insensitive option available
-• Handles Unicode with hash map`,
+      approach: [
+        "1. Compare lengths of both strings",
+        "2. Use frequency count array for one string",
+        "3. Decrement counts for characters in second string",
+        "4. All counts should be zero for anagrams"
+      ],
+      algorithmCharacteristics: [
+        "Frequency Counting: Uses fixed-size array for counts",
+        "Early Termination: Returns false if lengths differ",
+        "Case Handling: Works with lowercase letters (can be extended)",
+        "Efficient Comparison: Single pass after count setup"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(1)",
+        explanation: "Uses fixed-size count array regardless of input size"
+      },
       cppcode: `#include <string>
 #include <array>
 using namespace std;
@@ -314,21 +537,31 @@ bool isAnagram(string s, string t) {
         if count[ord(c) - ord('a')] < 0:
             return False
     return True`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
       link: "https://leetcode.com/problems/valid-anagram/"
     },
     {
       title: "First Non-Repeating Character",
       description: "Find the first non-repeating character in a string and return its index.",
-      approach: `
-1. Build frequency count of characters
-2. Traverse string to find first character with count 1
-3. Return index or -1 if none found`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(1) (fixed size count array)
-• Two-pass approach
-• Handles empty string case`,
+      approach: [
+        "1. Build frequency count of characters",
+        "2. Traverse string to find first character with count 1",
+        "3. Return index or -1 if none found"
+      ],
+      algorithmCharacteristics: [
+        "Two-Pass Approach: First pass counts, second pass finds",
+        "Constant Space: Uses fixed-size count array",
+        "Early Exit: Returns immediately when found",
+        "Case Handling: Works with lowercase letters (can be extended)"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(1)",
+        explanation: "Two linear passes through the string with fixed 26-element array"
+      },
       cppcode: `#include <string>
 #include <array>
 using namespace std;
@@ -359,21 +592,31 @@ int firstUniqChar(string s) {
         if count[ord(c) - ord('a')] == 1:
             return i
     return -1`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
       link: "https://leetcode.com/problems/first-unique-character-in-a-string/"
     },
     {
       title: "Search Pattern (KMP Algorithm)",
       description: "Implement strStr() - find first occurrence of needle in haystack using KMP algorithm.",
-      approach: `
-1. Preprocess pattern to create longest prefix suffix (LPS) array
-2. Use LPS array to skip unnecessary comparisons
-3. Perform pattern matching with optimized shifts`,
-      algorithm: `
-• Time complexity: O(m+n)
-• Space complexity: O(m) for LPS array
-• Efficient for large texts with repeating patterns
-• Avoids backtracking in text`,
+      approach: [
+        "1. Preprocess pattern to create longest prefix suffix (LPS) array",
+        "2. Use LPS array to skip unnecessary comparisons",
+        "3. Perform pattern matching with optimized shifts"
+      ],
+      algorithmCharacteristics: [
+        "Efficient Matching: O(m+n) time complexity",
+        "LPS Array: Enables skipping already matched portions",
+        "No Backtracking: Text pointer never moves backward",
+        "Handles Repeats: Optimized for patterns with repeating substrings"
+      ],
+      complexityDetails: {
+        time: "O(m+n)",
+        space: "O(m)",
+        explanation: "Preprocessing pattern takes O(m), searching takes O(n)"
+      },
       cppcode: `#include <vector>
 #include <string>
 using namespace std;
@@ -472,22 +715,32 @@ int strStr(string haystack, string needle) {
             else:
                 i += 1
     return -1`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(m+n), Space Complexity: O(m)",
       link: "https://leetcode.com/problems/implement-strstr/"
     },
     {
       title: "Minimum Characters to Add for Palindrome",
       description: "Find minimum characters to add to make a string palindrome.",
-      approach: `
-1. Use modified KMP algorithm with LPS array
-2. Create a new string: original + '$' + reverse
-3. Compute LPS array for this combined string
-4. Minimum insertions = length - LPS last value`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(n)
-• Efficient solution using pattern matching
-• Works for any string length`,
+      approach: [
+        "1. Use modified KMP algorithm with LPS array",
+        "2. Create a new string: original + '$' + reverse",
+        "3. Compute LPS array for this combined string",
+        "4. Minimum insertions = length - LPS last value"
+      ],
+      algorithmCharacteristics: [
+        "KMP Adaptation: Uses LPS array creatively",
+        "Efficient: Solves in linear time",
+        "Symmetry Detection: Finds longest palindromic prefix",
+        "Single Pass: After LPS computation"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(n)",
+        explanation: "LPS computation dominates time, requires O(n) space for combined string"
+      },
       cppcode: `#include <string>
 #include <algorithm>
 #include <vector>
@@ -546,21 +799,31 @@ int minInsertions(string s) {
         lps[i] = length
     
     return len(s) - lps[-1]`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(n)",
       link: "https://www.geeksforgeeks.org/minimum-characters-added-front-make-string-palindrome/"
     },
     {
       title: "String Rotation of Each Other",
       description: "Check if one string is a rotation of another.",
-      approach: `
-1. Check if lengths are equal
-2. Concatenate first string with itself
-3. Check if second string is substring of concatenated string`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(n) for concatenated string
-• Simple and elegant solution
-• Uses standard string search`,
+      approach: [
+        "1. Check if lengths are equal",
+        "2. Concatenate first string with itself",
+        "3. Check if second string is substring of concatenated string"
+      ],
+      algorithmCharacteristics: [
+        "Simple Check: Elegant one-line solution",
+        "Efficient: Uses built-in string search",
+        "Length Awareness: Early exit if lengths differ",
+        "Substring Search: Leverages standard library functions"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(n)",
+        explanation: "String concatenation takes O(n) space, substring search is typically O(n)"
+      },
       cppcode: `#include <string>
 using namespace std;
 
@@ -580,22 +843,32 @@ bool isRotation(string s1, string s2) {
     if len(s1) != len(s2):
         return False
     return s2 in (s1 + s1)`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(n)",
       link: "https://www.geeksforgeeks.org/a-program-to-check-if-strings-are-rotations-of-each-other/"
     },
     {
       title: "Fizz Buzz",
       description: "For numbers 1 to n, return 'Fizz' for multiples of 3, 'Buzz' for multiples of 5, 'FizzBuzz' for both.",
-      approach: `
-1. Iterate from 1 to n
-2. Check divisibility by 3 and 5 first
-3. Then check individual divisibility
-4. Default to string representation of number`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(n) for output
-• Simple conditional checks
-• Handles edge cases`,
+      approach: [
+        "1. Iterate from 1 to n",
+        "2. Check divisibility by 3 and 5 first",
+        "3. Then check individual divisibility",
+        "4. Default to string representation of number"
+      ],
+      algorithmCharacteristics: [
+        "Simple Logic: Straightforward conditional checks",
+        "Order Matters: Checks 15 before 3 and 5",
+        "String Conversion: Handles number to string conversion",
+        "No Extra Space: Generates output directly"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(n)",
+        explanation: "Linear pass through numbers with output proportional to input size"
+      },
       cppcode: `#include <vector>
 #include <string>
 using namespace std;
@@ -636,22 +909,32 @@ public class Solution {
         else:
             result.append(str(i))
     return result`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(n)",
       link: "https://leetcode.com/problems/fizz-buzz/"
     },
     {
       title: "CamelCase Pattern Matching",
       description: "Find all dictionary words that match a given CamelCase pattern.",
-      approach: `
-1. Extract uppercase characters from pattern
-2. For each word, extract its uppercase characters
-3. Compare with pattern's uppercase sequence
-4. Return matching words`,
-      algorithm: `
-• Time complexity: O(n*k) where n is number of words, k is average length
-• Space complexity: O(m) for pattern uppercase storage
-• Handles empty pattern case
-• Case-sensitive comparison`,
+      approach: [
+        "1. Extract uppercase characters from pattern",
+        "2. For each word, extract its uppercase characters",
+        "3. Compare with pattern's uppercase sequence",
+        "4. Return matching words"
+      ],
+      algorithmCharacteristics: [
+        "Pattern Matching: Compares uppercase sequences",
+        "Early Termination: Skips non-matching words quickly",
+        "Case Sensitivity: Strict uppercase matching",
+        "Linear Scan: Processes each word once"
+      ],
+      complexityDetails: {
+        time: "O(n*k)",
+        space: "O(m)",
+        explanation: "Where n is number of words, k is average length, m is pattern length"
+      },
       cppcode: `#include <vector>
 #include <string>
 using namespace std;
@@ -707,21 +990,31 @@ public class Solution {
                 break
         result.append(match and i == len(pattern))
     return result`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n*k), Space Complexity: O(m)",
       link: "https://leetcode.com/problems/camelcase-matching/"
     },
     {
       title: "Minimum Repeat to Make Substring",
       description: "Find minimum repeats of string A needed so that string B is a substring.",
-      approach: `
-1. Check if all characters of B exist in A
-2. Try possible repeats (max 2 needed if B is substring of A+A)
-3. Use string find operation`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(n)
-• Optimal solution with max 3 checks
-• Handles character mismatch case`,
+      approach: [
+        "1. Check if all characters of B exist in A",
+        "2. Try possible repeats (max 2 needed if B is substring of A+A)",
+        "3. Use string find operation"
+      ],
+      algorithmCharacteristics: [
+        "Efficient Check: Limits to max 3 concatenations",
+        "Character Validation: Early exit if B contains chars not in A",
+        "Substring Search: Uses built-in string search",
+        "Optimal: Never needs more than 3 repeats check"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(n)",
+        explanation: "Where n is length of B, due to string concatenation and search"
+      },
       cppcode: `#include <string>
 using namespace std;
 
@@ -762,21 +1055,31 @@ int minRepeats(string A, string B) {
     temp += A
     repeats += 1
     return repeats if B in temp else -1`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(n)",
       link: "https://www.geeksforgeeks.org/minimum-number-of-times-a-has-to-be-repeated-to-make-b-a-substring/"
     },
     {
       title: "Longest Prefix Suffix (KMP LPS)",
       description: "Find the length of the longest proper prefix which is also a suffix for each prefix of the string.",
-      approach: `
-1. Initialize LPS array with 0
-2. Use two pointers to compare prefix and suffix
-3. Build LPS array incrementally`,
-      algorithm: `
-• Time complexity: O(n)
-• Space complexity: O(n)
-• KMP preprocessing step
-• Used in pattern matching algorithms`,
+      approach: [
+        "1. Initialize LPS array with 0",
+        "2. Use two pointers to compare prefix and suffix",
+        "3. Build LPS array incrementally"
+      ],
+      algorithmCharacteristics: [
+        "KMP Preprocessing: Core of KMP algorithm",
+        "Efficient Construction: Builds array in linear time",
+        "Prefix Comparison: Smart comparison using previous values",
+        "No Extra Space: Modifies array in-place"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(n)",
+        explanation: "Single pass through string with O(n) space for LPS array"
+      },
       cppcode: `#include <vector>
 #include <string>
 using namespace std;
@@ -825,22 +1128,32 @@ vector<int> computeLPS(string s) {
                 lps[i] = 0
                 i += 1
     return lps`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(n)",
       link: "https://www.geeksforgeeks.org/kmp-algorithm-for-pattern-searching/"
     },
     {
       title: "Integer to English Words",
       description: "Convert a non-negative integer to its English words representation.",
-      approach: `
-1. Break number into chunks of 3 digits (thousands, millions, etc.)
-2. Convert each 3-digit chunk to words
-3. Combine with appropriate scale words
-4. Handle edge cases (zero, teens, tens)`,
-      algorithm: `
-• Time complexity: O(1) (fixed number of digits)
-• Space complexity: O(1)
-• Recursive solution
-• Uses helper functions for different scales`,
+      approach: [
+        "1. Break number into chunks of 3 digits (thousands, millions, etc.)",
+        "2. Convert each 3-digit chunk to words",
+        "3. Combine with appropriate scale words",
+        "4. Handle edge cases (zero, teens, tens)"
+      ],
+      algorithmCharacteristics: [
+        "Recursive Breakdown: Handles chunks recursively",
+        "Scale Awareness: Properly adds thousand, million, etc.",
+        "Edge Case Handling: Special cases for 0, teens (10-19)",
+        "Modular Design: Separate helpers for different scales"
+      ],
+      complexityDetails: {
+        time: "O(1)",
+        space: "O(1)",
+        explanation: "Fixed number of operations regardless of input (max 32-bit integer)"
+      },
       cppcode: `#include <string>
 #include <vector>
 using namespace std;
@@ -934,6 +1247,9 @@ string numberToWords(int num) {
         scale += 1
     
     return res.strip()`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
       complexity: "Time Complexity: O(1), Space Complexity: O(1)",
       link: "https://leetcode.com/problems/integer-to-english-words/"
     }
@@ -941,21 +1257,21 @@ string numberToWords(int num) {
 
   return (
     <div
-      className={`container mx-auto px-4 sm:px-6 py-12 rounded-2xl shadow-xl max-w-7xl ${
+      className={`container mx-auto px-4 sm:px-6 py-12 rounded-2xl shadow-xl max-w-7xl transition-colors duration-300 ${
         darkMode
-          ? "bg-gradient-to-br from-gray-900 to-gray-800"
-          : "bg-gradient-to-br from-indigo-50 to-purple-50"
+          ? "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900"
+          : "bg-gradient-to-br from-indigo-50 via-purple-50 to-indigo-50"
       }`}
     >
       <h1
-        className={`text-4xl sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text ${
+        className={`text-4xl pb-4 sm:text-5xl md:text-6xl font-extrabold text-center text-transparent bg-clip-text mb-8 sm:mb-12 ${
           darkMode
-            ? "bg-gradient-to-r from-indigo-400 to-purple-400"
-            : "bg-gradient-to-r from-indigo-600 to-purple-600"
-        } mb-8 sm:mb-12`}
+            ? "bg-gradient-to-r from-indigo-300 to-purple-400"
+            : "bg-gradient-to-r from-indigo-600 to-purple-700"
+        }`}
       >
         String Problems with Solutions
-      </h1>
+        </h1>
 
       <div className="space-y-8">
         {codeExamples.map((example, index) => (
@@ -963,122 +1279,153 @@ string numberToWords(int num) {
             key={index}
             className={`p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border ${
               darkMode
-                ? "bg-gray-800 border-gray-700"
-                : "bg-white border-indigo-100"
+                ? "bg-gray-800/90 border-gray-700 hover:border-gray-600"
+                : "bg-white/90 border-indigo-100 hover:border-indigo-200"
             }`}
-            aria-labelledby={`algorithm-${index}-title`}
           >
             <header className="mb-6">
-              <button
-                onClick={() => toggleDetails(index)}
-                className="w-full flex justify-between items-center focus:outline-none"
-              >
-                <h2
-                  id={`algorithm-${index}-title`}
-                  className={`text-2xl sm:text-3xl font-bold text-left ${
-                    darkMode ? "text-indigo-300" : "text-indigo-800"
-                  }`}
-                >
-                  {example.title}
-                </h2>
-                <span
-                  className={darkMode ? "text-indigo-400" : "text-indigo-600"}
-                >
-                  {expandedSections[index] ? (
-                    <ChevronUp size={24} />
-                  ) : (
-                    <ChevronDown size={24} />
-                  )}
-                </span>
-              </button>
-
-              {expandedSections[index] && (
-                <div className="space-y-4 mt-4">
-                  <div
-                    className={`p-4 sm:p-6 rounded-lg shadow-sm border ${
-                      darkMode
-                        ? "bg-gray-700 border-gray-600"
-                        : "bg-gray-50 border-gray-100"
-                    }`}
-                  >
-                    <h3
-                      className={`font-bold mb-3 text-lg ${
-                        darkMode ? "text-gray-300" : "text-gray-800"
-                      }`}
-                    >
-                      Description
-                    </h3>
-                    <div
-                      className={`${
-                        darkMode ? "text-gray-300" : "text-gray-700"
-                      } font-medium leading-relaxed`}
-                    >
-                      {formatDescription(example.description)}
-                    </div>
-                  </div>
-
-                  <div
-                    className={`p-4 sm:p-6 rounded-lg shadow-sm border ${
-                      darkMode
-                        ? "bg-blue-900 border-blue-800"
-                        : "bg-blue-50 border-blue-100"
-                    }`}
-                  >
-                    <h3
-                      className={`font-bold mb-3 text-lg ${
-                        darkMode ? "text-blue-300" : "text-blue-800"
-                      }`}
-                    >
-                      Approach
-                    </h3>
-                    <div
-                      className={`${
-                        darkMode ? "text-blue-300" : "text-blue-800"
-                      } font-semibold leading-relaxed whitespace-pre-line`}
-                    >
-                      {formatDescription(example.approach)}
-                    </div>
-                  </div>
-
-                  <div
-                    className={`p-4 sm:p-6 rounded-lg shadow-sm border ${
-                      darkMode
-                        ? "bg-green-900 border-green-800"
-                        : "bg-green-50 border-green-100"
-                    }`}
-                  >
-                    <h3
-                      className={`font-bold mb-3 text-lg ${
-                        darkMode ? "text-green-300" : "text-green-800"
-                      }`}
-                    >
-                      Algorithm Characteristics
-                    </h3>
-                    <div
-                      className={`${
-                        darkMode ? "text-green-300" : "text-green-800"
-                      } font-semibold leading-relaxed whitespace-pre-line`}
-                    >
-                      {formatDescription(example.algorithm)}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <p
-                className={`font-semibold mt-4 ${
-                  darkMode ? "text-gray-300" : "text-gray-800"
+              <h2
+                className={`text-2xl sm:text-3xl font-bold text-left mb-4 ${
+                  darkMode ? "text-indigo-300" : "text-indigo-800"
                 }`}
               >
-                <span
-                  className={`font-bold ${
-                    darkMode ? "text-indigo-400" : "text-indigo-700"
+                {example.title}
+              </h2>
+
+              <div
+                className={`p-4 sm:p-6 rounded-lg border transition-colors ${
+                  darkMode
+                    ? "bg-gray-700/50 border-gray-600"
+                    : "bg-gray-50 border-gray-200"
+                }`}
+              >
+                <h3
+                  className={`font-bold mb-3 text-lg ${
+                    darkMode ? "text-gray-300" : "text-gray-800"
                   }`}
                 >
-                  Complexity:
-                </span>{" "}
-                {example.complexity}
-              </p>
+                  Description
+                </h3>
+                <div
+                  className={`${
+                    darkMode ? "text-gray-300" : "text-gray-900"
+                  } font-medium leading-relaxed space-y-2`}
+                >
+                  {formatDescription(example.description, darkMode)}
+                </div>
+              </div>
+
+              <div className="space-y-4 mt-6">
+                <CollapsibleSection
+                  title="Approach"
+                  content={example.approach}
+                  isExpanded={expandedSections[`${index}-approach`]}
+                  onToggle={() => toggleDetails(index, "approach")}
+                  darkMode={darkMode}
+                  colorScheme={{
+                    bg: darkMode ? "bg-blue-900/30" : "bg-blue-50",
+                    border: darkMode ? "border-blue-700" : "border-blue-200",
+                    text: darkMode ? "text-blue-200" : "text-blue-800",
+                    icon: darkMode ? "text-blue-300" : "text-blue-500",
+                    hover: darkMode
+                      ? "hover:bg-blue-900/20"
+                      : "hover:bg-blue-50/70",
+                  }}
+                />
+
+                <CollapsibleSection
+                  title="Algorithm Characteristics"
+                  content={example.algorithmCharacteristics}
+                  isExpanded={expandedSections[`${index}-characteristics`]}
+                  onToggle={() => toggleDetails(index, "characteristics")}
+                  darkMode={darkMode}
+                  colorScheme={{
+                    bg: darkMode ? "bg-purple-900/30" : "bg-purple-50",
+                    border: darkMode
+                      ? "border-purple-700"
+                      : "border-purple-200",
+                    text: darkMode ? "text-purple-200" : "text-purple-800",
+                    icon: darkMode ? "text-purple-300" : "text-purple-500",
+                    hover: darkMode
+                      ? "hover:bg-purple-900/20"
+                      : "hover:bg-purple-50/70",
+                  }}
+                />
+
+                <CollapsibleSection
+                  title="Complexity Analysis"
+                  content={
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-4">
+                        <div
+                          className={`px-3 py-2 rounded-lg ${
+                            darkMode
+                              ? "bg-blue-900/30 border border-blue-800"
+                              : "bg-blue-100"
+                          }`}
+                        >
+                          <div
+                            className={`text-xs font-semibold ${
+                              darkMode ? "text-blue-300" : "text-blue-600"
+                            }`}
+                          >
+                            TIME COMPLEXITY
+                          </div>
+                          <div
+                            className={`font-bold ${
+                              darkMode ? "text-blue-100" : "text-blue-800"
+                            }`}
+                          >
+                            {example.complexityDetails.time}
+                          </div>
+                        </div>
+                        <div
+                          className={`px-3 py-2 rounded-lg ${
+                            darkMode
+                              ? "bg-green-900/30 border border-green-800"
+                              : "bg-green-100"
+                          }`}
+                        >
+                          <div
+                            className={`text-xs font-semibold ${
+                              darkMode ? "text-green-300" : "text-green-600"
+                            }`}
+                          >
+                            SPACE COMPLEXITY
+                          </div>
+                          <div
+                            className={`font-bold ${
+                              darkMode ? "text-green-100" : "text-green-800"
+                            }`}
+                          >
+                            {example.complexityDetails.space}
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        className={`prose prose-sm max-w-none ${
+                          darkMode ? "text-gray-300" : "text-gray-700"
+                        }`}
+                      >
+                        <p className="font-semibold">Explanation:</p>
+                        <p>{example.complexityDetails.explanation}</p>
+                      </div>
+                    </div>
+                  }
+                  isExpanded={expandedSections[`${index}-complexity`]}
+                  onToggle={() => toggleDetails(index, "complexity")}
+                  darkMode={darkMode}
+                  colorScheme={{
+                    bg: darkMode ? "bg-green-900/30" : "bg-green-50",
+                    border: darkMode ? "border-green-700" : "border-green-200",
+                    text: darkMode ? "text-green-200" : "text-green-800",
+                    icon: darkMode ? "text-green-300" : "text-green-500",
+                    hover: darkMode
+                      ? "hover:bg-green-900/20"
+                      : "hover:bg-green-50/70",
+                  }}
+                />
+              </div>
             </header>
 
             <div className="flex flex-wrap gap-3 mb-6">
@@ -1086,57 +1433,89 @@ string numberToWords(int num) {
                 href={example.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-block bg-gradient-to-r ${
+                className={`inline-flex items-center justify-center bg-gradient-to-r ${
                   darkMode
-                    ? "from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600"
-                    : "from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-                } text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+                    ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
+                    : "from-gray-600 to-gray-800 hover:from-gray-600 hover:to-gray-900"
+                } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
+                  darkMode
+                    ? "focus:ring-offset-gray-900"
+                    : "focus:ring-offset-white"
+                }`}
               >
+                <img
+                  src={
+                    darkMode
+                      ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg"
+                      : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+                  }
+                  alt="LeetCode Logo"
+                  className="w-6 h-6 mr-2"
+                />
                 View Problem
               </a>
 
               <ToggleCodeButton
                 language="cpp"
-                isVisible={visibleCodes.cpp === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "cpp"
+                }
                 onClick={() => toggleCodeVisibility("cpp", index)}
+                darkMode={darkMode}
               />
 
               <ToggleCodeButton
                 language="java"
-                isVisible={visibleCodes.java === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "java"
+                }
                 onClick={() => toggleCodeVisibility("java", index)}
+                darkMode={darkMode}
               />
 
               <ToggleCodeButton
                 language="python"
-                isVisible={visibleCodes.python === index}
+                isVisible={
+                  visibleCode.index === index &&
+                  visibleCode.language === "python"
+                }
                 onClick={() => toggleCodeVisibility("python", index)}
+                darkMode={darkMode}
               />
             </div>
 
-            <CodeExample
-              example={example}
-              isVisible={visibleCodes.cpp === index}
-              language="cpp"
-              code={example.cppcode}
-              darkMode={darkMode}
-            />
+            <div className="space-y-4">
+              <CodeExample
+                example={example}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "cpp"
+                }
+                language="cpp"
+                code={example.cppcode}
+                darkMode={darkMode}
+              />
 
-            <CodeExample
-              example={example}
-              isVisible={visibleCodes.java === index}
-              language="java"
-              code={example.javacode}
-              darkMode={darkMode}
-            />
+              <CodeExample
+                example={example}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "java"
+                }
+                language="java"
+                code={example.javacode}
+                darkMode={darkMode}
+              />
 
-            <CodeExample
-              example={example}
-              isVisible={visibleCodes.python === index}
-              language="python"
-              code={example.pythoncode}
-              darkMode={darkMode}
-            />
+              <CodeExample
+                example={example}
+                isVisible={
+                  visibleCode.index === index &&
+                  visibleCode.language === "python"
+                }
+                language="python"
+                code={example.pythoncode}
+                darkMode={darkMode}
+              />
+            </div>
           </article>
         ))}
       </div>

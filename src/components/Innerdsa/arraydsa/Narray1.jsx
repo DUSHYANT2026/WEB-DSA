@@ -7,9 +7,15 @@ import { useTheme } from "../../../ThemeContext.jsx";
 const formatDescription = (desc, darkMode) => {
   if (Array.isArray(desc)) {
     return (
-      <ul className={`list-disc pl-6 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
+      <ul
+        className={`list-disc pl-6 ${
+          darkMode ? "text-gray-300" : "text-gray-700"
+        }`}
+      >
         {desc.map((item, i) => (
-          <li key={i} className="mb-2">{item}</li>
+          <li key={i} className="mb-2">
+            {item}
+          </li>
         ))}
       </ul>
     );
@@ -63,25 +69,25 @@ const getBorderColor = (language, darkMode) => {
 
 const LanguageLogo = ({ language, size = 24, darkMode }) => {
   const baseClasses = "rounded-md p-1 flex items-center justify-center";
-  
+
   const getGradient = (language) => {
     switch (language) {
       case "cpp":
-        return darkMode 
-          ? "bg-gradient-to-br from-blue-600 to-red-600" 
-          : "bg-gradient-to-br from-blue-500 to-red-500";
+        return darkMode
+          ? "bg-gradient-to-br from-blue-900 to-blue-600"
+          : "bg-gradient-to-br from-blue-500 to-blue-700";
       case "java":
-        return darkMode 
-          ? "bg-gradient-to-br from-red-600 to-teal-600" 
-          : "bg-gradient-to-br from-red-500 to-teal-500";
+        return darkMode
+          ? "bg-gradient-to-br from-red-800 to-red-600"
+          : "bg-gradient-to-br from-red-500 to-red-700";
       case "python":
-        return darkMode 
-          ? "bg-gradient-to-br from-yellow-600 to-orange-600" 
-          : "bg-gradient-to-br from-yellow-500 to-orange-500";
+        return darkMode
+          ? "bg-gradient-to-br from-yellow-700 to-yellow-600"
+          : "bg-gradient-to-br from-yellow-400 to-yellow-600";
       default:
-        return darkMode 
-          ? "bg-gradient-to-br from-gray-600 to-blue-600" 
-          : "bg-gradient-to-br from-gray-500 to-blue-500";
+        return darkMode
+          ? "bg-gradient-to-br from-gray-700 to-gray-600"
+          : "bg-gradient-to-br from-gray-400 to-gray-600";
     }
   };
 
@@ -90,23 +96,46 @@ const LanguageLogo = ({ language, size = 24, darkMode }) => {
       case "cpp":
         return (
           <svg viewBox="0 0 128 128" width={size} height={size}>
-            <path fill="#00599C" d="M115.17 30.91l-50.15-29.61c-2.17-1.3-4.81-1.3-7.02 0l-50.15 29.61c-2.17 1.28-3.48 3.58-3.48 6.03v59.18c0 2.45 1.31 4.75 3.48 6.03l50.15 29.61c2.21 1.3 4.85 1.3 7.02 0l50.15-29.61c2.17-1.28 3.48-3.58 3.48-6.03v-59.18c0-2.45-1.31-4.75-3.48-6.03zM70.77 103.47c-15.64 0-27.89-11.84-27.89-27.47 0-15.64 12.25-27.47 27.89-27.47 6.62 0 11.75 1.61 16.3 4.41l-3.32 5.82c-3.42-2.01-7.58-3.22-12.38-3.22-10.98 0-19.09 7.49-19.09 18.46 0 10.98 8.11 18.46 19.09 18.46 5.22 0 9.56-1.41 13.38-3.82l3.32 5.62c-4.81 3.22-10.58 5.21-17.2 5.21zm37.91-1.61h-5.62v-25.5h5.62v25.5zm0-31.51h-5.62v-6.62h5.62v6.62z"></path>
+            <path
+              fill="#00599C"
+              d="M115.17 30.91l-50.15-29.61c-2.17-1.3-4.81-1.3-7.02 0l-50.15 29.61c-2.17 1.28-3.48 3.58-3.48 6.03v59.18c0 2.45 1.31 4.75 3.48 6.03l50.15 29.61c2.21 1.3 4.85 1.3 7.02 0l50.15-29.61c2.17-1.28 3.48-3.58 3.48-6.03v-59.18c0-2.45-1.31-4.75-3.48-6.03zM70.77 103.47c-15.64 0-27.89-11.84-27.89-27.47 0-15.64 12.25-27.47 27.89-27.47 6.62 0 11.75 1.61 16.3 4.41l-3.32 5.82c-3.42-2.01-7.58-3.22-12.38-3.22-10.98 0-19.09 7.49-19.09 18.46 0 10.98 8.11 18.46 19.09 18.46 5.22 0 9.56-1.41 13.38-3.82l3.32 5.62c-4.81 3.22-10.58 5.21-17.2 5.21zm37.91-1.61h-5.62v-25.5h5.62v25.5zm0-31.51h-5.62v-6.62h5.62v6.62z"
+            ></path>
           </svg>
         );
       case "java":
         return (
           <svg viewBox="0 0 128 128" width={size} height={size}>
-            <path fill="#0074BD" d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zM44.629 84.455s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z"></path>
-            <path fill="#EA2D2E" d="M69.802 61.271c6.025 6.935-1.58 13.134-1.58 13.134s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.223z"></path>
-            <path fill="#0074BD" d="M102.123 108.229s3.781 2.439-3.901 5.795c-13.199 5.591-49.921 5.775-65.14.132-4.461 0 0 3.188 4.667 18.519 6.338 15.104 1.643 39.252-.603 50.522-7.704zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.556 3.238-54.731-2.958 0 0 5.163-2.053 19.644-4.643z"></path>
-            <path fill="#EA2D2E" d="M76.491 1.587s12.968 12.976-12.303 32.923c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815 8.542-12.834 27.998-39.667 26.998-39.667z"></path>
+            <path
+              fill="#0074BD"
+              d="M47.617 98.12s-4.767 2.774 3.397 3.71c9.892 1.13 14.947.968 25.845-1.092 0 0 2.871 1.795 6.873 3.351-24.439 10.47-55.308-.607-36.115-5.969zM44.629 84.455s-5.348 3.959 2.823 4.805c10.567 1.091 18.91 1.18 33.354-1.6 0 0 1.993 2.025 5.132 3.131-29.542 8.64-62.446.68-41.309-6.336z"
+            ></path>
+            <path
+              fill="#EA2D2E"
+              d="M69.802 61.271c6.025 6.935-1.58 13.134-1.58 13.134s15.289-7.891 8.269-17.777c-6.559-9.215-11.587-13.792 15.635-29.58 0 .001-42.731 10.67-22.324 34.223z"
+            ></path>
+            <path
+              fill="#0074BD"
+              d="M102.123 108.229s3.781 2.439-3.901 5.795c-13.199 5.591-49.921 5.775-65.14.132-4.461 0 0 3.188 4.667 18.519 6.338 15.104 1.643 39.252-.603 50.522-7.704zM49.912 70.294s-22.686 5.389-8.033 7.348c6.188.828 18.518.638 30.011-.326 9.39-.789 18.813-2.474 18.813-2.474s-3.308 1.419-5.704 3.053c-23.042 6.061-67.556 3.238-54.731-2.958 0 0 5.163-2.053 19.644-4.643z"
+            ></path>
+            <path
+              fill="#EA2D2E"
+              d="M76.491 1.587s12.968 12.976-12.303 32.923c-20.266 16.006-4.621 25.13-.007 35.559-11.831-10.673-20.509-20.07-14.688-28.815 8.542-12.834 27.998-39.667 26.998-39.667z"
+            ></path>
           </svg>
         );
       case "python":
         return (
           <svg viewBox="0 0 128 128" width={size} height={size}>
-            <path fill="#3776AB" d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z" transform="translate(0 10.26)"></path>
-            <path fill="#FFDC41" d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.283 16.221 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.678-8.084 2.491-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z" transform="translate(0 10.26)"></path>
+            <path
+              fill="#3776AB"
+              d="M63.391 1.988c-4.222.02-8.252.379-11.8 1.007-10.45 1.846-12.346 5.71-12.346 12.837v9.411h24.693v3.137H29.977c-7.176 0-13.46 4.313-15.426 12.521-2.268 9.405-2.368 15.275 0 25.096 1.755 7.311 5.947 12.519 13.124 12.519h8.491V67.234c0-8.151 7.051-15.34 15.426-15.34h24.665c6.866 0 12.346-5.654 12.346-12.548V15.833c0-6.693-5.646-11.72-12.346-12.837-4.244-.706-8.645-1.027-12.866-1.008zM50.037 9.557c2.55 0 4.634 2.117 4.634 4.721 0 2.593-2.083 4.69-4.634 4.69-2.56 0-4.633-2.097-4.633-4.69-.001-2.604 2.073-4.721 4.633-4.721z"
+              transform="translate(0 10.26)"
+            ></path>
+            <path
+              fill="#FFDC41"
+              d="M91.682 28.38v10.966c0 8.5-7.208 15.655-15.426 15.655H51.591c-6.756 0-12.346 5.783-12.346 12.549v23.515c0 6.691 5.818 10.628 12.346 12.547 7.816 2.283 16.221 2.713 24.665 0 6.216-1.801 12.346-5.423 12.346-12.547v-9.412H63.938v-3.138h37.012c7.176 0 9.852-5.005 12.348-12.519 2.678-8.084 2.491-15.174 0-25.096-1.774-7.145-5.161-12.521-12.348-12.521h-9.268zM77.809 87.927c2.561 0 4.634 2.097 4.634 4.692 0 2.602-2.074 4.719-4.634 4.719-2.55 0-4.633-2.117-4.633-4.719 0-2.595 2.083-4.692 4.633-4.692z"
+              transform="translate(0 10.26)"
+            ></path>
           </svg>
         );
       default:
@@ -142,34 +171,32 @@ const getButtonColor = (language, darkMode) => {
   }
 };
 
-const CollapsibleSection = ({ 
-  title, 
-  content, 
-  isExpanded, 
-  onToggle, 
-  darkMode, 
-  colorScheme 
+const CollapsibleSection = ({
+  title,
+  content,
+  isExpanded,
+  onToggle,
+  darkMode,
+  colorScheme,
 }) => (
   <div className="group">
     <button
       onClick={onToggle}
       className={`w-full flex justify-between items-center focus:outline-none p-3 rounded-lg transition-all ${
-        isExpanded 
+        isExpanded
           ? `${colorScheme.bg} ${colorScheme.border} border`
-          : 'hover:bg-opacity-10 hover:bg-gray-500'
+          : "hover:bg-opacity-10 hover:bg-gray-500"
       }`}
       aria-expanded={isExpanded}
     >
       <div className="flex items-center">
         <span className={`mr-3 text-lg ${colorScheme.icon}`}>
-          {isExpanded ? '▼' : '►'}
+          {isExpanded ? "▼" : "►"}
         </span>
-        <h3 className={`font-bold text-lg ${colorScheme.text}`}>
-          {title}
-        </h3>
+        <h3 className={`font-bold text-lg ${colorScheme.text}`}>{title}</h3>
       </div>
       <span className={`transition-transform duration-200 ${colorScheme.icon}`}>
-        <ChevronDown size={20} className={isExpanded ? 'rotate-180' : ''} />
+        <ChevronDown size={20} className={isExpanded ? "rotate-180" : ""} />
       </span>
     </button>
 
@@ -177,10 +204,12 @@ const CollapsibleSection = ({
       <div
         className={`p-4 sm:p-6 rounded-lg border mt-1 transition-all duration-200 ${colorScheme.bg} ${colorScheme.border} animate-fadeIn`}
       >
-        <div className={`${colorScheme.text} font-medium leading-relaxed space-y-3`}>
-          {typeof content === 'string' ? (
+        <div
+          className={`${colorScheme.text} font-medium leading-relaxed space-y-3`}
+        >
+          {typeof content === "string" ? (
             <div className="prose prose-sm max-w-none">
-              {content.split('\n').map((paragraph, i) => (
+              {content.split("\n").map((paragraph, i) => (
                 <p key={i} className="mb-3 last:mb-0">
                   {paragraph}
                 </p>
@@ -190,10 +219,12 @@ const CollapsibleSection = ({
             <ul className="space-y-2 list-disc pl-5 marker:text-opacity-60">
               {content.map((item, i) => (
                 <li key={i} className="pl-2">
-                  {item.includes(':') ? (
+                  {item.includes(":") ? (
                     <>
-                      <span className="font-semibold">{item.split(':')[0]}:</span>
-                      {item.split(':').slice(1).join(':')}
+                      <span className="font-semibold">
+                        {item.split(":")[0]}:
+                      </span>
+                      {item.split(":").slice(1).join(":")}
                     </>
                   ) : (
                     item
@@ -213,66 +244,93 @@ const CollapsibleSection = ({
 const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
   <button
     onClick={onClick}
-    className={`inline-flex items-center bg-gradient-to-r ${getButtonColor(
-      language,
+    className={`inline-flex items-center justify-center bg-gradient-to-br ${
       darkMode
-    )} text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-      language === "cpp"
-        ? "focus:ring-pink-500 dark:focus:ring-blue-600"
+        ? language === "cpp"
+          ? "from-blue-900 to-blue-700 hover:from-blue-800 hover:to-blue-600"
+          : language === "java"
+          ? "from-red-900 to-red-700 hover:from-red-800 hover:to-red-600"
+          : "from-yellow-800 to-yellow-600 hover:from-yellow-700 hover:to-yellow-500"
+        : language === "cpp"
+        ? "from-blue-600 to-blue-800 hover:from-blue-500 hover:to-blue-700"
         : language === "java"
-        ? "focus:ring-green-500 dark:focus:ring-red-600"
-        : "focus:ring-yellow-500 dark:focus:ring-yellow-600"
+        ? "from-red-600 to-red-800 hover:from-red-500 hover:to-red-700"
+        : "from-yellow-500 to-yellow-700 hover:from-yellow-400 hover:to-yellow-600"
+    } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 ${
+      language === "cpp"
+        ? "focus:ring-blue-400"
+        : language === "java"
+        ? "focus:ring-red-400"
+        : "focus:ring-yellow-400"
+    } ${
+      darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
+    } shadow-md ${
+      darkMode ? "shadow-gray-800/50" : "shadow-gray-500/40"
+    } border ${
+      darkMode
+        ? "border-gray-700/50"
+        : "border-gray-400/50"
     }`}
     aria-expanded={isVisible}
     aria-controls={`${language}-code`}
   >
-    <LanguageLogo language={language} size={18} darkMode={darkMode} className="mr-2" />
+    <LanguageLogo
+      language={language}
+      size={18}
+      darkMode={darkMode}
+      className="mr-2"
+    />
     {language === "cpp" ? "C++" : language === "java" ? "Java" : "Python"}
   </button>
 );
 
 function Narray1() {
   const { darkMode } = useTheme();
-  const [visibleCodes, setVisibleCodes] = useState({
-    cpp: null,
-    java: null,
-    python: null,
+  const [visibleCode, setVisibleCode] = useState({
+    index: null,
+    language: null,
   });
   const [expandedSections, setExpandedSections] = useState({});
 
   const toggleCodeVisibility = (language, index) => {
-    setVisibleCodes(prev => ({
-      ...prev,
-      [language]: prev[language] === index ? null : index
-    }));
+    setVisibleCode((prev) => {
+      // If clicking the same code that's already open, close it
+      if (prev.index === index && prev.language === language) {
+        return { index: null, language: null };
+      }
+      // Otherwise open the new code
+      return { index, language };
+    });
   };
 
   const toggleDetails = (index, section) => {
-    setExpandedSections(prev => ({
+    setExpandedSections((prev) => ({
       ...prev,
-      [`${index}-${section}`]: !prev[`${index}-${section}`]
+      [`${index}-${section}`]: !prev[`${index}-${section}`],
     }));
   };
 
   const codeExamples = [
     {
       title: "Second Largest Element in Array",
-      description: "Find the second largest element in an array in O(n) time with O(1) space complexity.",
+      description:
+        "Find the second largest element in an array in O(n) time with O(1) space complexity.",
       approach: [
         "1. Initialize two variables to track largest and second largest",
         "2. Iterate through the array once",
         "3. Update variables when finding larger elements",
-        "4. Handle edge cases (all same elements, array size < 2)"
+        "4. Handle edge cases (all same elements, array size < 2)",
       ],
       algorithmCharacteristics: [
         "Single Pass: Processes array in one iteration",
         "Constant Space: Uses only two variables",
-        "Handles Duplicates: Properly manages equal elements"
+        "Handles Duplicates: Properly manages equal elements",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Single iteration through the array with constant time comparisons"
+        explanation:
+          "Single iteration through the array with constant time comparisons",
       },
       cppcode: `#include <vector>
 #include <climits>
@@ -314,26 +372,27 @@ int secondLargest(vector<int>& nums) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/second-largest-element-in-an-array/"
+      link: "https://leetcode.com/problems/second-largest-element-in-an-array/",
     },
     {
       title: "Move Zeroes to End",
-      description: "Move all zeros to the end while maintaining the relative order of non-zero elements.",
+      description:
+        "Move all zeros to the end while maintaining the relative order of non-zero elements.",
       approach: [
         "1. Use two pointers approach",
         "2. One pointer tracks position for next non-zero",
         "3. Another pointer scans the array",
-        "4. Fill remaining positions with zeros"
+        "4. Fill remaining positions with zeros",
       ],
       algorithmCharacteristics: [
         "In-place Operation: Modifies input array directly",
         "Order Preservation: Maintains relative order of non-zero elements",
-        "Efficient: Single pass through array"
+        "Efficient: Single pass through array",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "One pass to move non-zeros, one pass to fill zeros"
+        explanation: "One pass to move non-zeros, one pass to fill zeros",
       },
       cppcode: `void moveZeroes(vector<int>& nums) {
     int nonZero = 0;
@@ -370,26 +429,27 @@ int secondLargest(vector<int>& nums) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/move-zeroes/"
+      link: "https://leetcode.com/problems/move-zeroes/",
     },
     {
       title: "Reverse an Array",
-      description: "Reverse the elements of an array in-place using two pointers.",
+      description:
+        "Reverse the elements of an array in-place using two pointers.",
       approach: [
         "1. Initialize start and end pointers",
         "2. Swap elements at these pointers",
         "3. Move pointers towards center",
-        "4. Stop when pointers meet"
+        "4. Stop when pointers meet",
       ],
       algorithmCharacteristics: [
         "In-place: No additional storage needed",
         "Efficient: O(n) time complexity",
-        "Symmetrical: Works for even and odd lengths"
+        "Symmetrical: Works for even and odd lengths",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Performs n/2 swaps for array of size n"
+        explanation: "Performs n/2 swaps for array of size n",
       },
       cppcode: `void reverseArray(vector<int>& nums) {
     int left = 0, right = nums.size() - 1;
@@ -415,7 +475,7 @@ int secondLargest(vector<int>& nums) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/reverse-string/" // Similar concept
+      link: "https://leetcode.com/problems/reverse-string/", // Similar concept
     },
     {
       title: "Rotate Array",
@@ -424,17 +484,17 @@ int secondLargest(vector<int>& nums) {
         "1. Normalize k using modulo operation",
         "2. Reverse entire array",
         "3. Reverse first k elements",
-        "4. Reverse remaining elements"
+        "4. Reverse remaining elements",
       ],
       algorithmCharacteristics: [
         "In-place Rotation: No extra space needed",
         "Three Reversals: Elegant O(n) solution",
-        "Handles Large k: Uses modulo arithmetic"
+        "Handles Large k: Uses modulo arithmetic",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Three passes through the array"
+        explanation: "Three passes through the array",
       },
       cppcode: `void rotate(vector<int>& nums, int k) {
     k %= nums.size();
@@ -464,26 +524,27 @@ private void reverse(int[] nums, int start, int end) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/rotate-array/"
+      link: "https://leetcode.com/problems/rotate-array/",
     },
     {
       title: "Next Permutation",
-      description: "Find lexicographically next greater permutation of numbers.",
+      description:
+        "Find lexicographically next greater permutation of numbers.",
       approach: [
         "1. Find first decreasing element from end (pivot)",
         "2. Find smallest larger element to its right",
         "3. Swap them",
-        "4. Reverse suffix after pivot"
+        "4. Reverse suffix after pivot",
       ],
       algorithmCharacteristics: [
         "In-place Modification: Changes input array directly",
         "Lexicographical Order: Finds next permutation in sequence",
-        "Efficient: O(n) time solution"
+        "Efficient: O(n) time solution",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "At most two passes through the array"
+        explanation: "At most two passes through the array",
       },
       cppcode: `void nextPermutation(vector<int>& nums) {
     int i = nums.size() - 2;
@@ -528,26 +589,27 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/next-permutation/"
+      link: "https://leetcode.com/problems/next-permutation/",
     },
     {
       title: "Majority Element II",
-      description: "Find all elements appearing more than ⌊n/3⌋ times (Boyer-Moore variant).",
+      description:
+        "Find all elements appearing more than ⌊n/3⌋ times (Boyer-Moore variant).",
       approach: [
         "1. Extended Boyer-Moore voting algorithm",
         "2. Track two potential candidates",
         "3. Count occurrences in first pass",
-        "4. Verify counts in second pass"
+        "4. Verify counts in second pass",
       ],
       algorithmCharacteristics: [
         "Linear Time: O(n) time complexity",
         "Constant Space: O(1) extra space",
-        "Generalization: Works for n/k frequency"
+        "Generalization: Works for n/k frequency",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Two passes through the array with constant operations"
+        explanation: "Two passes through the array with constant operations",
       },
       cppcode: `vector<int> majorityElement(vector<int>& nums) {
     int count1 = 0, count2 = 0;
@@ -618,25 +680,26 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/majority-element-ii/"
+      link: "https://leetcode.com/problems/majority-element-ii/",
     },
     {
       title: "Best Time to Buy and Sell Stock II",
-      description: "Maximize profit by buying and selling stocks multiple times.",
+      description:
+        "Maximize profit by buying and selling stocks multiple times.",
       approach: [
         "1. Greedy approach capturing all increasing sequences",
         "2. Buy at valleys, sell at peaks",
-        "3. Sum all positive differences between consecutive days"
+        "3. Sum all positive differences between consecutive days",
       ],
       algorithmCharacteristics: [
         "Single Pass: Processes array in one iteration",
         "Greedy: Captures all profitable transactions",
-        "Efficient: O(n) time solution"
+        "Efficient: O(n) time solution",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "One pass through the price array"
+        explanation: "One pass through the price array",
       },
       cppcode: `int maxProfit(vector<int>& prices) {
     int profit = 0;
@@ -666,26 +729,27 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/"
+      link: "https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/",
     },
     {
       title: "Minimize the Heights II",
-      description: "Minimize maximum difference between heights after adjusting each element by ±k.",
+      description:
+        "Minimize maximum difference between heights after adjusting each element by ±k.",
       approach: [
         "1. Sort the array",
         "2. Initialize result as current difference",
         "3. Consider all possible splits where first i elements are increased and rest decreased",
-        "4. Track minimum possible maximum difference"
+        "4. Track minimum possible maximum difference",
       ],
       algorithmCharacteristics: [
         "Sorting Based: Requires sorted array",
         "Boundary Checks: Handles edge cases carefully",
-        "Optimal Adjustment: Finds best increase/decrease split"
+        "Optimal Adjustment: Finds best increase/decrease split",
       ],
       complexityDetails: {
         time: "O(n log n)",
         space: "O(1)",
-        explanation: "Dominant factor is sorting the array"
+        explanation: "Dominant factor is sorting the array",
       },
       cppcode: `int getMinDiff(int arr[], int n, int k) {
     sort(arr, arr + n);
@@ -726,7 +790,7 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n log n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs/" // Similar concept
+      link: "https://leetcode.com/problems/minimize-the-maximum-difference-of-pairs/", // Similar concept
     },
     {
       title: "Kadane's Algorithm",
@@ -735,17 +799,17 @@ private void swap(int[] nums, int i, int j) {
         "1. Track maximum sum ending at current position",
         "2. Track overall maximum sum",
         "3. Reset current sum if it becomes negative",
-        "4. Return overall maximum"
+        "4. Return overall maximum",
       ],
       algorithmCharacteristics: [
         "Dynamic Programming: Optimal substructure",
         "Single Pass: O(n) time complexity",
-        "Handles Negatives: Properly manages all-negative arrays"
+        "Handles Negatives: Properly manages all-negative arrays",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Single iteration through the array"
+        explanation: "Single iteration through the array",
       },
       cppcode: `int maxSubArray(vector<int>& nums) {
     int max_sum = INT_MIN, current_sum = 0;
@@ -775,7 +839,7 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/maximum-subarray/"
+      link: "https://leetcode.com/problems/maximum-subarray/",
     },
     {
       title: "Maximum Product Subarray",
@@ -784,17 +848,17 @@ private void swap(int[] nums, int i, int j) {
         "1. Track both maximum and minimum product at each step",
         "2. Swap max and min when encountering negative number",
         "3. Update global maximum product",
-        "4. Handle zero values appropriately"
+        "4. Handle zero values appropriately",
       ],
       algorithmCharacteristics: [
         "Dynamic Programming: Tracks both max and min",
         "Negative Handling: Accounts for sign changes",
-        "Single Pass: O(n) time complexity"
+        "Single Pass: O(n) time complexity",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Single iteration tracking multiple variables"
+        explanation: "Single iteration tracking multiple variables",
       },
       cppcode: `int maxProduct(vector<int>& nums) {
     int max_prod = nums[0], min_prod = nums[0], result = nums[0];
@@ -833,7 +897,7 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/maximum-product-subarray/"
+      link: "https://leetcode.com/problems/maximum-product-subarray/",
     },
     {
       title: "Maximum Sum Circular Subarray",
@@ -842,17 +906,17 @@ private void swap(int[] nums, int i, int j) {
         "1. Compute standard Kadane's maximum",
         "2. Compute minimum subarray sum",
         "3. Calculate circular maximum as total sum - minimum sum",
-        "4. Return maximum of standard and circular maximums"
+        "4. Return maximum of standard and circular maximums",
       ],
       algorithmCharacteristics: [
         "Kadane's Variant: Extended for circular case",
         "Total Sum: Uses array sum for circular calculation",
-        "Edge Cases: Handles all-negative arrays"
+        "Edge Cases: Handles all-negative arrays",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Two passes through the array"
+        explanation: "Two passes through the array",
       },
       cppcode: `int maxSubarraySumCircular(vector<int>& nums) {
     int total = 0, max_sum = INT_MIN, min_sum = INT_MAX;
@@ -896,26 +960,27 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/maximum-sum-circular-subarray/"
+      link: "https://leetcode.com/problems/maximum-sum-circular-subarray/",
     },
     {
       title: "First Missing Positive",
-      description: "Find the smallest missing positive integer in unsorted array.",
+      description:
+        "Find the smallest missing positive integer in unsorted array.",
       approach: [
         "1. Segregate positive numbers",
         "2. Use array indices to mark presence of numbers",
         "3. First positive index indicates missing number",
-        "4. Handle edge cases (all present, empty array)"
+        "4. Handle edge cases (all present, empty array)",
       ],
       algorithmCharacteristics: [
         "Index Marking: Uses array itself for storage",
         "In-place: Constant extra space",
-        "Cyclic Sort: Similar approach to sorting in place"
+        "Cyclic Sort: Similar approach to sorting in place",
       ],
       complexityDetails: {
         time: "O(n)",
         space: "O(1)",
-        explanation: "Three passes through the array"
+        explanation: "Three passes through the array",
       },
       cppcode: `int firstMissingPositive(vector<int>& nums) {
     int n = nums.size();
@@ -980,9 +1045,9 @@ private void swap(int[] nums, int i, int j) {
       javaLanguage: "java",
       pythonlanguage: "python",
       complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/first-missing-positive/"
-    }
-];
+      link: "https://leetcode.com/problems/first-missing-positive/",
+    },
+  ];
 
   return (
     <div
@@ -1001,7 +1066,7 @@ private void swap(int[] nums, int i, int j) {
       >
         Array Problems with Solutions
       </h1>
-  
+
       <div className="space-y-8">
         {codeExamples.map((example, index) => (
           <article
@@ -1020,7 +1085,7 @@ private void swap(int[] nums, int i, int j) {
               >
                 {example.title}
               </h2>
-  
+
               <div
                 className={`p-4 sm:p-6 rounded-lg border transition-colors ${
                   darkMode
@@ -1043,78 +1108,120 @@ private void swap(int[] nums, int i, int j) {
                   {formatDescription(example.description, darkMode)}
                 </div>
               </div>
-  
+
               <div className="space-y-4 mt-6">
                 <CollapsibleSection
                   title="Approach"
                   content={example.approach}
                   isExpanded={expandedSections[`${index}-approach`]}
-                  onToggle={() => toggleDetails(index, 'approach')}
+                  onToggle={() => toggleDetails(index, "approach")}
                   darkMode={darkMode}
                   colorScheme={{
                     bg: darkMode ? "bg-blue-900/30" : "bg-blue-50",
                     border: darkMode ? "border-blue-700" : "border-blue-200",
                     text: darkMode ? "text-blue-200" : "text-blue-800",
                     icon: darkMode ? "text-blue-300" : "text-blue-500",
-                    hover: darkMode ? "hover:bg-blue-900/20" : "hover:bg-blue-50/70"
+                    hover: darkMode
+                      ? "hover:bg-blue-900/20"
+                      : "hover:bg-blue-50/70",
                   }}
                 />
-  
+
                 <CollapsibleSection
                   title="Algorithm Characteristics"
                   content={example.algorithmCharacteristics}
                   isExpanded={expandedSections[`${index}-characteristics`]}
-                  onToggle={() => toggleDetails(index, 'characteristics')}
+                  onToggle={() => toggleDetails(index, "characteristics")}
                   darkMode={darkMode}
                   colorScheme={{
                     bg: darkMode ? "bg-purple-900/30" : "bg-purple-50",
-                    border: darkMode ? "border-purple-700" : "border-purple-200",
+                    border: darkMode
+                      ? "border-purple-700"
+                      : "border-purple-200",
                     text: darkMode ? "text-purple-200" : "text-purple-800",
                     icon: darkMode ? "text-purple-300" : "text-purple-500",
-                    hover: darkMode ? "hover:bg-purple-900/20" : "hover:bg-purple-50/70"
+                    hover: darkMode
+                      ? "hover:bg-purple-900/20"
+                      : "hover:bg-purple-50/70",
                   }}
                 />
-  
+
                 <CollapsibleSection
                   title="Complexity Analysis"
                   content={
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-4">
-                        <div className={`px-3 py-2 rounded-lg ${darkMode ? 'bg-blue-900/30 border border-blue-800' : 'bg-blue-100'}`}>
-                          <div className={`text-xs font-semibold ${darkMode ? 'text-blue-300' : 'text-blue-600'}`}>TIME COMPLEXITY</div>
-                          <div className={`font-bold ${darkMode ? 'text-blue-100' : 'text-blue-800'}`}>
+                        <div
+                          className={`px-3 py-2 rounded-lg ${
+                            darkMode
+                              ? "bg-blue-900/30 border border-blue-800"
+                              : "bg-blue-100"
+                          }`}
+                        >
+                          <div
+                            className={`text-xs font-semibold ${
+                              darkMode ? "text-blue-300" : "text-blue-600"
+                            }`}
+                          >
+                            TIME COMPLEXITY
+                          </div>
+                          <div
+                            className={`font-bold ${
+                              darkMode ? "text-blue-100" : "text-blue-800"
+                            }`}
+                          >
                             {example.complexityDetails.time}
                           </div>
                         </div>
-                        <div className={`px-3 py-2 rounded-lg ${darkMode ? 'bg-green-900/30 border border-green-800' : 'bg-green-100'}`}>
-                          <div className={`text-xs font-semibold ${darkMode ? 'text-green-300' : 'text-green-600'}`}>SPACE COMPLEXITY</div>
-                          <div className={`font-bold ${darkMode ? 'text-green-100' : 'text-green-800'}`}>
-                            {typeof example.complexityDetails.space === 'string' 
-                              ? example.complexityDetails.space 
-                              : `Top-Down: ${example.complexityDetails.space.topDown}, Bottom-Up: ${example.complexityDetails.space.bottomUp}, Optimized: ${example.complexityDetails.space.optimized}`}
+                        <div
+                          className={`px-3 py-2 rounded-lg ${
+                            darkMode
+                              ? "bg-green-900/30 border border-green-800"
+                              : "bg-green-100"
+                          }`}
+                        >
+                          <div
+                            className={`text-xs font-semibold ${
+                              darkMode ? "text-green-300" : "text-green-600"
+                            }`}
+                          >
+                            SPACE COMPLEXITY
+                          </div>
+                          <div
+                            className={`font-bold ${
+                              darkMode ? "text-green-100" : "text-green-800"
+                            }`}
+                          >
+                            {example.complexityDetails.space}
                           </div>
                         </div>
                       </div>
-                      <div className={`prose prose-sm max-w-none ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                      <div
+                        className={`prose prose-sm max-w-none ${
+                          darkMode ? "text-gray-300" : "text-gray-700"
+                        }`}
+                      >
                         <p className="font-semibold">Explanation:</p>
                         <p>{example.complexityDetails.explanation}</p>
                       </div>
                     </div>
                   }
                   isExpanded={expandedSections[`${index}-complexity`]}
-                  onToggle={() => toggleDetails(index, 'complexity')}
+                  onToggle={() => toggleDetails(index, "complexity")}
                   darkMode={darkMode}
                   colorScheme={{
                     bg: darkMode ? "bg-green-900/30" : "bg-green-50",
                     border: darkMode ? "border-green-700" : "border-green-200",
                     text: darkMode ? "text-green-200" : "text-green-800",
                     icon: darkMode ? "text-green-300" : "text-green-500",
-                    hover: darkMode ? "hover:bg-green-900/20" : "hover:bg-green-50/70"
+                    hover: darkMode
+                      ? "hover:bg-green-900/20"
+                      : "hover:bg-green-50/70",
                   }}
                 />
               </div>
             </header>
-  
+
             <div className="flex flex-wrap gap-3 mb-6">
               <a
                 href={example.link}
@@ -1125,61 +1232,79 @@ private void swap(int[] nums, int i, int j) {
                     ? "from-gray-900 to-gray-700 hover:from-gray-800 hover:to-gray-600"
                     : "from-gray-600 to-gray-800 hover:from-gray-600 hover:to-gray-900"
                 } text-white font-medium px-4 py-2 sm:px-6 sm:py-3 rounded-lg transition-all transform hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 ${
-                  darkMode ? "focus:ring-offset-gray-900" : "focus:ring-offset-white"
+                  darkMode
+                    ? "focus:ring-offset-gray-900"
+                    : "focus:ring-offset-white"
                 }`}
               >
-                <img 
-                  src={darkMode 
-                    ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg" 
-                    : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"}
-                  alt="LeetCode Logo" 
+                <img
+                  src={
+                    darkMode
+                      ? "https://upload.wikimedia.org/wikipedia/commons/a/ab/LeetCode_logo_white_no_text.svg"
+                      : "https://upload.wikimedia.org/wikipedia/commons/1/19/LeetCode_logo_black.png"
+                  }
+                  alt="LeetCode Logo"
                   className="w-6 h-6 mr-2"
                 />
                 View Problem
               </a>
-  
+
               <ToggleCodeButton
                 language="cpp"
-                isVisible={visibleCodes.cpp === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "cpp"
+                }
                 onClick={() => toggleCodeVisibility("cpp", index)}
                 darkMode={darkMode}
               />
-  
+
               <ToggleCodeButton
                 language="java"
-                isVisible={visibleCodes.java === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "java"
+                }
                 onClick={() => toggleCodeVisibility("java", index)}
                 darkMode={darkMode}
               />
-  
+
               <ToggleCodeButton
                 language="python"
-                isVisible={visibleCodes.python === index}
+                isVisible={
+                  visibleCode.index === index &&
+                  visibleCode.language === "python"
+                }
                 onClick={() => toggleCodeVisibility("python", index)}
                 darkMode={darkMode}
               />
             </div>
-  
+
             <div className="space-y-4">
               <CodeExample
                 example={example}
-                isVisible={visibleCodes.cpp === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "cpp"
+                }
                 language="cpp"
                 code={example.cppcode}
                 darkMode={darkMode}
               />
-  
+
               <CodeExample
                 example={example}
-                isVisible={visibleCodes.java === index}
+                isVisible={
+                  visibleCode.index === index && visibleCode.language === "java"
+                }
                 language="java"
                 code={example.javacode}
                 darkMode={darkMode}
               />
-  
+
               <CodeExample
                 example={example}
-                isVisible={visibleCodes.python === index}
+                isVisible={
+                  visibleCode.index === index &&
+                  visibleCode.language === "python"
+                }
                 language="python"
                 code={example.pythoncode}
                 darkMode={darkMode}
