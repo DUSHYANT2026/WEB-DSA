@@ -326,7 +326,7 @@ const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
   </button>
 );
 
-function Bit1() {
+function Bit3() {
   const { darkMode } = useTheme();
   const [visibleCode, setVisibleCode] = useState({
     index: null,
@@ -352,635 +352,431 @@ function Bit1() {
     }));
   };
 
-  const codeExamples = [
-    {
-      title: "Sum of Two Numbers",
-      description: "Calculate the sum of two integers without using the + or - operators.",
-      approach: [
-        "1. Use bitwise operations to calculate sum without carry",
-        "2. Calculate carry separately",
-        "3. Iterate until there is no carry left",
-        "4. XOR gives sum without carry",
-        "5. AND plus left shift gives carry"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(1) - fixed number of iterations (32/64)",
-        "Space complexity: O(1)",
-        "Works for both positive and negative numbers",
-        "Uses bitwise XOR and AND operations",
-        "Handles all integer ranges"
-      ],
-      complexityDetails: {
-        time: "O(1)",
-        space: "O(1)",
-        explanation: "Fixed number of iterations (32 or 64) regardless of input size"
+  const codeExamples =  [
+      {
+        title: "Check if a Number is Odd",
+        description: "Determine whether a given number is odd without using the modulus operator.",
+        approach: [
+          "1. Use bitwise AND operator with 1",
+          "2. If result is 1, number is odd",
+          "3. If result is 0, number is even",
+          "4. Works because odd numbers have LSB (least significant bit) set to 1"
+        ],
+        algorithmCharacteristics: [
+          "Time complexity: O(1)",
+          "Space complexity: O(1)",
+          "More efficient than modulus operation",
+          "Works for both positive and negative integers",
+          "Doesn't use division or modulus operators"
+        ],
+        complexityDetails: {
+          time: "O(1)",
+          space: "O(1)",
+          explanation: "Single bitwise operation with constant time"
+        },
+        cppcode: `#include <iostream>
+  using namespace std;
+  
+  bool isOdd(int num) {
+      return num & 1;
+  }
+  
+  int main() {
+      int num;
+      cout << "Enter a number: ";
+      cin >> num;
+      
+      if (isOdd(num)) {
+          cout << num << " is odd" << endl;
+      } else {
+          cout << num << " is even" << endl;
+      }
+      return 0;
+  }`,
+        javacode: `import java.util.Scanner;
+  
+  public class OddEven {
+      public static boolean isOdd(int num) {
+          return (num & 1) != 0;
+      }
+      
+      public static void main(String[] args) {
+          Scanner sc = new Scanner(System.in);
+          System.out.print("Enter a number: ");
+          int num = sc.nextInt();
+          
+          if (isOdd(num)) {
+              System.out.println(num + " is odd");
+          } else {
+              System.out.println(num + " is even");
+          }
+      }
+  }`,
+        pythoncode: `def is_odd(num):
+      return num & 1
+  
+  num = int(input("Enter a number: "))
+  if is_odd(num):
+      print(f"{num} is odd")
+  else:
+      print(f"{num} is even")`,
+        language: "cpp",
+        javaLanguage: "java",
+        pythonlanguage: "python",
+        complexity: "Time Complexity: O(1), Space Complexity: O(1)",
+        link: "https://www.geeksforgeeks.org/check-if-a-number-is-odd-or-even-using-bitwise-operators/"
       },
-      cppcode: `#include <iostream>
-using namespace std;
-
-int getSum(int a, int b) {
-    while (b != 0) {
-        unsigned carry = a & b;
-        a = a ^ b;
-        b = carry << 1;
-    }
-    return a;
-}
-
-int main() {
-    int a, b;
-    cout << "Enter two numbers: ";
-    cin >> a >> b;
-    cout << "Sum: " << getSum(a, b) << endl;
-    return 0;
-}`,
-      javacode: `public class SumWithoutOperators {
-    public static int getSum(int a, int b) {
-        while (b != 0) {
-            int carry = a & b;
-            a = a ^ b;
-            b = carry << 1;
-        }
-        return a;
-    }
-    
-    public static void main(String[] args) {
-        int a = 5, b = 7;
-        System.out.println("Sum: " + getSum(a, b));
-    }
-}`,
-      pythoncode: `def get_sum(a, b):
-    mask = 0xFFFFFFFF
-    while b != 0:
-        carry = (a & b) & mask
-        a = (a ^ b) & mask
-        b = (carry << 1) & mask
-    return a if a <= 0x7FFFFFFF else ~(a ^ mask)
-
-a = int(input("Enter first number: "))
-b = int(input("Enter second number: "))
-print("Sum:", get_sum(a, b))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/sum-of-two-integers/"
-    },
-    {
-      title: "Single Number II",
-      description: "Find the number that appears once in an array where every other number appears three times.",
-      approach: [
-        "1. Initialize two variables to track bits",
-        "2. For each number in array:",
-        "   - Update first tracker with XOR and mask",
-        "   - Update second tracker with XOR and mask",
-        "3. The remaining bits in first tracker is the unique number"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(n)",
-        "Space complexity: O(1)",
-        "Efficient bit manipulation solution",
-        "Works for any number range",
-        "Handles negative numbers properly"
-      ],
-      complexityDetails: {
-        time: "O(n)",
-        space: "O(1)",
-        explanation: "Single pass through the array with constant space operations"
+      {
+        title: "Count the Number of Set Bits",
+        description: "Count the number of 1s in the binary representation of a number (Hamming weight).",
+        approach: [
+          "1. Initialize count to 0",
+          "2. While number is greater than 0:",
+          "   a. Perform bitwise AND with 1",
+          "   b. Add result to count",
+          "   c. Right shift number by 1",
+          "3. Return count"
+        ],
+        algorithmCharacteristics: [
+          "Time complexity: O(log n) - runs in number of bits",
+          "Space complexity: O(1)",
+          "Works for both positive and negative numbers",
+          "More efficient methods exist (Brian Kernighan's algorithm)",
+          "Fundamental operation in many bit manipulation problems"
+        ],
+        complexityDetails: {
+          time: "O(log n)",
+          space: "O(1)",
+          explanation: "Iterates through each bit of the number"
+        },
+        cppcode: `#include <iostream>
+  using namespace std;
+  
+  int countSetBits(int num) {
+      int count = 0;
+      while (num) {
+          count += num & 1;
+          num >>= 1;
+      }
+      return count;
+  }
+  
+  int main() {
+      int num;
+      cout << "Enter a number: ";
+      cin >> num;
+      cout << "Number of set bits: " << countSetBits(num) << endl;
+      return 0;
+  }`,
+        javacode: `import java.util.Scanner;
+  
+  public class CountSetBits {
+      public static int countSetBits(int num) {
+          int count = 0;
+          while (num != 0) {
+              count += num & 1;
+              num >>>= 1;  // Use unsigned right shift
+          }
+          return count;
+      }
+      
+      public static void main(String[] args) {
+          Scanner sc = new Scanner(System.in);
+          System.out.print("Enter a number: ");
+          int num = sc.nextInt();
+          System.out.println("Number of set bits: " + countSetBits(num));
+      }
+  }`,
+        pythoncode: `def count_set_bits(num):
+      count = 0
+      while num:
+          count += num & 1
+          num >>= 1
+      return count
+  
+  num = int(input("Enter a number: "))
+  print(f"Number of set bits: {count_set_bits(num)}")`,
+        language: "cpp",
+        javaLanguage: "java",
+        pythonlanguage: "python",
+        complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
+        link: "https://www.geeksforgeeks.org/count-set-bits-in-an-integer/"
       },
-      cppcode: `#include <iostream>
-#include <vector>
-using namespace std;
-
-int singleNumber(vector<int>& nums) {
-    int ones = 0, twos = 0;
-    for (int num : nums) {
-        ones = (ones ^ num) & ~twos;
-        twos = (twos ^ num) & ~ones;
-    }
-    return ones;
-}
-
-int main() {
-    vector<int> nums = {2,2,3,2};
-    cout << "Single number: " << singleNumber(nums) << endl;
-    return 0;
-}`,
-      javacode: `public class SingleNumberII {
-    public static int singleNumber(int[] nums) {
-        int ones = 0, twos = 0;
-        for (int num : nums) {
-            ones = (ones ^ num) & ~twos;
-            twos = (twos ^ num) & ~ones;
-        }
-        return ones;
-    }
-    
-    public static void main(String[] args) {
-        int[] nums = {0,1,0,1,0,1,99};
-        System.out.println("Single number: " + singleNumber(nums));
-    }
-}`,
-      pythoncode: `def single_number(nums):
-    ones, twos = 0, 0
-    for num in nums:
-        ones = (ones ^ num) & ~twos
-        twos = (twos ^ num) & ~ones
-    return ones
-
-nums = [2,2,3,2]
-print("Single number:", single_number(nums))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/single-number-ii/"
-    },
-    {
-      title: "Reverse Bits",
-      description: "Reverse the bits of a given 32-bit unsigned integer.",
-      approach: [
-        "1. Initialize result as 0",
-        "2. For each bit in input:",
-        "   - Shift result left by 1",
-        "   - Add current bit of input",
-        "   - Shift input right by 1",
-        "3. Return final reversed result"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(1) - fixed 32 iterations",
-        "Space complexity: O(1)",
-        "Uses bit shifting operations",
-        "Preserves leading zeros",
-        "Works for all 32-bit unsigned integers"
-      ],
-      complexityDetails: {
-        time: "O(1)",
-        space: "O(1)",
-        explanation: "Exactly 32 iterations regardless of input value"
+      {
+        title: "Swap Two Numbers Without Temporary Variable",
+        description: "Swap two numbers without using a temporary variable using bitwise XOR.",
+        approach: [
+          "1. Using arithmetic operations (addition and subtraction):",
+          "   a = a + b",
+          "   b = a - b",
+          "   a = a - b",
+          "2. Using bitwise XOR operation:",
+          "   a = a ^ b",
+          "   b = a ^ b",
+          "   a = a ^ b"
+        ],
+        algorithmCharacteristics: [
+          "Time complexity: O(1)",
+          "Space complexity: O(1)",
+          "Avoids using temporary variable",
+          "Arithmetic method may overflow with large numbers",
+          "XOR method works for any primitive data type"
+        ],
+        complexityDetails: {
+          time: "O(1)",
+          space: "O(1)",
+          explanation: "Three XOR operations with constant time"
+        },
+        cppcode: `#include <iostream>
+  using namespace std;
+  
+  void swapNumbers(int &a, int &b) {
+      // Using arithmetic operations
+      a = a + b;
+      b = a - b;
+      a = a - b;
+      
+      // Alternative using XOR (uncomment to use)
+      // a = a ^ b;
+      // b = a ^ b;
+      // a = a ^ b;
+  }
+  
+  int main() {
+      int x = 5, y = 10;
+      cout << "Before swap: x = " << x << ", y = " << y << endl;
+      swapNumbers(x, y);
+      cout << "After swap: x = " << x << ", y = " << y << endl;
+      return 0;
+  }`,
+        javacode: `public class SwapNumbers {
+      public static void swapNumbers(int[] nums) {
+          // Using arithmetic operations
+          nums[0] = nums[0] + nums[1];
+          nums[1] = nums[0] - nums[1];
+          nums[0] = nums[0] - nums[1];
+          
+          // Alternative using XOR (uncomment to use)
+          // nums[0] = nums[0] ^ nums[1];
+          // nums[1] = nums[0] ^ nums[1];
+          // nums[0] = nums[0] ^ nums[1];
+      }
+      
+      public static void main(String[] args) {
+          int[] nums = {5, 10};
+          System.out.println("Before swap: x = " + nums[0] + ", y = " + nums[1]);
+          swapNumbers(nums);
+          System.out.println("After swap: x = " + nums[0] + ", y = " + nums[1]);
+      }
+  }`,
+        pythoncode: `def swap_numbers(a, b):
+      # Using arithmetic operations
+      a = a + b
+      b = a - b
+      a = a - b
+      return a, b
+      
+      # Alternative using XOR (uncomment to use)
+      # a = a ^ b
+      # b = a ^ b
+      # a = a ^ b
+      # return a, b
+  
+  x, y = 5, 10
+  print(f"Before swap: x = {x}, y = {y}")
+  x, y = swap_numbers(x, y)
+  print(f"After swap: x = {x}, y = {y}")`,
+        language: "cpp",
+        javaLanguage: "java",
+        pythonlanguage: "python",
+        complexity: "Time Complexity: O(1), Space Complexity: O(1)",
+        link: "https://www.geeksforgeeks.org/swap-two-numbers-without-using-temporary-variable/"
       },
-      cppcode: `#include <iostream>
-using namespace std;
-
-uint32_t reverseBits(uint32_t n) {
-    uint32_t result = 0;
-    for (int i = 0; i < 32; i++) {
-        result = (result << 1) | (n & 1);
-        n >>= 1;
-    }
-    return result;
-}
-
-int main() {
-    uint32_t num;
-    cout << "Enter a number: ";
-    cin >> num;
-    cout << "Reversed bits: " << reverseBits(num) << endl;
-    return 0;
-}`,
-      javacode: `public class ReverseBits {
-    public static int reverseBits(int n) {
-        int result = 0;
-        for (int i = 0; i < 32; i++) {
-            result = (result << 1) | (n & 1);
-            n >>>= 1;
-        }
-        return result;
-    }
-    
-    public static void main(String[] args) {
-        int num = 43261596;
-        System.out.println("Reversed bits: " + reverseBits(num));
-    }
-}`,
-      pythoncode: `def reverse_bits(n):
-    result = 0
-    for _ in range(32):
-        result = (result << 1) | (n & 1)
-        n >>= 1
-    return result
-
-num = int(input("Enter a number: "))
-print("Reversed bits:", reverse_bits(num))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/reverse-bits/"
-    },
-    {
-      title: "Power of Two",
-      description: "Determine if a given integer is a power of two.",
-      approach: [
-        "1. Check if number is positive",
-        "2. Use bitwise AND to verify power of two",
-        "3. A power of two has exactly one bit set",
-        "4. n & (n-1) will be 0 for powers of two"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(1)",
-        "Space complexity: O(1)",
-        "Single line solution possible",
-        "Works for all integer values",
-        "Handles edge case (n = 0)"
-      ],
-      complexityDetails: {
-        time: "O(1)",
-        space: "O(1)",
-        explanation: "Single bitwise operation check"
+      {
+        title: "Find the Number That Appears Odd Number of Times",
+        description: "Given an array where all numbers occur even number of times except one, find the odd occurring number.",
+        approach: [
+          "1. Initialize result to 0",
+          "2. XOR all elements in the array with result",
+          "3. Even occurrences will cancel out (XOR with same number = 0)",
+          "4. Final result will be the number with odd count"
+        ],
+        algorithmCharacteristics: [
+          "Time complexity: O(n)",
+          "Space complexity: O(1)",
+          "Efficient one-pass solution",
+          "Works for both positive and negative numbers",
+          "Uses XOR properties:",
+          "  - a ^ a = 0",
+          "  - a ^ 0 = a",
+          "  - XOR is commutative and associative"
+        ],
+        complexityDetails: {
+          time: "O(n)",
+          space: "O(1)",
+          explanation: "Single pass through the array with constant operations"
+        },
+        cppcode: `#include <iostream>
+  #include <vector>
+  using namespace std;
+  
+  int findOddOccurrence(const vector<int>& nums) {
+      int res = 0;
+      for (int num : nums) {
+          res ^= num;
+      }
+      return res;
+  }
+  
+  int main() {
+      vector<int> nums = {1, 2, 3, 2, 3, 1, 3};
+      cout << "The number appearing odd times is: " 
+           << findOddOccurrence(nums) << endl;
+      return 0;
+  }`,
+        javacode: `public class OddOccurrence {
+      public static int findOddOccurrence(int[] nums) {
+          int res = 0;
+          for (int num : nums) {
+              res ^= num;
+          }
+          return res;
+      }
+      
+      public static void main(String[] args) {
+          int[] nums = {1, 2, 3, 2, 3, 1, 3};
+          System.out.println("The number appearing odd times is: " 
+                            + findOddOccurrence(nums));
+      }
+  }`,
+        pythoncode: `def find_odd_occurrence(nums):
+      res = 0
+      for num in nums:
+          res ^= num
+      return res
+  
+  nums = [1, 2, 3, 2, 3, 1, 3]
+  print(f"The number appearing odd times is: {find_odd_occurrence(nums)}")`,
+        language: "cpp",
+        javaLanguage: "java",
+        pythonlanguage: "python",
+        complexity: "Time Complexity: O(n), Space Complexity: O(1)",
+        link: "https://www.geeksforgeeks.org/find-the-number-occurring-odd-number-of-times/"
       },
-      cppcode: `#include <iostream>
-using namespace std;
-
-bool isPowerOfTwo(int n) {
-    return n > 0 && (n & (n - 1)) == 0;
-}
-
-int main() {
-    int num;
-    cout << "Enter a number: ";
-    cin >> num;
-    cout << (isPowerOfTwo(num) ? "True" : "False") << endl;
-    return 0;
-}`,
-      javacode: `public class PowerOfTwo {
-    public static boolean isPowerOfTwo(int n) {
-        return n > 0 && (n & (n - 1)) == 0;
-    }
-    
-    public static void main(String[] args) {
-        int num = 16;
-        System.out.println(isPowerOfTwo(num));
-    }
-}`,
-      pythoncode: `def is_power_of_two(n):
-    return n > 0 and (n & (n - 1)) == 0
-
-num = int(input("Enter a number: "))
-print(is_power_of_two(num))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/power-of-two/"
-    },
-    {
-      title: "Divide Two Integers",
-      description: "Divide two integers without using multiplication, division or mod operator.",
-      approach: [
-        "1. Handle overflow case (dividend = INT_MIN, divisor = -1)",
-        "2. Determine sign of result",
-        "3. Work with absolute values",
-        "4. Subtract largest possible multiple of divisor",
-        "5. Use bit shifting for efficient multiplication",
-        "6. Accumulate result"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(log n)",
-        "Space complexity: O(1)",
-        "Efficient bit manipulation",
-        "Handles 32-bit integer range",
-        "Works for both positive and negative numbers"
-      ],
-      complexityDetails: {
-        time: "O(log n)",
-        space: "O(1)",
-        explanation: "Uses bit shifting to perform logarithmic division"
-      },
-      cppcode: `#include <iostream>
-#include <climits>
-using namespace std;
-
-int divide(int dividend, int divisor) {
-    if (dividend == INT_MIN && divisor == -1) return INT_MAX;
-    
-    long dvd = labs(dividend), dvs = labs(divisor);
-    int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
-    long res = 0;
-    
-    while (dvd >= dvs) {
-        long temp = dvs, multiple = 1;
-        while (dvd >= (temp << 1)) {
-            temp <<= 1;
-            multiple <<= 1;
-        }
-        dvd -= temp;
-        res += multiple;
-    }
-    
-    return sign * res;
-}
-
-int main() {
-    int dividend, divisor;
-    cout << "Enter dividend and divisor: ";
-    cin >> dividend >> divisor;
-    cout << "Result: " << divide(dividend, divisor) << endl;
-    return 0;
-}`,
-      javacode: `public class DivideIntegers {
-    public static int divide(int dividend, int divisor) {
-        if (dividend == Integer.MIN_VALUE && divisor == -1)
-            return Integer.MAX_VALUE;
-            
-        long dvd = Math.abs((long)dividend), dvs = Math.abs((long)divisor);
-        int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
-        long res = 0;
-        
-        while (dvd >= dvs) {
-            long temp = dvs, multiple = 1;
-            while (dvd >= (temp << 1)) {
-                temp <<= 1;
-                multiple <<= 1;
-            }
-            dvd -= temp;
-            res += multiple;
-        }
-        
-        return (int)(sign * res);
-    }
-    
-    public static void main(String[] args) {
-        System.out.println(divide(10, 3));
-    }
-}`,
-      pythoncode: `def divide(dividend, divisor):
-    if dividend == -2**31 and divisor == -1:
-        return 2**31 - 1
-    
-    dvd, dvs = abs(dividend), abs(divisor)
-    sign = -1 if (dividend < 0) ^ (divisor < 0) else 1
-    res = 0
-    
-    while dvd >= dvs:
-        temp, multiple = dvs, 1
-        while dvd >= (temp << 1):
-            temp <<= 1
-            multiple <<= 1
-        dvd -= temp
-        res += multiple
-    
-    return sign * res
-
-dividend = int(input("Enter dividend: "))
-divisor = int(input("Enter divisor: "))
-print("Result:", divide(dividend, divisor))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/divide-two-integers/"
-    },
-    {
-      title: "Bitwise AND of Numbers Range",
-      description: "Find the bitwise AND of all numbers in the range [left, right].",
-      approach: [
-        "1. Initialize a mask",
-        "2. While left and right are not equal:",
-        "   - Right shift both left and right",
-        "   - Increment mask",
-        "3. Shift left back by mask positions",
-        "4. Return the result"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(1) - max 32 iterations",
-        "Space complexity: O(1)",
-        "Finds common prefix of binary representations",
-        "Efficient bit manipulation",
-        "Works for all positive integers"
-      ],
-      complexityDetails: {
-        time: "O(1)",
-        space: "O(1)",
-        explanation: "Finds common prefix by right shifting until numbers match"
-      },
-      cppcode: `#include <iostream>
-using namespace std;
-
-int rangeBitwiseAnd(int left, int right) {
-    int shift = 0;
-    while (left != right) {
-        left >>= 1;
-        right >>= 1;
-        shift++;
-    }
-    return left << shift;
-}
-
-int main() {
-    int left, right;
-    cout << "Enter range [left right]: ";
-    cin >> left >> right;
-    cout << "Bitwise AND: " << rangeBitwiseAnd(left, right) << endl;
-    return 0;
-}`,
-      javacode: `public class BitwiseAND {
-    public static int rangeBitwiseAnd(int left, int right) {
-        int shift = 0;
-        while (left != right) {
-            left >>= 1;
-            right >>= 1;
-            shift++;
-        }
-        return left << shift;
-    }
-    
-    public static void main(String[] args) {
-        System.out.println(rangeBitwiseAnd(5, 7));
-    }
-}`,
-      pythoncode: `def range_bitwise_and(left, right):
-    shift = 0
-    while left != right:
-        left >>= 1
-        right >>= 1
-        shift += 1
-    return left << shift
-
-left = int(input("Enter left: "))
-right = int(input("Enter right: "))
-print("Bitwise AND:", range_bitwise_and(left, right))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/bitwise-and-of-numbers-range/"
-    },
-    {
-      title: "Gray Code",
-      description: "Generate the n-bit Gray code sequence where successive numbers differ by exactly one bit.",
-      approach: [
-        "1. Start with base case (n=1: [0,1])",
-        "2. For each subsequent n:",
-        "   - Take previous sequence and prepend 0",
-        "   - Take reversed previous sequence and prepend 1",
-        "   - Concatenate these two sequences",
-        "3. Return final sequence"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(2^n)",
-        "Space complexity: O(2^n)",
-        "Uses mirroring property of Gray code",
-        "Each iteration doubles the sequence size",
-        "Works for any positive integer n"
-      ],
-      complexityDetails: {
-        time: "O(2^n)",
-        space: "O(2^n)",
-        explanation: "Generates all possible n-bit combinations"
-      },
-      cppcode: `#include <iostream>
-#include <vector>
-using namespace std;
-
-vector<int> grayCode(int n) {
-    vector<int> result = {0};
-    for (int i = 0; i < n; i++) {
-        int size = result.size();
-        for (int j = size - 1; j >= 0; j--) {
-            result.push_back(result[j] | (1 << i));
-        }
-    }
-    return result;
-}
-
-int main() {
-    int n;
-    cout << "Enter n: ";
-    cin >> n;
-    vector<int> codes = grayCode(n);
-    for (int num : codes) {
-        cout << num << " ";
-    }
-    return 0;
-}`,
-      javacode: `import java.util.ArrayList;
-import java.util.List;
-
-public class GrayCode {
-    public static List<Integer> grayCode(int n) {
-        List<Integer> result = new ArrayList<>();
-        result.add(0);
-        for (int i = 0; i < n; i++) {
-            int size = result.size();
-            for (int j = size - 1; j >= 0; j--) {
-                result.add(result.get(j) | (1 << i));
-            }
-        }
-        return result;
-    }
-    
-    public static void main(String[] args) {
-        System.out.println(grayCode(3));
-    }
-}`,
-      pythoncode: `def gray_code(n):
-    result = [0]
-    for i in range(n):
-        result += [x | (1 << i) for x in reversed(result)]
-    return result
-
-n = int(input("Enter n: "))
-print("Gray code:", gray_code(n))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(2^n), Space Complexity: O(2^n)",
-      link: "https://leetcode.com/problems/gray-code/"
-    },
-    {
-      title: "Nth Digit",
-      description: "Find the nth digit of the infinite sequence 123456789101112131415...",
-      approach: [
-        "1. Determine the range (1-digit, 2-digit numbers etc.)",
-        "2. Find the exact number containing the nth digit",
-        "3. Find the specific digit within that number",
-        "4. Calculate based on digit length and offset"
-      ],
-      algorithmCharacteristics: [
-        "Time complexity: O(log n)",
-        "Space complexity: O(1)",
-        "Efficient digit counting",
-        "Handles very large n values",
-        "Works by determining digit ranges"
-      ],
-      complexityDetails: {
-        time: "O(log n)",
-        space: "O(1)",
-        explanation: "Narrows down digit position by counting digits in ranges"
-      },
-      cppcode: `#include <iostream>
-#include <cmath>
-using namespace std;
-
-int findNthDigit(int n) {
-    int len = 1;
-    long count = 9;
-    int start = 1;
-    
-    while (n > len * count) {
-        n -= len * count;
-        len++;
-        count *= 10;
-        start *= 10;
-    }
-    
-    int num = start + (n - 1) / len;
-    string s = to_string(num);
-    return s[(n - 1) % len] - '0';
-}
-
-int main() {
-    int n;
-    cout << "Enter n: ";
-    cin >> n;
-    cout << "Nth digit: " << findNthDigit(n) << endl;
-    return 0;
-}`,
-      javacode: `public class NthDigit {
-    public static int findNthDigit(int n) {
-        int len = 1;
-        long count = 9;
-        int start = 1;
-        
-        while (n > len * count) {
-            n -= len * count;
-            len++;
-            count *= 10;
-            start *= 10;
-        }
-        
-        int num = start + (n - 1) / len;
-        return Character.getNumericValue(String.valueOf(num).charAt((n - 1) % len));
-    }
-    
-    public static void main(String[] args) {
-        System.out.println(findNthDigit(11));
-    }
-}`,
-      pythoncode: `def find_nth_digit(n):
-    len = 1
-    count = 9
-    start = 1
-    
-    while n > len * count:
-        n -= len * count
-        len += 1
-        count *= 10
-        start *= 10
-    
-    num = start + (n - 1) // len
-    return int(str(num)[(n - 1) % len])
-
-n = int(input("Enter n: "))
-print("Nth digit:", find_nth_digit(n))`,
-      language: "cpp",
-      javaLanguage: "java",
-      pythonlanguage: "python",
-      complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
-      link: "https://leetcode.com/problems/nth-digit/"
-    }
-];
+      {
+        title: "Divide Two Integers Without Using Division Operator",
+        description: "Divide two integers without using multiplication, division or mod operator, handling overflow cases.",
+        approach: [
+          "1. Handle special cases (division by zero, INT_MIN / -1)",
+          "2. Determine sign of result",
+          "3. Work with absolute values",
+          "4. Use bit shifting to find largest multiple",
+          "5. Subtract multiples from dividend",
+          "6. Apply sign to result"
+        ],
+        algorithmCharacteristics: [
+          "Time complexity: O(log n)",
+          "Space complexity: O(1)",
+          "Handles 32-bit integer range",
+          "Efficient using bit manipulation",
+          "Works for both positive and negative numbers"
+        ],
+        complexityDetails: {
+          time: "O(log n)",
+          space: "O(1)",
+          explanation: "Uses bit shifting to perform logarithmic division"
+        },
+        cppcode: `#include <iostream>
+  #include <climits>
+  using namespace std;
+  
+  int divide(int dividend, int divisor) {
+      if (dividend == INT_MIN && divisor == -1) {
+          return INT_MAX;  // Handle overflow
+      }
+      
+      long dvd = labs(dividend), dvs = labs(divisor);
+      int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
+      long res = 0;
+      
+      while (dvd >= dvs) {
+          long temp = dvs, multiple = 1;
+          while (dvd >= (temp << 1)) {
+              temp <<= 1;
+              multiple <<= 1;
+          }
+          dvd -= temp;
+          res += multiple;
+      }
+      
+      return sign * res;
+  }
+  
+  int main() {
+      int dividend, divisor;
+      cout << "Enter dividend: ";
+      cin >> dividend;
+      cout << "Enter divisor: ";
+      cin >> divisor;
+      cout << "Result: " << divide(dividend, divisor) << endl;
+      return 0;
+  }`,
+        javacode: `public class IntegerDivision {
+      public static int divide(int dividend, int divisor) {
+          if (dividend == Integer.MIN_VALUE && divisor == -1) {
+              return Integer.MAX_VALUE;  // Handle overflow
+          }
+          
+          long dvd = Math.abs((long)dividend), dvs = Math.abs((long)divisor);
+          int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
+          long res = 0;
+          
+          while (dvd >= dvs) {
+              long temp = dvs, multiple = 1;
+              while (dvd >= (temp << 1)) {
+                  temp <<= 1;
+                  multiple <<= 1;
+              }
+              dvd -= temp;
+              res += multiple;
+          }
+          
+          return (int)(sign * res);
+      }
+      
+      public static void main(String[] args) {
+          int dividend = 10, divisor = 3;
+          System.out.println("Result: " + divide(dividend, divisor));
+      }
+  }`,
+        pythoncode: `def divide(dividend, divisor):
+      if dividend == -2**31 and divisor == -1:
+          return 2**31 - 1  # Handle overflow
+      
+      dvd, dvs = abs(dividend), abs(divisor)
+      sign = -1 if (dividend < 0) ^ (divisor < 0) else 1
+      res = 0
+      
+      while dvd >= dvs:
+          temp, multiple = dvs, 1
+          while dvd >= (temp << 1):
+              temp <<= 1
+              multiple <<= 1
+          dvd -= temp
+          res += multiple
+      
+      return sign * res
+  
+  dividend = int(input("Enter dividend: "))
+  divisor = int(input("Enter divisor: "))
+  print(f"Result: {divide(dividend, divisor)}")`,
+        language: "cpp",
+        javaLanguage: "java",
+        pythonlanguage: "python",
+        complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
+        link: "https://www.geeksforgeeks.org/divide-two-integers-without-using-multiplication-division-mod-operator/"
+      }
+    ];
   return (
     <div
       className={`container mx-auto px-4 sm:px-6 py-12 rounded-2xl shadow-xl max-w-7xl transition-colors duration-300 ${
@@ -996,7 +792,7 @@ print("Nth digit:", find_nth_digit(n))`,
             : "bg-gradient-to-r from-indigo-600 to-purple-700"
         }`}
       >
-        Leetcode Questions with Solutions
+        LeetCode Questions with Solutions
       </h1>
 
       <div className="space-y-8">

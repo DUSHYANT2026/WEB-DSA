@@ -326,7 +326,7 @@ const ToggleCodeButton = ({ language, isVisible, onClick, darkMode }) => (
   </button>
 );
 
-function Bit1() {
+function Bit2() {
   const { darkMode } = useTheme();
   const [visibleCode, setVisibleCode] = useState({
     index: null,
@@ -352,567 +352,431 @@ function Bit1() {
     }));
   };
 
-  const codeExamples =  [
-      {
-        title: "Print Prime Factors of a Number",
-        description: "Find and print all prime factors of a given number n.",
-        approach: [
-          "1. While n is divisible by 2, print 2 and divide n by 2",
-          "2. After step 1, n must be odd. Start from i=3 to sqrt(n)",
-          "3. While i divides n, print i and divide n by i",
-          "4. If n is a prime number > 2, print n"
-        ],
-        algorithmCharacteristics: [
-          "Time complexity: O(√n)",
-          "Space complexity: O(1)",
-          "Efficient for composite numbers",
-          "Handles even numbers first for optimization",
-          "Works for all positive integers > 1"
-        ],
-        complexityDetails: {
-          time: "O(√n)",
-          space: "O(1)",
-          explanation: "Iterates up to square root of n with optimizations for even numbers"
-        },
-        cppcode: `#include <iostream>
-  #include <cmath>
+  const codeExamples = [
+    {
+      title: "Check if a Number is Odd",
+      description: "Determine whether a given number is odd without using the modulus operator.",
+      approach: [
+        "1. Use bitwise AND operator with 1",
+        "2. If result is 1, number is odd",
+        "3. If result is 0, number is even",
+        "4. Works because odd numbers have LSB (least significant bit) set to 1"
+      ],
+      algorithmCharacteristics: [
+        "Time complexity: O(1)",
+        "Space complexity: O(1)",
+        "More efficient than modulus operation",
+        "Works for both positive and negative integers",
+        "Doesn't use division or modulus operators"
+      ],
+      complexityDetails: {
+        time: "O(1)",
+        space: "O(1)",
+        explanation: "Single bitwise operation with constant time"
+      },
+      cppcode: `#include <iostream>
   using namespace std;
   
-  void printPrimeFactors(int n) {
-      // Handle 2s that divide n
-      while (n % 2 == 0) {
-          cout << 2 << " ";
-          n /= 2;
-      }
-      
-      // n must be odd at this point
-      for (int i = 3; i <= sqrt(n); i += 2) {
-          while (n % i == 0) {
-              cout << i << " ";
-              n /= i;
-          }
-      }
-      
-      // Handle case when n is a prime > 2
-      if (n > 2)
-          cout << n << " ";
+  bool isOdd(int num) {
+      return num & 1;
   }
   
   int main() {
-      int n;
+      int num;
       cout << "Enter a number: ";
-      cin >> n;
-      cout << "Prime factors: ";
-      printPrimeFactors(n);
+      cin >> num;
+      
+      if (isOdd(num)) {
+          cout << num << " is odd" << endl;
+      } else {
+          cout << num << " is even" << endl;
+      }
       return 0;
   }`,
-        javacode: `import java.util.Scanner;
+      javacode: `import java.util.Scanner;
   
-  public class PrimeFactors {
-      public static void printPrimeFactors(int n) {
-          // Handle 2s that divide n
-          while (n % 2 == 0) {
-              System.out.print(2 + " ");
-              n /= 2;
-          }
-          
-          // n must be odd at this point
-          for (int i = 3; i <= Math.sqrt(n); i += 2) {
-              while (n % i == 0) {
-                  System.out.print(i + " ");
-                  n /= i;
-              }
-          }
-          
-          // Handle case when n is a prime > 2
-          if (n > 2)
-              System.out.print(n);
+  public class OddEven {
+      public static boolean isOdd(int num) {
+          return (num & 1) != 0;
       }
       
       public static void main(String[] args) {
           Scanner sc = new Scanner(System.in);
           System.out.print("Enter a number: ");
-          int n = sc.nextInt();
-          System.out.print("Prime factors: ");
-          printPrimeFactors(n);
-      }
-  }`,
-        pythoncode: `import math
-  
-  def print_prime_factors(n):
-      # Handle 2s that divide n
-      while n % 2 == 0:
-          print(2, end=" ")
-          n = n // 2
-      
-      # n must be odd at this point
-      for i in range(3, int(math.sqrt(n)) + 1, 2):
-          while n % i == 0:
-              print(i, end=" ")
-              n = n // i
-      
-      # Handle case when n is a prime > 2
-      if n > 2:
-          print(n, end=" ")
-  
-  n = int(input("Enter a number: "))
-  print("Prime factors:", end=" ")
-  print_prime_factors(n)`,
-        language: "cpp",
-        javaLanguage: "java",
-        pythonlanguage: "python",
-        complexity: "Time Complexity: O(√n), Space Complexity: O(1)",
-        link: "https://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/"
-      },
-      {
-        title: "All Divisors of a Number",
-        description: "Find and print all divisors of a given number n in sorted order.",
-        approach: [
-          "1. Iterate from 1 to √n",
-          "2. For each i, check if it divides n",
-          "3. If it does, add both i and n/i to the result",
-          "4. Handle edge case when i == n/i to avoid duplicates",
-          "5. Sort the final list of divisors"
-        ],
-        algorithmCharacteristics: [
-          "Time complexity: O(√n)",
-          "Space complexity: O(√n) for storing divisors",
-          "Efficient by only checking up to √n",
-          "Maintains sorted order without full sorting",
-          "Works for all positive integers"
-        ],
-        complexityDetails: {
-          time: "O(√n)",
-          space: "O(√n)",
-          explanation: "Iterates up to square root of n and stores divisors"
-        },
-        cppcode: `#include <iostream>
-  #include <vector>
-  #include <algorithm>
-  using namespace std;
-  
-  void printDivisors(int n) {
-      vector<int> divisors;
-      
-      for (int i = 1; i <= sqrt(n); i++) {
-          if (n % i == 0) {
-              if (n / i == i)
-                  divisors.push_back(i);
-              else {
-                  divisors.push_back(i);
-                  divisors.push_back(n / i);
-              }
+          int num = sc.nextInt();
+          
+          if (isOdd(num)) {
+              System.out.println(num + " is odd");
+          } else {
+              System.out.println(num + " is even");
           }
       }
-      
-      sort(divisors.begin(), divisors.end());
-      
-      for (int d : divisors)
-          cout << d << " ";
+  }`,
+      pythoncode: `def is_odd(num):
+      return num & 1
+  
+  num = int(input("Enter a number: "))
+  if is_odd(num):
+      print(f"{num} is odd")
+  else:
+      print(f"{num} is even")`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
+      link: "https://www.geeksforgeeks.org/check-if-a-number-is-odd-or-even-using-bitwise-operators/"
+    },
+    {
+      title: "Count the Number of Set Bits",
+      description: "Count the number of 1s in the binary representation of a number (Hamming weight).",
+      approach: [
+        "1. Initialize count to 0",
+        "2. While number is greater than 0:",
+        "   a. Perform bitwise AND with 1",
+        "   b. Add result to count",
+        "   c. Right shift number by 1",
+        "3. Return count"
+      ],
+      algorithmCharacteristics: [
+        "Time complexity: O(log n) - runs in number of bits",
+        "Space complexity: O(1)",
+        "Works for both positive and negative numbers",
+        "More efficient methods exist (Brian Kernighan's algorithm)",
+        "Fundamental operation in many bit manipulation problems"
+      ],
+      complexityDetails: {
+        time: "O(log n)",
+        space: "O(1)",
+        explanation: "Iterates through each bit of the number"
+      },
+      cppcode: `#include <iostream>
+  using namespace std;
+  
+  int countSetBits(int num) {
+      int count = 0;
+      while (num) {
+          count += num & 1;
+          num >>= 1;
+      }
+      return count;
   }
   
   int main() {
-      int n;
+      int num;
       cout << "Enter a number: ";
-      cin >> n;
-      cout << "Divisors: ";
-      printDivisors(n);
+      cin >> num;
+      cout << "Number of set bits: " << countSetBits(num) << endl;
       return 0;
   }`,
-        javacode: `import java.util.*;
+      javacode: `import java.util.Scanner;
   
-  public class Divisors {
-      public static void printDivisors(int n) {
-          List<Integer> divisors = new ArrayList<>();
-          
-          for (int i = 1; i <= Math.sqrt(n); i++) {
-              if (n % i == 0) {
-                  if (n / i == i)
-                      divisors.add(i);
-                  else {
-                      divisors.add(i);
-                      divisors.add(n / i);
-                  }
-              }
+  public class CountSetBits {
+      public static int countSetBits(int num) {
+          int count = 0;
+          while (num != 0) {
+              count += num & 1;
+              num >>>= 1;  // Use unsigned right shift
           }
-          
-          Collections.sort(divisors);
-          
-          for (int d : divisors)
-              System.out.print(d + " ");
+          return count;
       }
       
       public static void main(String[] args) {
           Scanner sc = new Scanner(System.in);
           System.out.print("Enter a number: ");
-          int n = sc.nextInt();
-          System.out.print("Divisors: ");
-          printDivisors(n);
+          int num = sc.nextInt();
+          System.out.println("Number of set bits: " + countSetBits(num));
       }
   }`,
-        pythoncode: `import math
+      pythoncode: `def count_set_bits(num):
+      count = 0
+      while num:
+          count += num & 1
+          num >>= 1
+      return count
   
-  def print_divisors(n):
-      divisors = set()
-      
-      for i in range(1, int(math.sqrt(n)) + 1):
-          if n % i == 0:
-              divisors.add(i)
-              divisors.add(n // i)
-      
-      for d in sorted(divisors):
-          print(d, end=" ")
-  
-  n = int(input("Enter a number: "))
-  print("Divisors:", end=" ")
-  print_divisors(n)`,
-        language: "cpp",
-        javaLanguage: "java",
-        pythonlanguage: "python",
-        complexity: "Time Complexity: O(√n), Space Complexity: O(√n)",
-        link: "https://www.geeksforgeeks.org/find-all-divisors-of-a-natural-number-set-2/"
+  num = int(input("Enter a number: "))
+  print(f"Number of set bits: {count_set_bits(num)}")`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
+      link: "https://www.geeksforgeeks.org/count-set-bits-in-an-integer/"
+    },
+    {
+      title: "Swap Two Numbers Without Temporary Variable",
+      description: "Swap two numbers without using a temporary variable using bitwise XOR.",
+      approach: [
+        "1. Using arithmetic operations (addition and subtraction):",
+        "   a = a + b",
+        "   b = a - b",
+        "   a = a - b",
+        "2. Using bitwise XOR operation:",
+        "   a = a ^ b",
+        "   b = a ^ b",
+        "   a = a ^ b"
+      ],
+      algorithmCharacteristics: [
+        "Time complexity: O(1)",
+        "Space complexity: O(1)",
+        "Avoids using temporary variable",
+        "Arithmetic method may overflow with large numbers",
+        "XOR method works for any primitive data type"
+      ],
+      complexityDetails: {
+        time: "O(1)",
+        space: "O(1)",
+        explanation: "Three XOR operations with constant time"
       },
-      {
-        title: "Sieve of Eratosthenes",
-        description: "Find all prime numbers up to a given limit n using the Sieve of Eratosthenes algorithm.",
-        approach: [
-          "1. Create a boolean array 'prime[0..n]' and initialize all entries as true",
-          "2. Mark 0 and 1 as non-prime",
-          "3. Start from first prime (2), mark all its multiples as non-prime",
-          "4. Move to next unmarked number and repeat",
-          "5. Numbers remaining marked as true are primes"
-        ],
-        algorithmCharacteristics: [
-          "Time complexity: O(n log log n)",
-          "Space complexity: O(n)",
-          "Most efficient way to find primes up to large n",
-          "Uses boolean array for marking composites",
-          "Can be optimized further with segmented sieve"
-        ],
-        complexityDetails: {
-          time: "O(n log log n)",
-          space: "O(n)",
-          explanation: "Efficiently marks composite numbers in a boolean array"
-        },
-        cppcode: `#include <iostream>
+      cppcode: `#include <iostream>
+  using namespace std;
+  
+  void swapNumbers(int &a, int &b) {
+      // Using arithmetic operations
+      a = a + b;
+      b = a - b;
+      a = a - b;
+      
+      // Alternative using XOR (uncomment to use)
+      // a = a ^ b;
+      // b = a ^ b;
+      // a = a ^ b;
+  }
+  
+  int main() {
+      int x = 5, y = 10;
+      cout << "Before swap: x = " << x << ", y = " << y << endl;
+      swapNumbers(x, y);
+      cout << "After swap: x = " << x << ", y = " << y << endl;
+      return 0;
+  }`,
+      javacode: `public class SwapNumbers {
+      public static void swapNumbers(int[] nums) {
+          // Using arithmetic operations
+          nums[0] = nums[0] + nums[1];
+          nums[1] = nums[0] - nums[1];
+          nums[0] = nums[0] - nums[1];
+          
+          // Alternative using XOR (uncomment to use)
+          // nums[0] = nums[0] ^ nums[1];
+          // nums[1] = nums[0] ^ nums[1];
+          // nums[0] = nums[0] ^ nums[1];
+      }
+      
+      public static void main(String[] args) {
+          int[] nums = {5, 10};
+          System.out.println("Before swap: x = " + nums[0] + ", y = " + nums[1]);
+          swapNumbers(nums);
+          System.out.println("After swap: x = " + nums[0] + ", y = " + nums[1]);
+      }
+  }`,
+      pythoncode: `def swap_numbers(a, b):
+      # Using arithmetic operations
+      a = a + b
+      b = a - b
+      a = a - b
+      return a, b
+      
+      # Alternative using XOR (uncomment to use)
+      # a = a ^ b
+      # b = a ^ b
+      # a = a ^ b
+      # return a, b
+  
+  x, y = 5, 10
+  print(f"Before swap: x = {x}, y = {y}")
+  x, y = swap_numbers(x, y)
+  print(f"After swap: x = {x}, y = {y}")`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      complexity: "Time Complexity: O(1), Space Complexity: O(1)",
+      link: "https://www.geeksforgeeks.org/swap-two-numbers-without-using-temporary-variable/"
+    },
+    {
+      title: "Find the Number That Appears Odd Number of Times",
+      description: "Given an array where all numbers occur even number of times except one, find the odd occurring number.",
+      approach: [
+        "1. Initialize result to 0",
+        "2. XOR all elements in the array with result",
+        "3. Even occurrences will cancel out (XOR with same number = 0)",
+        "4. Final result will be the number with odd count"
+      ],
+      algorithmCharacteristics: [
+        "Time complexity: O(n)",
+        "Space complexity: O(1)",
+        "Efficient one-pass solution",
+        "Works for both positive and negative numbers",
+        "Uses XOR properties:",
+        "  - a ^ a = 0",
+        "  - a ^ 0 = a",
+        "  - XOR is commutative and associative"
+      ],
+      complexityDetails: {
+        time: "O(n)",
+        space: "O(1)",
+        explanation: "Single pass through the array with constant operations"
+      },
+      cppcode: `#include <iostream>
   #include <vector>
   using namespace std;
   
-  void sieveOfEratosthenes(int n) {
-      vector<bool> prime(n+1, true);
-      prime[0] = prime[1] = false;
-      
-      for (int p = 2; p * p <= n; p++) {
-          if (prime[p]) {
-              for (int i = p * p; i <= n; i += p)
-                  prime[i] = false;
-          }
+  int findOddOccurrence(const vector<int>& nums) {
+      int res = 0;
+      for (int num : nums) {
+          res ^= num;
       }
-      
-      cout << "Primes up to " << n << ": ";
-      for (int p = 2; p <= n; p++) {
-          if (prime[p])
-              cout << p << " ";
-      }
+      return res;
   }
   
   int main() {
-      int n;
-      cout << "Enter upper limit: ";
-      cin >> n;
-      sieveOfEratosthenes(n);
+      vector<int> nums = {1, 2, 3, 2, 3, 1, 3};
+      cout << "The number appearing odd times is: " 
+           << findOddOccurrence(nums) << endl;
       return 0;
   }`,
-        javacode: `import java.util.Scanner;
-  
-  public class Sieve {
-      public static void sieveOfEratosthenes(int n) {
-          boolean[] prime = new boolean[n+1];
-          for (int i = 0; i <= n; i++)
-              prime[i] = true;
-          
-          prime[0] = prime[1] = false;
-          
-          for (int p = 2; p * p <= n; p++) {
-              if (prime[p]) {
-                  for (int i = p * p; i <= n; i += p)
-                      prime[i] = false;
-              }
+      javacode: `public class OddOccurrence {
+      public static int findOddOccurrence(int[] nums) {
+          int res = 0;
+          for (int num : nums) {
+              res ^= num;
           }
-          
-          System.out.print("Primes up to " + n + ": ");
-          for (int p = 2; p <= n; p++) {
-              if (prime[p])
-                  System.out.print(p + " ");
-          }
+          return res;
       }
       
       public static void main(String[] args) {
-          Scanner sc = new Scanner(System.in);
-          System.out.print("Enter upper limit: ");
-          int n = sc.nextInt();
-          sieveOfEratosthenes(n);
+          int[] nums = {1, 2, 3, 2, 3, 1, 3};
+          System.out.println("The number appearing odd times is: " 
+                            + findOddOccurrence(nums));
       }
   }`,
-        pythoncode: `def sieve_of_eratosthenes(n):
-      prime = [True] * (n + 1)
-      prime[0] = prime[1] = False
-      
-      p = 2
-      while p * p <= n:
-          if prime[p]:
-              for i in range(p * p, n + 1, p):
-                  prime[i] = False
-          p += 1
-      
-      print(f"Primes up to {n}:", end=" ")
-      for p in range(2, n + 1):
-          if prime[p]:
-              print(p, end=" ")
+      pythoncode: `def find_odd_occurrence(nums):
+      res = 0
+      for num in nums:
+          res ^= num
+      return res
   
-  n = int(input("Enter upper limit: "))
-  sieve_of_eratosthenes(n)`,
-        language: "cpp",
-        javaLanguage: "java",
-        pythonlanguage: "python",
-        complexity: "Time Complexity: O(n log log n), Space Complexity: O(n)",
-        link: "https://www.geeksforgeeks.org/sieve-of-eratosthenes/"
+  nums = [1, 2, 3, 2, 3, 1, 3]
+  print(f"The number appearing odd times is: {find_odd_occurrence(nums)}")`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      complexity: "Time Complexity: O(n), Space Complexity: O(1)",
+      link: "https://www.geeksforgeeks.org/find-the-number-occurring-odd-number-of-times/"
+    },
+    {
+      title: "Divide Two Integers Without Using Division Operator",
+      description: "Divide two integers without using multiplication, division or mod operator, handling overflow cases.",
+      approach: [
+        "1. Handle special cases (division by zero, INT_MIN / -1)",
+        "2. Determine sign of result",
+        "3. Work with absolute values",
+        "4. Use bit shifting to find largest multiple",
+        "5. Subtract multiples from dividend",
+        "6. Apply sign to result"
+      ],
+      algorithmCharacteristics: [
+        "Time complexity: O(log n)",
+        "Space complexity: O(1)",
+        "Handles 32-bit integer range",
+        "Efficient using bit manipulation",
+        "Works for both positive and negative numbers"
+      ],
+      complexityDetails: {
+        time: "O(log n)",
+        space: "O(1)",
+        explanation: "Uses bit shifting to perform logarithmic division"
       },
-      {
-        title: "Prime Factorization Using Sieve",
-        description: "Efficiently compute prime factorization of numbers using precomputed smallest prime factors (SPF).",
-        approach: [
-          "1. Precompute smallest prime factor (SPF) for every number up to n",
-          "2. For each query number, repeatedly divide by its SPF",
-          "3. Collect all prime factors in the process",
-          "4. Continue until number becomes 1"
-        ],
-        algorithmCharacteristics: [
-          "Time complexity: O(log n) per query after O(n) pre-processing",
-          "Space complexity: O(n)",
-          "Extremely efficient for multiple queries",
-          "Uses modified Sieve of Eratosthenes",
-          "Precomputes smallest prime factors for quick lookup"
-        ],
-        complexityDetails: {
-          time: "Preprocessing: O(n), Query: O(log n)",
-          space: "O(n)",
-          explanation: "Preprocessing step enables fast factorization queries"
-        },
-        cppcode: `#include <iostream>
-  #include <vector>
+      cppcode: `#include <iostream>
+  #include <climits>
   using namespace std;
   
-  vector<int> precomputeSPF(int max_num) {
-      vector<int> spf(max_num + 1);
-      for (int i = 0; i <= max_num; i++)
-          spf[i] = i;
+  int divide(int dividend, int divisor) {
+      if (dividend == INT_MIN && divisor == -1) {
+          return INT_MAX;  // Handle overflow
+      }
       
-      for (int i = 2; i * i <= max_num; i++) {
-          if (spf[i] == i) {
-              for (int j = i * i; j <= max_num; j += i) {
-                  if (spf[j] == j)
-                      spf[j] = i;
-              }
+      long dvd = labs(dividend), dvs = labs(divisor);
+      int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
+      long res = 0;
+      
+      while (dvd >= dvs) {
+          long temp = dvs, multiple = 1;
+          while (dvd >= (temp << 1)) {
+              temp <<= 1;
+              multiple <<= 1;
           }
-      }
-      return spf;
-  }
-  
-  void printPrimeFactors(int n, const vector<int>& spf) {
-      cout << "Prime factors of " << n << ": ";
-      while (n != 1) {
-          cout << spf[n] << " ";
-          n /= spf[n];
-      }
-  }
-  
-  int main() {
-      const int MAX = 1000000;
-      vector<int> spf = precomputeSPF(MAX);
-      
-      int n;
-      cout << "Enter a number (<= " << MAX << "): ";
-      cin >> n;
-      printPrimeFactors(n, spf);
-      return 0;
-  }`,
-        javacode: `import java.util.Scanner;
-  
-  public class PrimeFactorizationSieve {
-      public static int[] precomputeSPF(int maxNum) {
-          int[] spf = new int[maxNum + 1];
-          for (int i = 0; i <= maxNum; i++)
-              spf[i] = i;
-          
-          for (int i = 2; i * i <= maxNum; i++) {
-              if (spf[i] == i) {
-                  for (int j = i * i; j <= maxNum; j += i) {
-                      if (spf[j] == j)
-                          spf[j] = i;
-                  }
-              }
-          }
-          return spf;
+          dvd -= temp;
+          res += multiple;
       }
       
-      public static void printPrimeFactors(int n, int[] spf) {
-          System.out.print("Prime factors of " + n + ": ");
-          while (n != 1) {
-              System.out.print(spf[n] + " ");
-              n /= spf[n];
-          }
-      }
-      
-      public static void main(String[] args) {
-          final int MAX = 1000000;
-          int[] spf = precomputeSPF(MAX);
-          
-          Scanner sc = new Scanner(System.in);
-          System.out.print("Enter a number (<= " + MAX + "): ");
-          int n = sc.nextInt();
-          printPrimeFactors(n, spf);
-      }
-  }`,
-        pythoncode: `def precompute_spf(max_num):
-      spf = [0] * (max_num + 1)
-      for i in range(max_num + 1):
-          spf[i] = i
-      
-      for i in range(2, int(max_num**0.5) + 1):
-          if spf[i] == i:
-              for j in range(i * i, max_num + 1, i):
-                  if spf[j] == j:
-                      spf[j] = i
-      return spf
-  
-  def print_prime_factors(n, spf):
-      print(f"Prime factors of {n}:", end=" ")
-      while n != 1:
-          print(spf[n], end=" ")
-          n = n // spf[n]
-  
-  MAX = 1000000
-  spf = precompute_spf(MAX)
-  n = int(input(f"Enter a number (<= {MAX}): "))
-  print_prime_factors(n, spf)`,
-        language: "cpp",
-        javaLanguage: "java",
-        pythonlanguage: "python",
-        complexity: "Preprocessing: O(n), Query: O(log n), Space: O(n)",
-        link: "https://www.geeksforgeeks.org/prime-factorization-using-sieve-olog-n-multiple-queries/"
-      },
-      {
-        title: "Power(n, k)",
-        description: "Compute n raised to the power k efficiently using exponentiation by squaring.",
-        approach: [
-          "1. Handle base cases (k = 0, k = 1)",
-          "2. For even exponent: power(n, k) = power(n*n, k/2)",
-          "3. For odd exponent: power(n, k) = n * power(n*n, (k-1)/2)",
-          "4. Handle negative exponents by using 1/power(n, -k)"
-        ],
-        algorithmCharacteristics: [
-          "Time complexity: O(log k)",
-          "Space complexity: O(log k) for recursion, O(1) for iterative",
-          "Much faster than naive O(k) multiplication",
-          "Works for both integer and floating point bases",
-          "Handles negative exponents"
-        ],
-        complexityDetails: {
-          time: "O(log k)",
-          space: "O(1)",
-          explanation: "Uses divide and conquer approach to reduce multiplications"
-        },
-        cppcode: `#include <iostream>
-  using namespace std;
-  
-  double power(double x, int n) {
-      long long N = n;
-      if (N < 0) {
-          x = 1 / x;
-          N = -N;
-      }
-      
-      double result = 1;
-      double current_product = x;
-      
-      for (long long i = N; i > 0; i /= 2) {
-          if (i % 2 == 1)
-              result *= current_product;
-          current_product *= current_product;
-      }
-      return result;
+      return sign * res;
   }
   
   int main() {
-      double base;
-      int exponent;
-      cout << "Enter base: ";
-      cin >> base;
-      cout << "Enter exponent: ";
-      cin >> exponent;
-      
-      cout << base << "^" << exponent << " = " << power(base, exponent);
+      int dividend, divisor;
+      cout << "Enter dividend: ";
+      cin >> dividend;
+      cout << "Enter divisor: ";
+      cin >> divisor;
+      cout << "Result: " << divide(dividend, divisor) << endl;
       return 0;
   }`,
-        javacode: `import java.util.Scanner;
-  
-  public class Power {
-      public static double power(double x, int n) {
-          long N = n;
-          if (N < 0) {
-              x = 1 / x;
-              N = -N;
+      javacode: `public class IntegerDivision {
+      public static int divide(int dividend, int divisor) {
+          if (dividend == Integer.MIN_VALUE && divisor == -1) {
+              return Integer.MAX_VALUE;  // Handle overflow
           }
           
-          double result = 1;
-          double currentProduct = x;
+          long dvd = Math.abs((long)dividend), dvs = Math.abs((long)divisor);
+          int sign = (dividend < 0) ^ (divisor < 0) ? -1 : 1;
+          long res = 0;
           
-          for (long i = N; i > 0; i /= 2) {
-              if (i % 2 == 1)
-                  result *= currentProduct;
-              currentProduct *= currentProduct;
+          while (dvd >= dvs) {
+              long temp = dvs, multiple = 1;
+              while (dvd >= (temp << 1)) {
+                  temp <<= 1;
+                  multiple <<= 1;
+              }
+              dvd -= temp;
+              res += multiple;
           }
-          return result;
+          
+          return (int)(sign * res);
       }
       
       public static void main(String[] args) {
-          Scanner sc = new Scanner(System.in);
-          System.out.print("Enter base: ");
-          double base = sc.nextDouble();
-          System.out.print("Enter exponent: ");
-          int exponent = sc.nextInt();
-          
-          System.out.println(base + "^" + exponent + " = " + power(base, exponent));
+          int dividend = 10, divisor = 3;
+          System.out.println("Result: " + divide(dividend, divisor));
       }
   }`,
-        pythoncode: `def power(x, n):
-      N = n
-      if N < 0:
-          x = 1 / x
-          N = -N
+      pythoncode: `def divide(dividend, divisor):
+      if dividend == -2**31 and divisor == -1:
+          return 2**31 - 1  # Handle overflow
       
-      result = 1
-      current_product = x
+      dvd, dvs = abs(dividend), abs(divisor)
+      sign = -1 if (dividend < 0) ^ (divisor < 0) else 1
+      res = 0
       
-      i = N
-      while i > 0:
-          if i % 2 == 1:
-              result *= current_product
-          current_product *= current_product
-          i = i // 2
-      return result
+      while dvd >= dvs:
+          temp, multiple = dvs, 1
+          while dvd >= (temp << 1):
+              temp <<= 1
+              multiple <<= 1
+          dvd -= temp
+          res += multiple
+      
+      return sign * res
   
-  base = float(input("Enter base: "))
-  exponent = int(input("Enter exponent: "))
-  print(f"{base}^{exponent} = {power(base, exponent)}")`,
-        language: "cpp",
-        javaLanguage: "java",
-        pythonlanguage: "python",
-        complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
-        link: "https://www.geeksforgeeks.org/write-a-c-program-to-calculate-powxn/"
-      }
-    ];
+  dividend = int(input("Enter dividend: "))
+  divisor = int(input("Enter divisor: "))
+  print(f"Result: {divide(dividend, divisor)}")`,
+      language: "cpp",
+      javaLanguage: "java",
+      pythonlanguage: "python",
+      complexity: "Time Complexity: O(log n), Space Complexity: O(1)",
+      link: "https://www.geeksforgeeks.org/divide-two-integers-without-using-multiplication-division-mod-operator/"
+    }
+  ];
   return (
     <div
       className={`container mx-auto px-4 sm:px-6 py-12 rounded-2xl shadow-xl max-w-7xl transition-colors duration-300 ${
@@ -928,7 +792,7 @@ function Bit1() {
             : "bg-gradient-to-r from-indigo-600 to-purple-700"
         }`}
       >
-        Mathematics Based Questions with Solutions
+       Maths Based Questions with Solutions
       </h1>
 
       <div className="space-y-8">
