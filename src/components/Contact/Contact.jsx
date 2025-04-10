@@ -153,8 +153,8 @@ export default function Contact() {
       />
   
       {/* Content - Improved responsive classes */}
-      <div className="relative z-10 flex items-top justify-center min-h-screen px-4 sm:items-center sm:pt-0">
-        <div className="w-full max-w-6xl mx-auto sm:px-6 lg:px-8">
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4">
+        <div className="w-full max-w-3xl mx-auto sm:px-6 lg:px-8">
           <div className="mt-0 overflow-hidden shadow-2xl sm:rounded-2xl">
             <div className="grid grid-cols-1 md:grid-cols-2">
               {/* Left Side - Contact Info */}
@@ -165,28 +165,26 @@ export default function Contact() {
                     : "bg-gradient-to-r from-pink-600 to-purple-600"
                 } text-white sm:rounded-l-lg`}
               >
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">
+                <h1 className="text-lg sm:text-xl md:text-2xl font-extrabold tracking-tight">
                   Have a Question? Contact Us
                 </h1>
-                <p className="mt-2 sm:mt-3 md:mt-4 text-base sm:text-lg font-medium">
+                <p className="mt-2 text-sm font-medium">
                   Fill out the form to get in touch with our team. We're here to help!
                 </p>
   
-                <div className="mt-4 sm:mt-6 space-y-4 sm:space-y-6">
-                  {/* WhatsApp Button - Improved mobile sizing */}
+                <div className="mt-4 space-y-4">
+                  {/* WhatsApp Button */}
                   <div
                     className="flex items-center p-2 rounded-2xl transition-all duration-300 group cursor-pointer"
                     onClick={() => window.open("https://chat.whatsapp.com/INdHcEdh3ieGE5eHDg4vea", "_blank", "noopener,noreferrer")}
                   >
                     <div className="flex items-center w-full">
-                      <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 transition-all duration-500 group-hover:rotate-[360deg] group-hover:scale-110">
-                      <svg
+                      <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 transition-all duration-500 group-hover:rotate-[360deg] group-hover:scale-110">
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          x="0px"
-                          y="0px"
-                          width="40"
-                          height="40"
                           viewBox="0 0 48 48"
+                          width="100%"
+                          height="100%"
                         >
                           <path
                             fill="#fff"
@@ -206,32 +204,30 @@ export default function Contact() {
                           ></path>
                           <path
                             fill="#fff"
-                            fill-rule="evenodd"
+                            fillRule="evenodd"
                             d="M19.268,16.045c-0.355-0.79-0.729-0.806-1.068-0.82c-0.277-0.012-0.593-0.011-0.909-0.011c-0.316,0-0.83,0.119-1.265,0.594c-0.435,0.475-1.661,1.622-1.661,3.956c0,2.334,1.7,4.59,1.937,4.906c0.237,0.316,3.282,5.259,8.104,7.161c4.007,1.58,4.823,1.266,5.693,1.187c0.87-0.079,2.807-1.147,3.202-2.255c0.395-1.108,0.395-2.057,0.277-2.255c-0.119-0.198-0.435-0.316-0.909-0.554s-2.807-1.385-3.242-1.543c-0.435-0.158-0.751-0.237-1.068,0.238c-0.316,0.474-1.225,1.543-1.502,1.859c-0.277,0.317-0.554,0.357-1.028,0.119c-0.474-0.238-2.002-0.738-3.815-2.354c-1.41-1.257-2.362-2.81-2.639-3.285c-0.277-0.474-0.03-0.731,0.208-0.968c0.213-0.213,0.474-0.554,0.712-0.831c0.237-0.277,0.316-0.475,0.474-0.791c0.158-0.317,0.079-0.594-0.04-0.831C20.612,19.329,19.69,16.983,19.268,16.045z"
-                            clip-rule="evenodd"
+                            clipRule="evenodd"
                           ></path>
                         </svg>
                       </div>
-                      <div className="ml-3 sm:ml-4 text-white text-sm sm:text-base tracking-wide font-medium transition-all duration-300 group-hover:text-lg group-hover:font-semibold">
+                      <div className="ml-3 text-white text-xs sm:text-sm tracking-wide font-medium transition-all duration-300 group-hover:text-base group-hover:font-semibold">
                         Join Our WhatsApp Community
                       </div>
                     </div>
                   </div>
   
-                  {/* Discord Button - Improved mobile sizing */}
+                  {/* Discord Button */}
                   <div
                     className="flex items-center p-2 rounded-2xl transition-all duration-300 group cursor-pointer"
                     onClick={() => window.open("https://discord.gg/THjTwd3r9m", "_blank", "noopener,noreferrer")}
                   >
                     <div className="flex items-center w-full">
-                      <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 transition-all duration-500 group-hover:rotate-[360deg] group-hover:scale-110">
-                      <svg
+                      <div className="flex-shrink-0 w-6 h-6 sm:w-8 sm:h-8 transition-all duration-500 group-hover:rotate-[360deg] group-hover:scale-110">
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          x="0px"
-                          y="0px"
-                          width="40"
-                          height="40"
                           viewBox="0 0 48 48"
+                          width="100%"
+                          height="100%"
                         >
                           <path
                             fill="#5865F2"
@@ -239,7 +235,7 @@ export default function Contact() {
                           ></path>
                         </svg>
                       </div>
-                      <div className="ml-3 sm:ml-4 text-white text-sm sm:text-base tracking-wide font-medium transition-all duration-300 group-hover:text-lg group-hover:font-semibold">
+                      <div className="ml-3 text-white text-xs sm:text-sm tracking-wide font-medium transition-all duration-300 group-hover:text-base group-hover:font-semibold">
                         Join Our Discord Community
                       </div>
                     </div>
@@ -247,14 +243,14 @@ export default function Contact() {
                 </div>
               </div>
   
-              {/* Right Side - Contact Form - Improved mobile padding */}
+              {/* Right Side - Contact Form - SMALLER SIZE */}
               <form
-                className={`p-6 sm:p-8 ${
+                className={`p-4 sm:p-6 ${
                   darkMode ? "bg-gray-700 text-white" : "bg-white text-gray-800"
                 } sm:rounded-r-lg`}
               >
-                <div className="flex flex-col space-y-4 sm:space-y-6">
-                  {/* Full Name - Improved mobile sizing */}
+                <div className="flex flex-col space-y-3 sm:space-y-4">
+                  {/* Full Name - Smaller size */}
                   <div>
                     <label htmlFor="name" className="sr-only">
                       Full Name
@@ -263,7 +259,7 @@ export default function Contact() {
                       type="text"
                       id="name"
                       placeholder="Full Name"
-                      className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base border ${
+                      className={`w-full px-3 py-1.5 text-xs sm:text-sm border ${
                         darkMode
                           ? "border-gray-600 bg-gray-800"
                           : "border-gray-300"
@@ -271,7 +267,7 @@ export default function Contact() {
                     />
                   </div>
   
-                  {/* Email - Improved mobile sizing */}
+                  {/* Email - Smaller size */}
                   <div>
                     <label htmlFor="email" className="sr-only">
                       Email
@@ -280,15 +276,15 @@ export default function Contact() {
                       type="email"
                       id="email"
                       placeholder="Email"
-                      className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base border ${
+                      className={`w-full px-3 py-1.5 text-xs sm:text-sm border ${
                         darkMode
                           ? "border-gray-600 bg-gray-800"
                           : "border-gray-300"
-                      } rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300`}
+                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300`}
                     />
                   </div>
   
-                  {/* Mobile Number - Improved mobile sizing */}
+                  {/* Mobile Number - Smaller size */}
                   <div>
                     <label htmlFor="tel" className="sr-only">
                       Mobile Number
@@ -297,22 +293,22 @@ export default function Contact() {
                       type="tel"
                       id="tel"
                       placeholder="Mobile Number"
-                      className={`w-full px-4 py-2 sm:py-3 text-sm sm:text-base border ${
+                      className={`w-full px-3 py-1.5 text-xs sm:text-sm border ${
                         darkMode
                           ? "border-gray-600 bg-gray-800"
                           : "border-gray-300"
-                      } rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300`}
+                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300`}
                     />
                   </div>
   
-                  {/* Submit Button - Improved mobile sizing */}
+                  {/* Submit Button - Smaller size */}
                   <button
                     type="submit"
                     className={`w-full ${
                       darkMode
                         ? "bg-pink-700 hover:bg-pink-800"
                         : "bg-pink-600 hover:bg-red-700"
-                    } text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-2xl transition duration-300 transform hover:scale-105 text-sm sm:text-base`}
+                    } text-white font-bold py-1.5 px-3 rounded-lg transition duration-300 transform hover:scale-105 text-xs sm:text-sm`}
                   >
                     Submit Your Details
                   </button>

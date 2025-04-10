@@ -20,8 +20,8 @@ function LayoutContent() {
       <div className={`min-h-screen flex flex-col transition-colors duration-300 ${
         darkMode ? "bg-zinc-900 text-gray-300" : "bg-gray-50 text-black"
       }`}>
-        <Header />
-        <main className="flex-grow mt-16 mb-6 px-1 max-w-7xl mx-auto w-full">
+        <Header/>
+        <main className="flex-grow mt-10 max-w-7xl mx-auto w-[95%]">
           <Outlet />
         </main>
         <Footer />
