@@ -12,75 +12,111 @@ export default function Home() {
   const dsaTopics = [
     {
       title: "Array, String, Matrix",
-      description: "Master the fundamentals of arrays, strings, and efficient searching with binary search.",
+      description:
+        "Master the fundamentals of arrays, strings, and efficient searching with binary search.",
       route: "/Arrays",
-      gradient: darkMode ? "from-blue-600 to-purple-600" : "from-blue-500 to-purple-500",
+      gradient: darkMode
+        ? "from-blue-600 to-purple-600"
+        : "from-blue-500 to-purple-500",
     },
     {
       title: "Standard Template Library",
-      description: "Learn to use the powerful STL in C++ for efficient coding and problem-solving.",
+      description:
+        "Learn to use the powerful STL in C++ for efficient coding and problem-solving.",
       route: "/STL",
-      gradient: darkMode ? "from-green-600 to-teal-600" : "from-green-500 to-teal-500",
+      gradient: darkMode
+        ? "from-green-600 to-teal-600"
+        : "from-green-500 to-teal-500",
     },
     {
       title: "Linked List",
-      description: "Understand singly, doubly, and circular linked lists and their applications.",
+      description:
+        "Understand singly, doubly, and circular linked lists and their applications.",
       route: "/Linkedlist",
-      gradient: darkMode ? "from-yellow-600 to-orange-600" : "from-yellow-500 to-orange-500",
+      gradient: darkMode
+        ? "from-yellow-600 to-orange-600"
+        : "from-yellow-500 to-orange-500",
     },
     {
       title: "Stack, Queue, Heaps",
-      description: "Explore stack, queue, and priority queue data structures and their use cases.",
+      description:
+        "Explore stack, queue, and priority queue data structures and their use cases.",
       route: "/Stack",
-      gradient: darkMode ? "from-pink-600 to-red-600" : "from-pink-500 to-red-500",
+      gradient: darkMode
+        ? "from-pink-600 to-red-600"
+        : "from-pink-500 to-red-500",
     },
     {
       title: "Recursion & Backtracking",
-      description: "Solve complex problems using recursion and backtracking techniques.",
+      description:
+        "Solve complex problems using recursion and backtracking techniques.",
       route: "/Recusion",
-      gradient: darkMode ? "from-purple-600 to-indigo-600" : "from-purple-500 to-indigo-500",
+      gradient: darkMode
+        ? "from-purple-600 to-indigo-600"
+        : "from-purple-500 to-indigo-500",
     },
     {
       title: "Dynamic Programming",
-      description: "Learn to optimize solutions using dynamic programming and memoization.",
+      description:
+        "Learn to optimize solutions using dynamic programming and memoization.",
       route: "/Dynamic",
-      gradient: darkMode ? "from-teal-600 to-cyan-600" : "from-teal-500 to-cyan-500",
+      gradient: darkMode
+        ? "from-teal-600 to-cyan-600"
+        : "from-teal-500 to-cyan-500",
     },
     {
       title: "Tree (Binary Tree, BST, AVL)",
-      description: "Master tree data structures, including binary trees, BSTs, and AVL trees.",
+      description:
+        "Master tree data structures, including binary trees, BSTs, and AVL trees.",
       route: "/Tree",
-      gradient: darkMode ? "from-orange-600 to-amber-600" : "from-orange-500 to-amber-500",
+      gradient: darkMode
+        ? "from-orange-600 to-amber-600"
+        : "from-orange-500 to-amber-500",
     },
     {
       title: "Graph (BFS, DFS, Paths)",
-      description: "Understand graph traversal algorithms like BFS, DFS, and shortest path algorithms.",
+      description:
+        "Understand graph traversal algorithms like BFS, DFS, and shortest path algorithms.",
       route: "/Graph",
-      gradient: darkMode ? "from-blue-700 to-indigo-700" : "from-blue-600 to-indigo-600",
+      gradient: darkMode
+        ? "from-blue-700 to-indigo-700"
+        : "from-blue-600 to-indigo-600",
     },
     {
       title: "Bit Manipulation & Maths",
-      description: "Solve problems using bit manipulation and mathematical concepts.",
+      description:
+        "Solve problems using bit manipulation and mathematical concepts.",
       route: "/Bitm",
-      gradient: darkMode ? "from-green-700 to-teal-700" : "from-green-600 to-teal-600",
+      gradient: darkMode
+        ? "from-green-700 to-teal-700"
+        : "from-green-600 to-teal-600",
     },
     {
       title: "Algorithms",
-      description: "Learn key algorithms like sliding window, two pointers, sorting, and greedy algorithms.",
+      description:
+        "Learn key algorithms like sliding window, two pointers, sorting, and greedy algorithms.",
       route: "/Algorithm",
-      gradient: darkMode ? "from-pink-700 to-purple-700" : "from-pink-600 to-purple-600",
+      gradient: darkMode
+        ? "from-pink-700 to-purple-700"
+        : "from-pink-600 to-purple-600",
     },
     {
       title: "Trie Implementation",
-      description: "Master prefix trees for efficient string operations and autocomplete features.",
+      description:
+        "Master prefix trees for efficient string operations and autocomplete features.",
       route: "/Trie",
-      gradient: darkMode ? "from-pink-600 to-red-600" : "from-pink-500 to-red-500",
+      gradient: darkMode
+        ? "from-pink-600 to-red-600"
+        : "from-pink-500 to-red-500",
     },
     {
       title: "Start Learning DSA",
-      description: "Begin your structured journey to master Data Structures and Algorithms.",
+      description:
+        "Begin your structured journey to master Data Structures and Algorithms.",
       route: "/Home2",
-      gradient: darkMode ? "from-teal-600 to-purple-600" : "from-teal-500 to-purple-500",
+      gradient: darkMode
+        ? "from-teal-600 to-purple-600"
+        : "from-teal-500 to-purple-500",
     },
   ];
 
@@ -89,46 +125,46 @@ export default function Home() {
     {
       text: "Data Structure & Algorithm",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Most Important LeetCode Questions",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Most Important MAANG Interview Questions",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Learn DSA and Get Placed in MAANG Companies",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
-    }
+      lightHoverColor: "hover:text-orange-500",
+    },
   ];
 
   const mlFeatures = [
     {
       text: "Machine Learning Fundamentals",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Most Important Machine Learning Algorithms",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Key Machine Learning Interview Questions for Top Tech Companies",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
+      lightHoverColor: "hover:text-orange-500",
     },
     {
       text: "Learn Machine Learning and Get Hired by Top AI/ML Companies",
       darkHoverColor: "hover:text-orange-400",
-      lightHoverColor: "hover:text-orange-500"
-    }
+      lightHoverColor: "hover:text-orange-500",
+    },
   ];
 
   // Reusable FeatureText component
@@ -151,7 +187,9 @@ export default function Home() {
         } ${darkMode ? "border-gray-600" : "border-gray-200"}`}
       >
         <h3 className="text-xl font-bold text-white mb-3">{topic.title}</h3>
-        <p className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-100"}`}>
+        <p
+          className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-100"}`}
+        >
           {topic.description}
         </p>
       </div>
@@ -186,7 +224,7 @@ export default function Home() {
               >
                 All About Coding
               </h1>
-              
+
               <div
                 className={`text-lg space-y-3 ${
                   darkMode ? "text-gray-300" : "text-gray-700"
@@ -197,7 +235,11 @@ export default function Home() {
                 ))}
               </div>
 
-              <NavLink to="./Home2" onClick={scrollToTop} className="inline-block">
+              <NavLink
+                to="./Home2"
+                onClick={scrollToTop}
+                className="inline-block"
+              >
                 <div
                   className={`bg-gradient-to-r px-6 py-4 rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out border ${
                     darkMode
@@ -224,7 +266,11 @@ export default function Home() {
                 ))}
               </div>
 
-              <NavLink to="./AIML" onClick={scrollToTop} className="inline-block">
+              <NavLink
+                to="./AIML"
+                onClick={scrollToTop}
+                className="inline-block"
+              >
                 <div
                   className={`bg-gradient-to-r px-6 py-4 rounded-xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition duration-300 ease-in-out border ${
                     darkMode
@@ -237,7 +283,7 @@ export default function Home() {
                   </h3>
                   <p className="text-sm text-gray-100">
                     Click here to start learning Machine Learning
-                  </p>
+                  </p>``
                 </div>
               </NavLink>
             </div>
@@ -253,9 +299,11 @@ export default function Home() {
                   alt="ALL ABOUT CODING"
                   loading="lazy"
                 />
-                <div className={`absolute inset-0 bg-gradient-to-t ${
-                  darkMode ? "from-gray-900" : "from-gray-100"
-                } opacity-20`}></div>
+                <div
+                  className={`absolute inset-0 bg-gradient-to-t ${
+                    darkMode ? "from-gray-900" : "from-gray-100"
+                  } opacity-20`}
+                ></div>
               </div>
             </div>
           </div>
@@ -272,7 +320,7 @@ export default function Home() {
           >
             All The Important Topics of DSA
           </h2>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {dsaTopics.map((topic, index) => (
               <TopicCard key={index} topic={topic} />
@@ -280,7 +328,54 @@ export default function Home() {
           </div>
         </section>
 
-
+        {/* Footer Section - Smaller and more compact */}
+        <footer
+  className={`w-full mt-12 py-6 border-t ${
+    darkMode
+      ? "border-gray-800 bg-zinc-800"
+      : "border-gray-200 bg-gray-50"
+  } rounded-t-lg`}
+>
+  <div className="mx-auto px-4 text-center">
+    <h3
+      className={`text-xl font-bold mb-3 ${
+        darkMode ? "text-gray-200" : "text-gray-800"
+      }`}
+    >
+      Ready to Master Coding?
+    </h3>
+    <p
+      className={`mb-4 text-sm ${
+        darkMode ? "text-gray-400" : "text-gray-600"
+      }`}
+    >
+      Join thousands of developers who have transformed their careers
+      with our comprehensive learning paths.
+    </p>
+    <div className="flex justify-center space-x-4">
+      <button
+        onClick={() => window.location.href = "/login"}
+        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+          darkMode
+            ? "bg-purple-600 text-white hover:bg-purple-700"
+            : "bg-purple-500 text-white hover:bg-purple-600"
+        }`}
+      >
+        Sign Up for Free
+      </button>
+      <button
+        onClick={() => window.location.href = "/about"}
+        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
+          darkMode
+            ? "border border-purple-600 text-purple-400 hover:bg-purple-900 hover:bg-opacity-30"
+            : "border border-purple-500 text-purple-600 hover:bg-purple-100"
+        }`}
+      >
+        Learn More
+      </button>
+    </div>
+  </div>
+</footer>
       </div>
     </div>
   );

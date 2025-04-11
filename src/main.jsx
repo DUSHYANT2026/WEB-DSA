@@ -13,6 +13,7 @@ import Codolio from './components/Codolio/Codolio.jsx'
 import Github from './components/Github/Github.jsx'
 import Linkedin from './components/Linkedin/Linkedin.jsx'
 import AIML from './components/ML/AIML.jsx'
+import Login from './components/Login/Login.jsx'
 
 import Arrays from './components/DSA/Arrays.jsx'
 import Narray1 from './components/Innerdsa/arraydsa/Narray1.jsx'
@@ -154,6 +155,7 @@ const router = createBrowserRouter(
       <Route path='github' element={<Github />} /> 
       <Route path='Linkedin' element={<Linkedin />} /> 
       <Route path='AIML' element={<AIML />} /> 
+      <Route path='Login' element={<Login />} /> 
 
 
       <Route path='Arrays' element={<Arrays />} />
