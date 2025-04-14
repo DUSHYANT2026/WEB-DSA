@@ -94,7 +94,7 @@ export default function Home() {
     {
       title: "Algorithms",
       description:
-        "Learn key algorithms like sliding window, two pointers, sorting, and greedy algorithms.",
+        "Learn key algorithms like sliding window, sorting, and greedy algorithms.",
       route: "/Algorithm",
       gradient: darkMode
         ? "from-pink-700 to-purple-700"
