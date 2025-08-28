@@ -46,11 +46,13 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-4 mx-auto">
           {[
             { path: "/", name: "Home" },
-            { path: "/about", name: "About" },
-            { path: "/contact", name: "Contact" },
+            { path: "/HOME2", name: "DSA" },
+            { path: "/AIML", name: "AI-ML" },
+            { path: "/Codeforces", name: "Codeforces" },
             { path: "/Leetcode", name: "LeetCode" },
             { path: "/Github", name: "GitHub" },
-            { path: "/AIML", name: "AI-ML" },
+            { path: "/about", name: "About" },
+            { path: "/contact", name: "Contact" },
           ].map((item) => (
             <NavLink
               key={item.path}
@@ -197,12 +199,14 @@ export default function Header() {
         >
           <div className="px-2 pt-2 pb-3 space-y-1">
             {[
-              { path: "/", name: "Home" },
-              { path: "/about", name: "About" },
-              { path: "/contact", name: "Contact" },
-              { path: "/Leetcode", name: "LeetCode" },
-              { path: "/Github", name: "GitHub" },
-              { path: "/AIML", name: "AI-ML" },
+            { path: "/", name: "Home" },
+            { path: "/HOME2", name: "DSA" },
+            { path: "/AIML", name: "AI-ML" },
+            { path: "/Codeforces", name: "Codeforces" },
+            { path: "/Leetcode", name: "LeetCode" },
+            { path: "/Github", name: "GitHub" },
+            { path: "/about", name: "About" },
+            { path: "/contact", name: "Contact" },
             ].map((item) => (
               <NavLink
                 key={item.path}

@@ -9,6 +9,7 @@ import About from './components/About/About.jsx'
 import Contact from './components/Contact/Contact.jsx'
 import User from './components/User/User.jsx'
 import Leetcode from './components/Leetcode/Leetcode.jsx'
+import Codeforces from './components/Codeforce/Codeforces.jsx'
 import Codolio from './components/Codolio/Codolio.jsx'
 import Github from './components/Github/Github.jsx'
 import Linkedin from './components/Linkedin/Linkedin.jsx'
@@ -150,6 +151,7 @@ const router = createBrowserRouter(
       <Route path='about' element={<About />} />
       <Route path='contact' element={<Contact />} />
       <Route path='user/:userid' element={<User />} />
+      <Route path='Codeforces' element={<Codeforces />} />
       <Route path='Leetcode' element={<Leetcode />} />
       <Route path='Codolio' element={<Codolio />} />
       <Route path='github' element={<Github />} /> 
