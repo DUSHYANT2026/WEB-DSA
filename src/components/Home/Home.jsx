@@ -291,7 +291,7 @@ export default function Home() {
           <Roadmap
             title="AI/ML Mastery Roadmap"
             steps={aimlRoadmap}
-            route="/Ai_Ml"
+            route="/AIML"
             gradient={darkMode ? "bg-gradient-to-br from-sky-500 to-teal-500" : "bg-gradient-to-br from-sky-400 to-teal-400"}
             titleGradient={darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-600" : "bg-gradient-to-r from-cyan-500 to-teal-500"}
           />
