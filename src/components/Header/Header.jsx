@@ -27,6 +27,7 @@ export default function Header() {
     { path: "/Github", name: "GitHub" },
     { path: "/about", name: "About" },
     { path: "/contact", name: "Contact" },
+    { path: "/CodingAI", name: "Coding-AI" },
   ];
 
   return (

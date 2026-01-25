@@ -15,6 +15,7 @@ import Github from './components/Github/Github.jsx'
 import Linkedin from './components/Linkedin/Linkedin.jsx'
 import AIML from './components/ML/AIML.jsx'
 import Login from './components/Login/Login.jsx'
+import CodingAI from './components/Codingai/CodingAI.jsx'
 
 import Arrays from './components/DSA/Arrays.jsx'
 import Narray1 from './components/Innerdsa/arraydsa/Narray1.jsx'
@@ -285,6 +286,7 @@ const router = createBrowserRouter(
       <Route path='FlaskFastAPI' element={<FlaskFastAPI />} />
       <Route path='RESTAPI' element={<RESTAPI />} />
       <Route path='SavingModels' element={<SavingModels />} />
+      <Route path='CodingAI' element={<CodingAI />} />
 
     </Route>     
   )
