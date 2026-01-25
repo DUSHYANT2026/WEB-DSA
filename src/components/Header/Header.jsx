@@ -16,272 +16,121 @@ export default function Header() {
     }
   }, [darkMode]);
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+  const toggleDarkMode = () => setDarkMode(!darkMode);
+
+  const navItems = [
+    { path: "/", name: "Home" },
+    { path: "/HOME2", name: "DSA" },
+    { path: "/AIML", name: "AI-ML" },
+    { path: "/Codeforces", name: "Codeforces" },
+    { path: "/Leetcode", name: "LeetCode" },
+    { path: "/Github", name: "GitHub" },
+    { path: "/about", name: "About" },
+    { path: "/contact", name: "Contact" },
+  ];
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 ${
+      className={`fixed top-0 left-0 w-full z-50 border-b transition-colors duration-300 ${
         darkMode
-          ? "bg-zinc-800 text-blue-400"
-          : "bg-gradient-to-br from-teal-600 to-purple-600"
-      } shadow-xl`}
+          ? "bg-[#0f172a] border-slate-800 text-slate-200"
+          : "bg-white border-slate-200 text-slate-900"
+      }`}
     >
-      <div className="max-w-5xl mx-auto px-4 py-2 flex justify-between items-center md:px-6">
-        {/* Logo on the left */}
-        <Link
-          to="/"
-          className={`flex items-center font-bold text-lg ${
-            darkMode
-              ? "text-white hover:text-blue-300"
-              : "text-white hover:text-orange-200"
-          } transition duration-200`}
-        >
-          <img src="./aac2.jpg" className="mr-2 h-8 rounded-full" alt="Logo" />
-          <span className="hidden sm:inline">AllAboutCoding</span>
-        </Link>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* Left: Logo & Full Brand Name */}
+          <div className="flex items-center flex-shrink-0">
+            <Link to="/" className="flex items-center space-x-3 group">
+              <img
+                src="./aac2.jpg"
+                className="h-8 w-8 rounded-full border border-blue-500/50 group-hover:scale-105 transition-transform"
+                alt="Logo"
+              />
+              <span className={`text-lg font-bold tracking-tight transition-colors ${
+                darkMode ? "text-white" : "text-slate-900"
+              }`}>
+                All About Coding
+              </span>
+            </Link>
+          </div>
 
-        {/* Desktop Navigation in center */}
-        <nav className="hidden md:flex items-center space-x-4 mx-auto">
-          {[
-            { path: "/", name: "Home" },
-            { path: "/HOME2", name: "DSA" },
-            { path: "/AIML", name: "AI-ML" },
-            { path: "/Codeforces", name: "Codeforces" },
-            { path: "/Leetcode", name: "LeetCode" },
-            { path: "/Github", name: "GitHub" },
-            { path: "/about", name: "About" },
-            { path: "/contact", name: "Contact" },
-          ].map((item) => (
+          {/* Center: Main Navigation */}
+          <nav className="hidden lg:flex items-center space-x-1">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                className={({ isActive }) =>
+                  `px-3 py-2 text-sm font-medium rounded-md transition-all relative ${
+                    isActive
+                      ? darkMode 
+                        ? "text-blue-400 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-400" 
+                        : "text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-blue-600"
+                      : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
+                  }`
+                }
+              >
+                {item.name}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Right: Theme Toggle & Mobile Button */}
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={toggleDarkMode}
+              className={`p-2 rounded-md transition-colors ${
+                darkMode ? "hover:bg-slate-800 text-slate-400" : "hover:bg-slate-100 text-slate-600"
+              }`}
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" /></svg>
+              ) : (
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" /></svg>
+              )}
+            </button>
+
+            <button
+              className="lg:hidden p-2 rounded-md text-slate-500 hover:text-slate-900 dark:hover:text-white"
+              onClick={() => setNavOpen(!navOpen)}
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {navOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      <div className={`lg:hidden transition-all duration-300 ease-in-out ${
+        navOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+      } ${darkMode ? "bg-[#1e293b]" : "bg-slate-50"}`}>
+        <div className="px-4 pt-2 pb-6 space-y-1 shadow-inner">
+          {navItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
+              onClick={() => setNavOpen(false)}
               className={({ isActive }) =>
-                `px-2 py-1 text-sm font-medium rounded-lg transition duration-200 ${
+                `block px-3 py-3 text-base font-semibold rounded-md transition-colors ${
                   isActive
-                    ? darkMode
-                      ? "bg-zinc-700 text-orange-300 font-bold"
-                      : "bg-white/20 text-orange-200 font-bold"
-                    : darkMode
-                    ? "text-blue-400 hover:bg-zinc-700/70 hover:text-blue-300"
-                    : "text-white hover:bg-white/10 hover:text-orange-200"
+                    ? "text-blue-500 bg-blue-500/10"
+                    : "text-slate-500 hover:bg-slate-200/50 dark:hover:bg-slate-800"
                 }`
               }
             >
               {item.name}
             </NavLink>
           ))}
-        </nav>
-
-        {/* Right section - dark mode toggle and mobile menu button */}
-        <div className="flex items-center space-x-3">
-          {/* Dark mode toggle at far right (desktop) */}
-          <div className="hidden md:flex items-center">
-            <button
-              onClick={toggleDarkMode}
-              className={`relative inline-flex items-center justify-between h-6 rounded-full w-12 px-1 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-1 ${
-                darkMode
-                  ? "bg-blue-600 focus:ring-blue-400"
-                  : "bg-orange-400 focus:ring-orange-300"
-              }`}
-              aria-label={`Switch to ${darkMode ? "light" : "dark"} mode`}
-            >
-              <svg
-                className={`w-3 h-3 text-white transition-opacity duration-300 ${
-                  darkMode ? "opacity-100" : "opacity-0"
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-
-              {/* Toggle circle */}
-              <span
-                className={`absolute inline-flex items-center justify-center w-5 h-5 transform transition-transform duration-300 rounded-full bg-white shadow-md ${
-                  darkMode ? "translate-x-5" : "translate-x-0"
-                }`}
-              />
-
-              <svg
-                className={`w-3 h-3 text-white transition-opacity duration-300 ${
-                  darkMode ? "opacity-0" : "opacity-100"
-                }`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                />
-              </svg>
-            </button>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden p-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 transition-all duration-200"
-            onClick={() => setNavOpen(!navOpen)}
-            aria-label={navOpen ? "Close menu" : "Open menu"}
-            aria-expanded={navOpen}
-            aria-controls="mobile-menu"
-          >
-            <svg
-              className={`w-6 h-6 text-white transform transition-transform duration-300 ${
-                navOpen ? "rotate-90" : "rotate-0"
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {navOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M6 18L18 6M6 6l12 12"
-                  className="transition-opacity duration-300 opacity-100"
-                />
-              ) : (
-                <>
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M4 6h16"
-                    className="transition-all duration-300 origin-center"
-                    transform={navOpen ? "rotate(45) translate(5,-5)" : ""}
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M4 12h16"
-                    className="transition-opacity duration-300"
-                    opacity={navOpen ? "0" : "1"}
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2.5}
-                    d="M4 18h16"
-                    className="transition-all duration-300 origin-center"
-                    transform={navOpen ? "rotate(-45) translate(5,5)" : ""}
-                  />
-                </>
-              )}
-            </svg>
-          </button>
         </div>
       </div>
-
-      {/* Mobile Navigation with improved styling */}
-      {navOpen && (
-        <div
-          className={`md:hidden absolute w-full ${
-            darkMode
-              ? "bg-zinc-800 border-t border-zinc-700"
-              : "bg-gradient-to-r from-teal-600 to-purple-600 border-t border-white/10"
-          } shadow-lg rounded-b-lg overflow-hidden`}
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            {[
-            { path: "/", name: "Home" },
-            { path: "/HOME2", name: "DSA" },
-            { path: "/AIML", name: "AI-ML" },
-            { path: "/Codeforces", name: "Codeforces" },
-            { path: "/Leetcode", name: "LeetCode" },
-            { path: "/Github", name: "GitHub" },
-            { path: "/about", name: "About" },
-            { path: "/contact", name: "Contact" },
-            ].map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive
-                      ? darkMode
-                        ? "bg-zinc-700 text-orange-300"
-                        : "bg-white/20 text-orange-200"
-                      : darkMode
-                      ? "text-blue-400 hover:bg-zinc-700/70 hover:text-blue-300"
-                      : "text-white hover:bg-white/10 hover:text-orange-200"
-                  }`
-                }
-                onClick={() => setNavOpen(false)}
-              >
-                {item.name}
-              </NavLink>
-            ))}
-
-            {/* Dark mode toggle inside mobile menu */}
-            <div className="px-3 py-2 flex items-center justify-between border-t border-white/10 mt-2 pt-2">
-              <span className="text-sm font-medium text-white">
-                {darkMode ? "Light Mode" : "Dark Mode"}
-              </span>
-
-              <button
-                onClick={toggleDarkMode}
-                className={`relative inline-flex items-center h-6 rounded-full w-11 transition-colors duration-300 focus:outline-none ${
-                  darkMode ? "bg-blue-600" : "bg-orange-500"
-                }`}
-                aria-label={`Switch to ${darkMode ? "light" : "dark"} mode`}
-              >
-                {/* Toggle handle with icon */}
-                <span
-                  className={`absolute inline-flex items-center justify-center w-4 h-4 transform transition-transform duration-300 rounded-full bg-white shadow-md ${
-                    darkMode ? "translate-x-6" : "translate-x-1"
-                  }`}
-                >
-                  {darkMode ? (
-                    <svg
-                      className="w-2 h-2 text-blue-600"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      className="w-2 h-2 text-orange-500"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                      />
-                    </svg>
-                  )}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

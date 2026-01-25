@@ -33,17 +33,17 @@ export default function Home() {
   };
 
   const learningFeatures = [
-    { text: "Data Structure & Algorithm", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Most Important LeetCode Questions", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Most Important MAANG Interview Questions", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Learn DSA and Get Placed in MAANG Companies", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
+    { text: "Data Structure & Algorithm", color: "text-orange-500" },
+    { text: "Most Important LeetCode Questions", color: "text-orange-500" },
+    { text: "Most Important MAANG Interview Questions", color: "text-orange-500" },
+    { text: "Learn DSA and Get Placed in MAANG", color: "text-orange-500" },
   ];
 
   const mlFeatures = [
-    { text: "Machine Learning Fundamentals", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Most Important Machine Learning Algorithms", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Key Machine Learning Interview Questions for Top Tech Companies", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
-    { text: "Learn Machine Learning and Get Hired by Top AI/ML Companies", darkHoverColor: "hover:text-orange-400", lightHoverColor: "hover:text-orange-500" },
+    { text: "Machine Learning Fundamentals", color: "text-blue-500" },
+    { text: "Most Important ML Algorithms", color: "text-blue-500" },
+    { text: "Key AI Interview Questions", color: "text-blue-500" },
+    { text: "Learn ML and Get Hired by Top AI Companies", color: "text-blue-500" },
   ];
 
   const dsaRoadmap = [
@@ -69,46 +69,31 @@ export default function Home() {
   ];
 
   const FeatureText = ({ feature }) => (
-    <p
-      className={`font-semibold tracking-wide leading-relaxed transform hover:translate-x-4 transition duration-300 ease-in-out ${
-        darkMode ? feature.darkHoverColor : feature.lightHoverColor
-      }`}
-    >
-      {feature.text}
-    </p>
+    <div className="flex items-center space-x-3 group">
+      <div className={`w-1.5 h-1.5 rounded-full ${feature.color} opacity-60 group-hover:scale-150 transition-transform duration-300`} />
+      <p className={`text-sm md:text-base font-medium tracking-tight transition duration-300 group-hover:translate-x-2 ${
+        darkMode ? "text-gray-400 group-hover:text-white" : "text-gray-600 group-hover:text-gray-900"
+      }`}>
+        {feature.text}
+      </p>
+    </div>
   );
   
-  // --- NEW, MORE BEAUTIFUL ROADMAP COMPONENT ---
   const RoadmapCard = ({ step, gradient }) => (
-    <div
-      className={`group relative p-5 rounded-xl shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-2xl ${
-        darkMode
-          ? "bg-gray-800/60 backdrop-blur-sm border border-gray-700/50"
-          : "bg-white/60 backdrop-blur-sm border border-gray-200/50"
-      }`}
-    >
-      {/* Subtle hover glow effect */}
-      <div
-        className={`absolute -inset-px rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${gradient}`}
-      />
-      <div className="relative flex items-start space-x-4">
-        <div className={`flex-shrink-0 w-12 h-12 rounded-lg ${gradient} flex items-center justify-center`}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-7 h-7 text-white"
-          >
+    <div className={`group relative p-6 rounded-2xl shadow-sm transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${
+        darkMode ? "bg-zinc-800/40 border border-zinc-700/50 hover:bg-zinc-800/80" : "bg-white border border-gray-100"
+      }`}>
+      <div className="flex items-start space-x-4">
+        <div className={`flex-shrink-0 w-12 h-12 rounded-xl ${gradient} flex items-center justify-center transform group-hover:rotate-6 transition-transform duration-300 shadow-lg`}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
             {step.icon}
           </svg>
         </div>
         <div>
-          <h3 className={`font-bold text-lg mb-1 ${darkMode ? "text-gray-100" : "text-gray-900"}`}>
+          <h3 className={`font-bold text-lg mb-1 tracking-tight ${darkMode ? "text-zinc-100" : "text-zinc-900"}`}>
             {step.title}
           </h3>
-          <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+          <p className={`text-sm leading-relaxed ${darkMode ? "text-zinc-400" : "text-zinc-500"}`}>
             {step.description}
           </p>
         </div>
@@ -117,76 +102,44 @@ export default function Home() {
   );
 
   const Roadmap = ({ title, steps, route, gradient, titleGradient }) => (
-    <div className="mb-24">
-      <NavLink to={route} onClick={scrollToTop}>
-        <h2
-          className={`text-3xl font-bold text-center mb-16 p-5 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border text-white ${titleGradient} ${
-            darkMode ? "border-gray-700" : "border-transparent"
-          }`}
-        >
-          {title}
-        </h2>
-      </NavLink>
+    <div className="mb-32">
+      <div className="flex flex-col items-center mb-16">
+        <NavLink to={route} onClick={scrollToTop} className="group">
+          <h2 className={`text-2xl md:text-4xl font-extrabold px-10 py-4 rounded-full text-white shadow-xl transition-all duration-300 group-hover:scale-105 ${titleGradient}`}>
+            {title}
+          </h2>
+        </NavLink>
+        <div className={`w-px h-12 mt-4 ${gradient} opacity-30`} />
+      </div>
 
       <div className="relative">
-        <div
-          className={`hidden lg:block absolute top-5 left-1/2 w-1.5 h-[calc(100%-2rem)] -translate-x-1/2 rounded-full ${gradient} opacity-50`}
-        />
-
-        <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-y-20 items-start">
+        <div className={`hidden lg:block absolute top-0 left-1/2 w-0.5 h-full -translate-x-1/2 bg-gradient-to-b from-transparent via-gray-400 to-transparent opacity-20`} />
+        <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:gap-y-16 items-center">
           {steps.map((step, index) => {
             const isEven = index % 2 === 0;
             return (
               <React.Fragment key={index}>
-                {/* --- MOBILE/TABLET VIEW (Single-sided timeline) --- */}
-                <div className="lg:hidden flex items-start space-x-4">
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-white z-10 shadow-lg ${gradient}`}
-                    >
-                      {step.step}
-                    </div>
-                    {index !== steps.length - 1 && (
-                      <div className={`w-0.5 h-full min-h-[8rem] ${gradient}`} />
-                    )}
+                <div className="lg:hidden flex items-start space-x-6">
+                   <div className={`flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full font-bold text-white shadow-md ${gradient}`}>
+                    {step.step}
                   </div>
-                  <div className="pt-1 w-full">
-                    <RoadmapCard step={step} gradient={gradient} />
-                  </div>
+                  <RoadmapCard step={step} gradient={gradient} />
                 </div>
-
-                {/* --- DESKTOP VIEW (Zigzag layout) --- */}
                 {isEven ? (
                   <>
-                    <div className="hidden lg:block pr-10 text-right">
-                      <RoadmapCard step={step} gradient={gradient} />
-                    </div>
-                    <div className="hidden lg:flex justify-center">
-                      <div
-                        className={`relative flex items-center justify-center w-14 h-14 rounded-full font-bold text-xl text-white z-10 shadow-xl ${gradient} ${
-                          darkMode ? "ring-8 ring-zinc-900" : "ring-8 ring-white"
-                        }`}
-                      >
-                        {step.step}
-                      </div>
+                    <div className="hidden lg:block"><RoadmapCard step={step} gradient={gradient} /></div>
+                    <div className="hidden lg:flex justify-center z-10">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-xl ring-4 ${darkMode ? 'ring-zinc-900' : 'ring-white'} ${gradient}`}>{step.step}</div>
                     </div>
                     <div />
                   </>
                 ) : (
                   <>
                     <div />
-                    <div className="hidden lg:flex justify-center">
-                      <div
-                        className={`relative flex items-center justify-center w-14 h-14 rounded-full font-bold text-xl text-white z-10 shadow-xl ${gradient} ${
-                          darkMode ? "ring-8 ring-zinc-900" : "ring-8 ring-white"
-                        }`}
-                      >
-                        {step.step}
-                      </div>
+                    <div className="hidden lg:flex justify-center z-10">
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white shadow-xl ring-4 ${darkMode ? 'ring-zinc-900' : 'ring-white'} ${gradient}`}>{step.step}</div>
                     </div>
-                    <div className="hidden lg:block pl-10">
-                      <RoadmapCard step={step} gradient={gradient} />
-                    </div>
+                    <div className="hidden lg:block"><RoadmapCard step={step} gradient={gradient} /></div>
                   </>
                 )}
               </React.Fragment>
@@ -194,157 +147,78 @@ export default function Home() {
           })}
         </div>
       </div>
-
-      <div className="text-center mt-16">
-        <NavLink to={route} onClick={scrollToTop}>
-          <button
-            className={`px-8 py-3 rounded-full font-semibold text-white transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${titleGradient}`}
-          >
-            Explore the {title}
-          </button>
-        </NavLink>
-      </div>
     </div>
   );
 
   return (
-    <div
-      className={`min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 ${
-        darkMode ? "bg-zinc-900 text-white" : "bg-gray-50 text-gray-900"
-      } transition-colors duration-300`}
-    >
-      <div className="w-full max-w-6xl mx-auto">
+    <div className={`min-h-screen ${darkMode ? "bg-zinc-900 text-zinc-100" : "bg-[#fcfcfd] text-zinc-900"} transition-colors duration-500 font-sans`}>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-12">
+        
         {/* Hero Section */}
-        <section
-          className={`relative overflow-hidden rounded-3xl mx-auto sm:mx-12 md:mx-16 my-8 py-10 shadow-2xl bg-gradient-to-r ${
-            darkMode
-              ? "from-gray-800 to-gray-900 border-gray-700"
-              : "from-gray-50 to-gray-100 border-gray-200"
-          } border hover:shadow-3xl transform hover:scale-[1.01] transition duration-500 ease-in-out`}
-        >
-          <div className="relative z-10 px-6 mx-auto grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div className="space-y-6 text-center lg:text-left order-2 lg:order-1">
-              <h1
-                className={`text-4xl md:text-5xl font-bold pb-3 bg-clip-text text-transparent bg-gradient-to-r ${
-                  darkMode
-                    ? "from-orange-400 to-purple-500"
-                    : "from-orange-500 to-purple-600"
-                } transition duration-500 hover:scale-105`}
-              >
-                All About Coding
-              </h1>
-              <div
-                className={`text-lg space-y-3 ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                {learningFeatures.map((feature, index) => (
-                  <FeatureText key={index} feature={feature} />
-                ))}
+        <section className={`relative mb-24 rounded-[2.5rem] overflow-hidden border ${
+          darkMode ? "bg-zinc-800/30 border-zinc-700/50" : "bg-white border-zinc-200/60 shadow-sm"
+        }`}>
+          <div className="absolute top-0 right-0 -mt-20 -mr-20 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
+          <div className="relative z-10 p-8 md:p-16 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-8">
+              <div>
+                <span className={`inline-block px-4 py-1.5 mb-4 text-xs font-bold tracking-widest uppercase rounded-full ${darkMode ? "bg-orange-500/20 text-orange-400" : "bg-orange-100 text-orange-600"}`}>
+                  Accelerate your growth
+                </span>
+                <h1 className="text-5xl md:text-6xl font-black tracking-tight leading-none mb-4">
+                  All About <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-purple-600">Coding</span>
+                </h1>
+                <p className={`text-lg max-w-md ${darkMode ? "text-zinc-400" : "text-zinc-500"}`}>
+                  Industry-leading curriculum for Data Structures, Algorithms, and Artificial Intelligence.
+                </p>
               </div>
-              <div
-                className={`text-lg space-y-3 mt-6 ${
-                  darkMode ? "text-gray-300" : "text-gray-700"
-                }`}
-              >
-                {mlFeatures.map((feature, index) => (
-                  <FeatureText key={index} feature={feature} />
-                ))}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <div className="space-y-3">{learningFeatures.map((f, i) => <FeatureText key={i} feature={f} />)}</div>
+                <div className="space-y-3">{mlFeatures.map((f, i) => <FeatureText key={i} feature={f} />)}</div>
+              </div>
+
+              <div className="flex flex-wrap gap-4 pt-4">
+                 <button onClick={() => window.location.href="/login"} className="px-8 py-4 rounded-xl bg-orange-500 text-white font-bold hover:bg-orange-600 transition shadow-lg shadow-orange-500/20 transform hover:-translate-y-0.5 active:scale-95">
+                    Sign Up / Login
+                 </button>
               </div>
             </div>
-            <div className="flex justify-center lg:justify-end order-1 lg:order-2">
-              <div className="relative overflow-hidden rounded-3xl shadow-2xl transform hover:rotate-2 transition duration-500 ease-in-out max-w-sm md:max-w-md">
-                <img
-                  className={`w-full h-auto max-h-96 object-cover rounded-3xl border-4 ${
-                    darkMode ? "border-gray-600" : "border-gray-300"
-                  } hover:scale-105 transition-all duration-500`}
-                  src={"./aac2.jpg"}
-                  alt="ALL ABOUT CODING"
-                  loading="lazy"
-                />
-                <div
-                  className={`absolute inset-0 bg-gradient-to-t ${
-                    darkMode ? "from-gray-900" : "from-gray-100"
-                  } opacity-20`}
-                ></div>
+
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-purple-600 rounded-[2rem] blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+              <div className={`relative overflow-hidden rounded-[2rem] border-4 ${darkMode ? 'border-zinc-800' : 'border-white'} shadow-2xl`}>
+                <img className="w-full h-auto object-cover transform transition duration-700 group-hover:scale-105" src="./aac2.jpg" alt="Platform Preview" />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Roadmaps Section */}
-        <section className="w-full mx-auto px-4 py-12">
-          <h2
-            className={`text-4xl font-bold text-center mb-20 bg-clip-text text-transparent bg-gradient-to-r ${
-                darkMode ? "from-purple-400 to-pink-500" : "from-purple-600 to-pink-600"
-            }`}
-          >
-            Your Learning Journey Starts Here
-          </h2>
+        {/* Roadmap Section */}
+        <section className="pb-24">
+          <div className="text-center mb-24">
+            <h2 className={`text-3xl md:text-5xl font-black mb-4 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Learning Journeys</h2>
+            <p className={`text-lg ${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>Structured paths designed to take you from beginner to job-ready.</p>
+          </div>
+
           <Roadmap
-            title="DSA Mastery Roadmap"
+            title="DSA Mastery"
             steps={dsaRoadmap}
             route="/Home2"
-            gradient={darkMode ? "bg-gradient-to-br from-pink-500 to-red-500" : "bg-gradient-to-br from-pink-400 to-red-400"}
-            titleGradient={darkMode ? "bg-gradient-to-r from-pink-600 to-red-600" : "bg-gradient-to-r from-pink-500 to-red-500"}
+            gradient="bg-gradient-to-br from-pink-500 to-rose-600"
+            titleGradient="bg-gradient-to-r from-pink-500 to-rose-600"
           />
+          
           <Roadmap
-            title="AI/ML Mastery Roadmap"
+            title="AI/ML Expert"
             steps={aimlRoadmap}
             route="/AIML"
-            gradient={darkMode ? "bg-gradient-to-br from-sky-500 to-teal-500" : "bg-gradient-to-br from-sky-400 to-teal-400"}
-            titleGradient={darkMode ? "bg-gradient-to-r from-cyan-600 to-teal-600" : "bg-gradient-to-r from-cyan-500 to-teal-500"}
+            gradient="bg-gradient-to-br from-indigo-500 to-cyan-500"
+            titleGradient="bg-gradient-to-r from-indigo-500 to-cyan-500"
           />
         </section>
 
-        {/* Footer Section (unchanged) */}
-        <footer
-          className={`w-full mt-12 py-6 border-t ${
-            darkMode
-              ? "border-gray-800 bg-zinc-800"
-              : "border-gray-200 bg-gray-50"
-          } rounded-t-lg`}
-        >
-          <div className="mx-auto px-4 text-center">
-            <h3
-              className={`text-xl font-bold mb-3 ${
-                darkMode ? "text-gray-200" : "text-gray-800"
-              }`}
-            >
-              Ready to Master Coding?
-            </h3>
-            <p
-              className={`mb-4 text-sm ${
-                darkMode ? "text-gray-400" : "text-gray-600"
-              }`}
-            >
-              Join thousands of developers who have transformed their careers
-              with our comprehensive learning paths.
-            </p>
-            <div className="flex justify-center space-x-4">
-              <button
-                onClick={() => (window.location.href = "/login")}
-                className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                  darkMode
-                    ? "bg-purple-600 text-white hover:bg-purple-700"
-                    : "bg-purple-500 text-white hover:bg-purple-600"
-                }`}
-              >
-                Sign Up for Free
-              </button>
-              <button
-                onClick={() => (window.location.href = "/about")}
-                className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-300 ${
-                  darkMode
-                    ? "border border-purple-600 text-purple-400 hover:bg-purple-900 hover:bg-opacity-30"
-                    : "border border-purple-500 text-purple-600 hover:bg-purple-100"
-                }`}
-              >
-                Learn More
-              </button>
-            </div>
-          </div>
-        </footer>
+        {/* Simple Minimal Footer */}
       </div>
     </div>
   );
