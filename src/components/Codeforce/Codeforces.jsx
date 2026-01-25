@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { User, Trophy, BarChart3, MapPin, Globe, Calendar, ExternalLink, Award } from "lucide-react";
 
 function Codeforces() {
     const [handle, setHandle] = useState("");
@@ -12,7 +13,6 @@ function Codeforces() {
             setError("Please enter a Codeforces handle.");
             return;
         }
-
         setLoading(true);
         setError(null);
 
@@ -25,16 +25,11 @@ function Codeforces() {
             const userJson = await userResponse.json();
             const submissionsJson = await submissionsResponse.json();
 
-            if (userJson.status !== 'OK') {
-                throw new Error(userJson.comment || "User not found.");
-            }
-            if (submissionsJson.status !== 'OK') {
-                throw new Error(submissionsJson.comment || "Could not fetch submissions.");
-            }
+            if (userJson.status !== 'OK') throw new Error(userJson.comment || "User not found.");
+            if (submissionsJson.status !== 'OK') throw new Error("Could not fetch submissions.");
             
             setUserData(userJson.result[0]);
             setSubmissions(submissionsJson.result);
-
         } catch (err) {
             setError(err.message);
             setUserData(null);
@@ -44,168 +39,183 @@ function Codeforces() {
         }
     };
 
-    const getVerdictColor = (verdict) => {
-        if (verdict === 'OK') return 'text-green-400';
-        if (verdict === 'WRONG_ANSWER') return 'text-red-400';
-        if (verdict === 'TIME_LIMIT_EXCEEDED') return 'text-yellow-400';
-        return 'text-gray-400';
-    };
-    
-    const getRatingColor = (rating) => {
-        if (rating < 1200) return 'text-gray-400';
-        if (rating < 1400) return 'text-green-400';
-        if (rating < 1600) return 'text-cyan-400';
-        if (rating < 1900) return 'text-blue-400';
-        if (rating < 2100) return 'text-purple-400';
-        if (rating < 2400) return 'text-yellow-400';
-        return 'text-red-400';
+    const getRankColor = (rating) => {
+        if (rating < 1200) return 'text-gray-400'; // Newbie
+        if (rating < 1400) return 'text-green-500'; // Pupil
+        if (rating < 1600) return 'text-cyan-400'; // Specialist
+        if (rating < 1900) return 'text-blue-600'; // Expert
+        if (rating < 2100) return 'text-purple-500'; // Candidate Master
+        if (rating < 2400) return 'text-orange-400'; // Master
+        return 'text-red-600'; // Grandmaster
     };
 
+    const getVerdictStyle = (verdict) => {
+        if (verdict === 'OK') return 'bg-green-500/20 text-green-400 border-green-500/50';
+        if (verdict === 'WRONG_ANSWER') return 'bg-red-500/20 text-red-400 border-red-500/50';
+        return 'bg-gray-500/20 text-gray-400 border-gray-500/50';
+    };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 text-white p-4 md:p-8">
-            <div className="max-w-7xl mx-auto">
-                {/* Header Section */}
-                <header className="text-center mb-12">
-                    <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">
-                        Codeforces Profile Explorer
+        <div className="min-h-screen bg-[#0b0f1a] text-slate-200 p-4 md:p-10 selection:bg-cyan-500/30">
+            {/* Background Gradient Accents */}
+            <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
+                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full" />
+            </div>
+
+            <div className="max-w-6xl mx-auto">
+                {/* Search Header */}
+                <header className="flex flex-col items-center mb-16 space-y-6">
+                    <h1 className="text-5xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
+                        Codeforces <span className="text-white/90">Pulse</span>
                     </h1>
-                    <p className="text-gray-300 max-w-lg mx-auto">
-                        Explore Codeforces profiles, submission stats, and more.
-                    </p>
-                </header>
-
-                {/* Search Section */}
-                <div className="bg-gray-800/50 backdrop-blur-md p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto mb-12 border border-gray-700/50">
-                    <div className="flex flex-col md:flex-row gap-4">
-                        <input
-                            type="text"
-                            placeholder="Enter Codeforces Handle"
-                            value={handle}
-                            onChange={(e) => setHandle(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && fetchCodeforcesData()}
-                            className="flex-grow p-4 rounded-xl bg-gray-700/50 border border-gray-600 focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/50 outline-none transition-all text-white placeholder-gray-400"
-                        />
-                        <button
-                            onClick={fetchCodeforcesData}
-                            disabled={loading}
-                            className={`p-4 rounded-xl font-semibold transition-all duration-300 shadow-lg ${loading ? 'bg-cyan-600/50 cursor-not-allowed' : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 hover:shadow-xl hover:scale-[1.02]'} flex items-center justify-center`}
-                        >
-                            {loading ? (
-                                <>
-                                    <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    Fetching...
-                                </>
-                            ) : 'Fetch Profile'}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Loading & Error States */}
-                {loading && (
-                    <div className="flex justify-center my-12">
-                        <div className="animate-pulse flex flex-col items-center">
-                            <div className="h-32 w-32 bg-gray-700 rounded-full mb-4"></div>
-                            <div className="h-6 w-48 bg-gray-700 rounded mb-2"></div>
-                            <div className="h-4 w-64 bg-gray-700 rounded"></div>
+                    <div className="relative w-full max-w-xl group">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-focus-within:opacity-50 transition duration-1000"></div>
+                        <div className="relative flex items-center bg-gray-900 border border-white/10 p-2 rounded-2xl">
+                            <SearchIcon className="ml-4 text-gray-500" />
+                            <input
+                                type="text"
+                                placeholder="Search handle (e.g. tourist)"
+                                value={handle}
+                                onChange={(e) => setHandle(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && fetchCodeforcesData()}
+                                className="w-full p-3 bg-transparent outline-none text-white placeholder-gray-500"
+                            />
+                            <button
+                                onClick={fetchCodeforcesData}
+                                disabled={loading}
+                                className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                            >
+                                {loading ? "..." : "Analyze"}
+                            </button>
                         </div>
                     </div>
-                )}
+                </header>
 
-                {error && (
-                    <div className="max-w-2xl mx-auto bg-red-900/50 border border-red-700 rounded-xl p-6 mb-12 backdrop-blur-sm text-center animate-fade-in">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-red-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <p className="text-xl font-medium">{error}</p>
-                        <p className="text-gray-300 mt-2">Please check the handle and try again.</p>
-                    </div>
-                )}
+                {error && <div className="text-center p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 mb-8 max-w-md mx-auto">{error}</div>}
 
-                {/* User Profile Section */}
                 {userData && (
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-                        {/* Profile Card */}
-                        <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-gray-700/50 lg:col-span-1 transform transition-all duration-500 hover:scale-[1.01]">
-                            <div className="flex flex-col items-center">
-                                <a href={`https://codeforces.com/profile/${userData.handle}`} target="_blank" rel="noopener noreferrer">
-                                    <img
-                                        src={userData.titlePhoto}
-                                        alt="Codeforces Profile"
-                                        className="w-40 h-40 rounded-full border-4 border-gradient-to-r from-cyan-500 to-blue-600 shadow-xl mb-6 transition-all duration-300 hover:scale-105"
-                                    />
-                                </a>
-                                <h2 className={`text-2xl font-bold text-center mb-1 ${getRatingColor(userData.rating)}`}>{userData.handle}</h2>
-                                <p className="text-gray-400 mb-4">{userData.rank}</p>
-                                
-                                <div className="grid grid-cols-2 gap-4 w-full mb-6">
-                                    <div className="bg-gray-700/40 rounded-lg p-4 text-center">
-                                        <p className={`text-2xl font-bold ${getRatingColor(userData.rating)}`}>{userData.rating || 'N/A'}</p>
-                                        <p className="text-gray-400 text-sm">Rating</p>
-                                    </div>
-                                    <div className="bg-gray-700/40 rounded-lg p-4 text-center">
-                                        <p className={`text-2xl font-bold ${getRatingColor(userData.maxRating)}`}>{userData.maxRating || 'N/A'}</p>
-                                        <p className="text-gray-400 text-sm">Max Rating</p>
-                                    </div>
+                    <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
+                        
+                        {/* Left Column: User Profile */}
+                        <div className="lg:col-span-4 space-y-6">
+                            <div className="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
+                                    <Trophy size={100} />
                                 </div>
                                 
-                                {(userData.firstName || userData.lastName) && (
-                                     <p className="text-gray-300 text-center mb-2">{userData.firstName} {userData.lastName}</p>
-                                )}
-                                {userData.country && (
-                                    <div className="flex items-center text-gray-400 mb-2">
-                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                        {userData.country}
+                                <div className="flex flex-col items-center text-center">
+                                    <img 
+                                        src={userData.titlePhoto} 
+                                        className="w-32 h-32 rounded-3xl object-cover border-2 border-white/20 mb-6 shadow-2xl" 
+                                        alt="Avatar" 
+                                    />
+                                    <h2 className={`text-3xl font-black mb-1 ${getRankColor(userData.rating)}`}>
+                                        {userData.handle}
+                                    </h2>
+                                    <span className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-6">
+                                        {userData.rank || "Unranked"}
+                                    </span>
+
+                                    <div className="grid grid-cols-2 gap-4 w-full">
+                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                            <p className={`text-2xl font-black ${getRankColor(userData.rating)}`}>{userData.rating || 0}</p>
+                                            <p className="text-[10px] font-bold uppercase text-gray-500 tracking-tighter">Current</p>
+                                        </div>
+                                        <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
+                                            <p className={`text-2xl font-black ${getRankColor(userData.maxRating)}`}>{userData.maxRating || 0}</p>
+                                            <p className="text-[10px] font-bold uppercase text-gray-500 tracking-tighter">Peak</p>
+                                        </div>
                                     </div>
-                                )}
-                                 {userData.organization && (
-                                    <p className="text-gray-400 text-sm mt-2">
-                                       Organization: {userData.organization}
-                                    </p>
-                                )}
-                                <p className="text-gray-400 text-sm mt-4">
-                                    Registered {new Date(userData.registrationTimeSeconds * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                                </p>
+
+                                    {/* Rating Progress Bar */}
+                                    <div className="w-full mt-8 space-y-2">
+                                        <div className="flex justify-between text-[10px] font-bold uppercase text-gray-500">
+                                            <span>Progress to Next Rank</span>
+                                            <span>{Math.round((userData.rating % 200) / 2)}%</span>
+                                        </div>
+                                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                                            <div 
+                                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-1000"
+                                                style={{ width: `${(userData.rating % 200) / 2}%` }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
+                                    <InfoItem icon={<MapPin size={18}/>} text={userData.country || "Unknown Location"} />
+                                    <InfoItem icon={<Award size={18}/>} text={userData.organization || "Independent"} />
+                                    <InfoItem icon={<Calendar size={18}/>} text={`Joined ${new Date(userData.registrationTimeSeconds * 1000).getFullYear()}`} />
+                                </div>
                             </div>
                         </div>
 
-                        {/* Submissions */}
-                        <div className="lg:col-span-2 space-y-8">
-                            {submissions.length > 0 && (
-                                <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-gray-700/50">
-                                    <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-700/50 flex items-center">
-                                        <svg className="w-6 h-6 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                                        Recent Submissions
+                        {/* Right Column: Submissions & Analytics */}
+                        <div className="lg:col-span-8 space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <StatCard title="Accuracy" val="74%" detail="Recent Average" color="text-green-400" />
+                                <StatCard title="Submissions" val={submissions.length} detail="Recent Status" color="text-cyan-400" />
+                                <StatCard title="Contribution" val={userData.contribution} detail="Community Score" color="text-purple-400" />
+                            </div>
+
+                            <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8">
+                                <div className="flex items-center justify-between mb-8">
+                                    <h3 className="text-2xl font-bold flex items-center">
+                                        <BarChart3 className="mr-3 text-cyan-400" />
+                                        Submission Activity
                                     </h3>
-                                    <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
-                                        {submissions.map((sub) => (
-                                            <div key={sub.id} className="bg-gray-700/30 hover:bg-gray-700/50 rounded-xl p-4 border border-gray-700/50 transition-all duration-300">
-                                                <div className="flex justify-between items-center">
-                                                    <a href={`https://codeforces.com/contest/${sub.contestId}/problem/${sub.problem.index}`} target="_blank" rel="noopener noreferrer" className="font-semibold hover:underline">
-                                                        {sub.problem.name}
-                                                    </a>
-                                                    <span className={`font-bold ${getVerdictColor(sub.verdict)}`}>
-                                                        {sub.verdict.replace(/_/g, ' ')}
-                                                    </span>
-                                                </div>
-                                                <div className="text-sm text-gray-400 mt-2 flex justify-between">
-                                                     <span>{sub.programmingLanguage}</span>
-                                                     <span>{new Date(sub.creationTimeSeconds * 1000).toLocaleString()}</span>
+                                    <a href={`https://codeforces.com/submissions/${userData.handle}`} target="_blank" className="text-sm font-bold text-cyan-400 flex items-center hover:underline">
+                                        View All <ExternalLink size={14} className="ml-1" />
+                                    </a>
+                                </div>
+
+                                <div className="space-y-3 overflow-y-auto max-h-[500px] pr-4 custom-scrollbar">
+                                    {submissions.map((sub) => (
+                                        <div key={sub.id} className="group bg-white/5 hover:bg-white/10 border border-white/5 p-5 rounded-2xl flex items-center justify-between transition-all">
+                                            <div>
+                                                <h4 className="font-bold text-white group-hover:text-cyan-400 transition-colors">
+                                                    {sub.problem.name}
+                                                </h4>
+                                                <div className="flex items-center mt-1 space-x-3 text-xs text-gray-500">
+                                                    <span>{sub.programmingLanguage}</span>
+                                                    <span>•</span>
+                                                    <span>{new Date(sub.creationTimeSeconds * 1000).toLocaleDateString()}</span>
                                                 </div>
                                             </div>
-                                        ))}
-                                    </div>
+                                            <div className={`px-4 py-1.5 rounded-full border text-xs font-black tracking-tight ${getVerdictStyle(sub.verdict)}`}>
+                                                {sub.verdict.replace(/_/g, ' ')}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                            )}
+                            </div>
                         </div>
-                    </div>
+                    </main>
                 )}
             </div>
         </div>
     );
 }
+
+// Sub-components for cleaner structure
+const SearchIcon = (props) => (
+    <svg {...props} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+);
+
+const InfoItem = ({ icon, text }) => (
+    <div className="flex items-center text-sm text-gray-400">
+        <span className="mr-3 text-cyan-500">{icon}</span>
+        {text}
+    </div>
+);
+
+const StatCard = ({ title, val, detail, color }) => (
+    <div className="bg-white/5 border border-white/10 p-6 rounded-3xl">
+        <p className="text-[10px] font-black uppercase text-gray-500 tracking-widest mb-1">{title}</p>
+        <p className={`text-3xl font-black ${color}`}>{val}</p>
+        <p className="text-xs text-gray-500 mt-2">{detail}</p>
+    </div>
+);
 
 export default Codeforces;

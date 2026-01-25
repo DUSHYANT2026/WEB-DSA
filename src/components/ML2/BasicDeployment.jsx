@@ -1,65 +1,164 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useTheme } from "../../ThemeContext.jsx";
+import { 
+  Save, 
+  Server, 
+  Globe, 
+  Box, 
+  RefreshCcw, 
+  Cloud, 
+  ArrowRight, 
+  Circle,
+  Activity
+} from "lucide-react";
 
 const BasicDeployment = () => {
+  const { darkMode } = useTheme();
+
+  const topics = [
+    {
+      title: "Model Persistence",
+      desc: "Efficiently saving and loading trained models using Pickle and Joblib for production use.",
+      path: "/SavingModels",
+      color: "purple",
+      difficulty: "Beginner",
+      icon: <Save />,
+      stats: "Serialization"
+    },
+    {
+      title: "Flask & FastAPI",
+      desc: "Building high-performance web servers to serve model predictions via HTTP requests.",
+      path: "/FlaskFastAPI",
+      color: "teal",
+      difficulty: "Intermediate",
+      icon: <Server />,
+      stats: "Web Frameworks"
+    },
+    {
+      title: "REST API Design",
+      desc: "Architecting standard endpoints for seamless communication between frontend and ML backends.",
+      path: "/RESTAPI",
+      color: "amber",
+      difficulty: "Intermediate",
+      icon: <Globe />,
+      stats: "API Standards"
+    },
+    {
+      title: "Dockerization",
+      desc: "Containerizing ML environments to ensure 'it works on my machine' works everywhere.",
+      path: "/DockerDeployment",
+      color: "rose",
+      difficulty: "Advanced",
+      icon: <Box />,
+      stats: "Containers"
+    },
+    {
+      title: "CI/CD for MLOps",
+      desc: "Automating the testing and deployment pipeline for model updates and retraining.",
+      path: "/CICD",
+      color: "emerald",
+      difficulty: "Expert",
+      icon: <RefreshCcw />,
+      stats: "Automation"
+    },
+    {
+      title: "Cloud Infrastructure",
+      desc: "Scaling models on AWS, Azure, or GCP using serverless functions and managed services.",
+      path: "/CloudDeployment",
+      color: "blue",
+      difficulty: "Expert",
+      icon: <Cloud />,
+      stats: "Scalability"
+    }
+  ];
+
+  const colorMap = {
+    purple: "from-purple-500/20 to-pink-500/20 border-purple-500/20 text-purple-400",
+    teal: "from-teal-500/20 to-cyan-500/20 border-teal-500/20 text-teal-400",
+    amber: "from-amber-500/20 to-orange-500/20 border-amber-500/20 text-amber-400",
+    rose: "from-rose-500/20 to-red-500/20 border-rose-500/20 text-rose-400",
+    emerald: "from-emerald-500/20 to-green-500/20 border-emerald-500/20 text-emerald-400",
+    blue: "from-blue-500/20 to-indigo-500/20 border-blue-500/20 text-blue-400",
+  };
+
   return (
-    <div className="mx-auto w-full max-w-7xl p-6">
-      {/* Main Header */}
-      <div className="text-5xl font-extrabold text-center mb-12 text-gray-900 bg-gradient-to-r from-blue-500 to-indigo-500 p-8 rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-300 border border-gray-200 cursor-pointer">
-        <span className="text-gray-100 text-center text-3xl sm:text-4xl block">
-          Deployment and Real-World Projects
-        </span>
-      </div>
+    <div className={`min-h-screen py-16 px-6 transition-colors duration-500 ${darkMode ? "bg-[#0b0f1a]" : "bg-slate-50"}`}>
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col items-center mb-16 text-center">
+          <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 ${darkMode ? "bg-indigo-500/10 text-indigo-400" : "bg-indigo-100 text-indigo-600"}`}>
+            Production Phase
+          </span>
+          <h1 className={`text-5xl font-black tracking-tight mb-4 ${darkMode ? "text-white" : "text-slate-900"}`}>
+            Deployment & <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">MLOps.</span>
+          </h1>
+          <p className={`text-lg max-w-2xl ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            Take your models out of the lab. Learn to package, containerize, and deploy 
+            your intelligence to the cloud for real-world impact.
+          </p>
+        </div>
 
-      {/* Subheadings Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <NavLink to="/SavingModels">
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              Saving and Loading Models (Pickle, Joblib)
-            </span>
-          </div>
-        </NavLink>
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {topics.map((topic, index) => (
+            <NavLink to={topic.path} key={index} className="group relative">
+              <div className={`
+                relative overflow-hidden rounded-[2.5rem] border p-8 h-full flex flex-col transition-all duration-500
+                ${darkMode 
+                  ? "bg-zinc-900/40 border-zinc-800/50 backdrop-blur-xl hover:bg-zinc-800/60 hover:border-indigo-500/50 shadow-2xl shadow-black/50" 
+                  : "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/10"}
+                group-hover:-translate-y-2
+              `}>
+                
+                {/* Visual Glow Accent */}
+                <div className={`absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-gradient-to-br ${colorMap[topic.color]} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-        <NavLink to="/FlaskFastAPI">
-          <div className="bg-gradient-to-r from-teal-500 to-cyan-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              Flask and FastAPI for Model Deployment
-            </span>
-          </div>
-        </NavLink>
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-8">
+                    <div className={`p-4 rounded-2xl transition-colors duration-300 ${darkMode ? "bg-zinc-800 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white" : "bg-slate-100 text-slate-700 group-hover:bg-indigo-600 group-hover:text-white"}`}>
+                      {React.cloneElement(topic.icon, { size: 24 })}
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${darkMode ? "bg-zinc-800 text-slate-400" : "bg-slate-100 text-slate-500"}`}>
+                      {topic.difficulty}
+                    </span>
+                  </div>
 
-        <NavLink to="/RESTAPI">
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              REST API Development
-            </span>
-          </div>
-        </NavLink>
+                  <h3 className={`text-xl font-bold mb-3 transition-colors ${darkMode ? "text-white group-hover:text-indigo-400" : "text-slate-900 group-hover:text-indigo-600"}`}>
+                    {topic.title}
+                  </h3>
+                  <p className={`text-sm leading-relaxed mb-8 ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
+                    {topic.desc}
+                  </p>
 
-        <NavLink to="/DockerDeployment">
-          <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              Docker for ML Deployment
-            </span>
-          </div>
-        </NavLink>
+                  <div className={`mt-auto flex items-center justify-between pt-6 border-t ${darkMode ? "border-zinc-800" : "border-slate-100"}`}>
+                    <span className={`flex items-center text-xs font-medium ${darkMode ? "text-slate-500" : "text-slate-400"}`}>
+                      <Circle className="w-2 h-2 mr-2 fill-indigo-500 stroke-none" />
+                      {topic.stats}
+                    </span>
+                    <div className={`flex items-center text-sm font-bold transition-all ${darkMode ? "text-white group-hover:text-indigo-400" : "text-slate-900 group-hover:text-indigo-600"} group-hover:translate-x-1`}>
+                      Go Live <ArrowRight className="ml-2 w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </NavLink>
+          ))}
+        </div>
 
-        <NavLink to="/CICD">
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              CI/CD for Machine Learning Models
-            </span>
-          </div>
-        </NavLink>
-
-        <NavLink to="/CloudDeployment">
-          <div className="bg-gradient-to-r from-blue-400 to-indigo-600 p-6 rounded-xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-200 cursor-pointer h-full flex items-center justify-center">
-            <span className="text-white text-center text-2xl font-bold">
-              Cloud Deployment
-            </span>
-          </div>
-        </NavLink>
+        {/* Informational Callout */}
+        <div className={`mt-16 p-8 rounded-[2.5rem] border ${darkMode ? 'bg-indigo-500/5 border-indigo-500/20' : 'bg-indigo-50 border-indigo-100'} flex flex-col md:flex-row items-center gap-6`}>
+           <div className={`p-4 rounded-full ${darkMode ? 'bg-indigo-500/20 text-indigo-400' : 'bg-white text-indigo-600 shadow-sm'}`}>
+              <Activity size={32} />
+           </div>
+           <div>
+              <h4 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>The Production Lifecycle</h4>
+              <p className={`text-sm ${darkMode ? 'text-slate-400' : 'text-slate-600'}`}>
+                Deployment isn't the end—it's the beginning. Modern ML engineers focus on <strong>Monitoring</strong> and <strong>Model Drift</strong> to ensure that predictions remain accurate as real-world data changes over time.
+              </p>
+           </div>
+        </div>
       </div>
     </div>
   );

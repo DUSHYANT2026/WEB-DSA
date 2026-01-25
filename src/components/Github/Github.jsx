@@ -7,44 +7,42 @@ function Github() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchGitHubData = async () => {
-        if (!username.trim()) {
-            setError("Please enter a GitHub username.");
-            return;
+  // ... keep existing imports and state hooks ...
+
+const fetchGitHubData = async () => {
+    if (!username.trim()) {
+        setError("Please enter a GitHub username.");
+        return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+        // Point to your LOCAL server instead of GitHub API directly
+        const response = await fetch(`https://allaboutcodingbackend.vercel.app/github/${username}`);
+
+        if (!response.ok) {
+            // This will catch the 404 "User not found" sent by your server
+            const errorData = await response.json();
+            throw new Error(errorData.error || "Failed to fetch data from server");
         }
 
-        setLoading(true);
-        setError(null);
+        const data = await response.json();
 
-        const headers = {
-            'Authorization': `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`
-        };
+        // Your server returns an object: { user: {...}, repos: [...] }
+        setUserData(data.user);
+        setReposData(data.repos);
+    } catch (err) {
+        setError(err.message);
+        setUserData(null);
+        setReposData([]);
+    } finally {
+        setLoading(false);
+    }
+};
 
-        try {
-            const [userResponse, reposResponse] = await Promise.all([
-                fetch(`https://api.github.com/users/${username}`, { headers }),
-                fetch(`https://api.github.com/users/${username}/repos`, { headers })
-            ]);
-
-            if (!userResponse.ok || !reposResponse.ok) {
-                throw new Error("User not found or API limit reached.");
-            }
-
-            const [user, repos] = await Promise.all([
-                userResponse.json(),
-                reposResponse.json()
-            ]);
-
-            setUserData(user);
-            setReposData(repos);
-        } catch (err) {
-            setError(err.message);
-            setUserData(null);
-            setReposData([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+// ... keep existing return JSX ...
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800 text-white p-4 md:p-8">
@@ -287,3 +285,6 @@ function Github() {
 }
 
 export default Github;
+
+
+

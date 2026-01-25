@@ -1,127 +1,153 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useTheme } from "../../ThemeContext.jsx";
+import { 
+  Trees, 
+  BrainCircuit, 
+  LineChart, 
+  BookOpen, 
+  PlayCircle, 
+  ArrowRight, 
+  ArrowLeft,
+  Circle 
+} from "lucide-react";
 
 const AdvancedML = () => {
+  const { darkMode } = useTheme();
+
   const topics = [
     {
       title: "Ensemble Learning",
       path: "/EnsembleLearning",
-      description: "Bagging, Boosting, Random Forests, and Stacking techniques",
-      color: "from-green-600 to-teal-600",
-      border: "border-green-400",
-      icon: "🌲"
+      desc: "Bagging, Boosting, and Stacking. Master Random Forests and XGBoost logic.",
+      color: "emerald",
+      difficulty: "Advanced",
+      icon: <Trees />,
+      stats: "15 Lessons"
     },
     {
       title: "Neural Networks",
       path: "/NeuralNetworks",
-      description: "Deep learning fundamentals, architectures, and applications",
-      color: "from-yellow-500 to-orange-500",
-      border: "border-yellow-400",
-      icon: "🧠"
+      desc: "Deep Learning basics: Backpropagation, Activation functions, and CNN/RNN architectures.",
+      color: "amber",
+      difficulty: "Expert",
+      icon: <BrainCircuit />,
+      stats: "20 Lessons"
     },
     {
-      title: "Time Series Forecasting",
+      title: "Time Series",
       path: "/TimeSeriesForecasting",
-      description: "ARIMA, LSTM, and forecasting methodologies",
-      color: "from-red-500 to-pink-500",
-      border: "border-red-400",
-      icon: "📈"
+      desc: "Predicting the future: ARIMA models, LSTMs, and handling seasonal data.",
+      color: "rose",
+      difficulty: "Advanced",
+      icon: <LineChart />,
+      stats: "10 Patterns"
     }
   ];
 
-  return (
-    <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900">
-      <div className="max-w-6xl mx-auto">
-        {/* Header with breadcrumb */}
-        <div className="mb-6 flex items-center text-sm text-gray-400">
-          <NavLink to="/" className="hover:text-blue-400">Home</NavLink>
-          <span className="mx-2">/</span>
-          <span className="text-gray-300">Advanced Machine Learning</span>
-        </div>
+  const colorMap = {
+    emerald: "from-emerald-500/20 to-teal-500/20 border-emerald-500/20 text-emerald-400",
+    amber: "from-amber-500/20 to-orange-500/20 border-amber-500/20 text-amber-400",
+    rose: "from-rose-500/20 to-pink-500/20 border-rose-500/20 text-rose-400",
+  };
 
-        {/* Title Section */}
-        <div className="mb-10">
-          <h1 className="text-3xl font-bold mb-4 text-white">
-            Advanced Machine Learning
+  return (
+    <div className={`min-h-screen py-16 px-6 transition-colors duration-500 ${darkMode ? "bg-[#0b0f1a]" : "bg-slate-50"}`}>
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Breadcrumb Navigation */}
+        <nav className="flex items-center space-x-2 mb-8 text-sm font-medium">
+          <NavLink to="/" className={`${darkMode ? "text-slate-500 hover:text-white" : "text-slate-400 hover:text-slate-900"} transition-colors`}>Home</NavLink>
+          <span className="text-slate-500">/</span>
+          <span className="text-indigo-500 font-bold">Advanced ML</span>
+        </nav>
+
+        {/* Header Section */}
+        <div className="mb-16">
+          <h1 className={`text-5xl font-black tracking-tight mb-6 ${darkMode ? "text-white" : "text-slate-900"}`}>
+            Advanced <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">Machine Learning.</span>
           </h1>
-          <p className="text-lg text-gray-300">
-            Master sophisticated machine learning algorithms and techniques that power modern AI systems
+          <p className={`text-xl max-w-3xl leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            Master the state-of-the-art algorithms that drive modern computer vision, 
+            natural language processing, and predictive analytics.
           </p>
         </div>
 
-        {/* Topics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {topics.map((topic, index) => (
-            <NavLink to={topic.path} className="block" key={index}>
+            <NavLink to={topic.path} key={index} className="group relative">
               <div className={`
-                bg-gradient-to-r ${topic.color} p-6 rounded-lg shadow-md 
-                hover:shadow-lg transform hover:translate-y-1 
-                transition duration-300 border ${topic.border} h-full
+                relative overflow-hidden rounded-[2.5rem] border p-8 h-full flex flex-col transition-all duration-500
+                ${darkMode 
+                  ? "bg-zinc-900/40 border-zinc-800/50 backdrop-blur-xl hover:bg-zinc-800/60 hover:border-indigo-500/50 shadow-2xl shadow-black/50" 
+                  : "bg-white border-slate-200 hover:border-indigo-400 hover:shadow-xl hover:shadow-indigo-500/10"}
+                group-hover:-translate-y-2
               `}>
-                <div className="flex items-center mb-4">
-                  <span className="text-3xl mr-3">{topic.icon}</span>
-                  <h3 className="text-xl font-bold text-white">
+                
+                {/* Decorative Glow */}
+                <div className={`absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-gradient-to-br ${colorMap[topic.color]} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-8">
+                    <div className={`p-4 rounded-2xl transition-colors duration-300 ${darkMode ? "bg-zinc-800 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white" : "bg-slate-100 text-slate-700 group-hover:bg-indigo-600 group-hover:text-white"}`}>
+                      {React.cloneElement(topic.icon, { size: 28 })}
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${darkMode ? "bg-zinc-800 text-slate-400" : "bg-slate-100 text-slate-500"}`}>
+                      {topic.difficulty}
+                    </span>
+                  </div>
+
+                  <h3 className={`text-2xl font-bold mb-3 transition-colors ${darkMode ? "text-white group-hover:text-indigo-400" : "text-slate-900 group-hover:text-indigo-600"}`}>
                     {topic.title}
                   </h3>
-                </div>
-                <p className="text-gray-100 text-sm">
-                  {topic.description}
-                </p>
-                <div className="mt-4 text-right">
-                  <span className="inline-flex items-center text-white text-sm font-medium">
-                    Learn more
-                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
+                  <p className={`text-sm leading-relaxed mb-8 ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
+                    {topic.desc}
+                  </p>
+
+                  <div className={`mt-auto flex items-center justify-between pt-6 border-t ${darkMode ? "border-zinc-800" : "border-slate-100"}`}>
+                    <span className={`flex items-center text-xs font-medium ${darkMode ? "text-slate-500" : "text-slate-400"}`}>
+                      <Circle className="w-2 h-2 mr-2 fill-indigo-500 stroke-none" />
+                      {topic.stats}
+                    </span>
+                    <div className={`flex items-center text-sm font-bold transition-all ${darkMode ? "text-white group-hover:text-indigo-400" : "text-slate-900 group-hover:text-indigo-600"} group-hover:translate-x-1`}>
+                      Deep Dive <ArrowRight className="ml-2 w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </NavLink>
           ))}
         </div>
 
-        {/* Additional Resources */}
-        <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
-          <h2 className="text-xl font-bold text-white mb-4">Additional Resources</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-gray-700 p-4 rounded border border-gray-600 flex items-center">
-              <div className="bg-blue-600 rounded-full p-2 mr-3">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
+        {/* Resource Section */}
+        <div className={`rounded-[2.5rem] p-10 border ${darkMode ? 'bg-zinc-900/40 border-zinc-800' : 'bg-white border-slate-200 shadow-sm'} mb-16`}>
+          <h2 className={`text-2xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-slate-900'}`}>Learning Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className={`p-6 rounded-2xl flex items-center space-x-4 transition-colors ${darkMode ? 'bg-zinc-800/50 hover:bg-zinc-800' : 'bg-slate-50 hover:bg-slate-100'}`}>
+              <div className="bg-blue-500 p-3 rounded-xl text-white"><BookOpen size={24} /></div>
               <div>
-                <h3 className="font-medium text-white">Recommended Books</h3>
-                <p className="text-sm text-gray-300">Essential reading for advanced ML</p>
+                <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Advanced Theory</h4>
+                <p className="text-sm text-slate-500">Curated papers and specialized ML textbooks.</p>
               </div>
             </div>
-            <div className="bg-gray-700 p-4 rounded border border-gray-600 flex items-center">
-              <div className="bg-purple-600 rounded-full p-2 mr-3">
-                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-              </div>
+            <div className={`p-6 rounded-2xl flex items-center space-x-4 transition-colors ${darkMode ? 'bg-zinc-800/50 hover:bg-zinc-800' : 'bg-slate-50 hover:bg-slate-100'}`}>
+              <div className="bg-purple-500 p-3 rounded-xl text-white"><PlayCircle size={24} /></div>
               <div>
-                <h3 className="font-medium text-white">Video Tutorials</h3>
-                <p className="text-sm text-gray-300">Step-by-step visual explanations</p>
+                <h4 className={`font-bold ${darkMode ? 'text-white' : 'text-slate-900'}`}>Architecting Nets</h4>
+                <p className="text-sm text-slate-500">Visual guides to deep learning architectures.</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Navigation Controls */}
-        <div className="mt-10 flex justify-between">
-          <NavLink to="/DataPreprocessing" className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Previous: Data Preprocessing
+        {/* Global Navigation */}
+        <div className="flex justify-between items-center">
+          <NavLink to="/DataPreprocessing" className={`flex items-center px-6 py-3 rounded-2xl font-bold transition-all ${darkMode ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}>
+            <ArrowLeft className="mr-2" size={18} /> Preprocessing
           </NavLink>
-          <NavLink to="/ReinforcementLearning" className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-white flex items-center">
-            Next: Reinforcement Learning
-            <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+          <NavLink to="/ReinforcementLearning" className="flex items-center px-8 py-4 rounded-2xl font-bold bg-indigo-600 text-white hover:bg-indigo-500 shadow-xl shadow-indigo-600/20 transition-all hover:-translate-y-1">
+            Reinforcement Learning <ArrowRight className="ml-2" size={18} />
           </NavLink>
         </div>
       </div>

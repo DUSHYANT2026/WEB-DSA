@@ -1,67 +1,150 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { useTheme } from "../../ThemeContext.jsx";
+import { 
+  Gamepad2, 
+  GitBranch, 
+  Zap, 
+  BrainCircuit, 
+  Dna, 
+  Bot, 
+  ArrowRight, 
+  Circle 
+} from "lucide-react";
 
 const ReinforcementLearning = () => {
+  const { darkMode } = useTheme();
+
+  const topics = [
+    {
+      title: "RL Fundamentals",
+      desc: "Master the feedback loop: Agents, Environments, States, Actions, and Rewards.",
+      path: "/BasicsOfRL",
+      color: "blue",
+      difficulty: "Intermediate",
+      icon: <Gamepad2 />,
+      stats: "Concepts"
+    },
+    {
+      title: "Markov Processes",
+      desc: "MDP frameworks: Understanding transition dynamics and the Bellman Equation.",
+      path: "/MDP",
+      color: "emerald",
+      difficulty: "Intermediate",
+      icon: <GitBranch />,
+      stats: "Math Model"
+    },
+    {
+      title: "Q-Learning",
+      desc: "Value-based methods and temporal difference learning for discrete action spaces.",
+      path: "/QLearning",
+      color: "amber",
+      difficulty: "Advanced",
+      icon: <Zap />,
+      stats: "Algorithm"
+    },
+    {
+      title: "Deep Q Networks",
+      desc: "Scaling RL with Neural Networks: Experience Replay and Target Networks.",
+      path: "/DQN",
+      color: "rose",
+      difficulty: "Advanced",
+      icon: <BrainCircuit />,
+      stats: "Deep RL"
+    },
+    {
+      title: "Policy Gradients",
+      desc: "Direct policy optimization: REINFORCE, Actor-Critic, and PPO methods.",
+      path: "/PolicyGradientMethods",
+      color: "violet",
+      difficulty: "Expert",
+      icon: <Dna />,
+      stats: "Optimization"
+    },
+    {
+      title: "Robotics & Gaming",
+      desc: "Real-world deployment: Training agents for complex simulators and hardware.",
+      path: "/RLGamingRobotics",
+      color: "slate",
+      difficulty: "Expert",
+      icon: <Bot />,
+      stats: "Applications"
+    }
+  ];
+
+  const colorMap = {
+    blue: "from-blue-500/20 to-indigo-500/20 border-blue-500/20 text-blue-400",
+    emerald: "from-emerald-500/20 to-teal-500/20 border-emerald-500/20 text-emerald-400",
+    amber: "from-amber-500/20 to-orange-500/20 border-amber-500/20 text-amber-400",
+    rose: "from-rose-500/20 to-pink-500/20 border-rose-500/20 text-rose-400",
+    violet: "from-violet-500/20 to-purple-500/20 border-violet-500/20 text-violet-400",
+    slate: "from-slate-600/20 to-slate-800/20 border-slate-500/20 text-slate-400",
+  };
+
   return (
-    <div className="mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-4xl font-bold text-center mb-12 text-gray-100 bg-gradient-to-r from-orange-500 to-pink-500 p-6 rounded-2xl shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300 border border-gray-300 cursor-pointer">
-        Reinforcement Learning
-      </h2>
+    <div className={`min-h-screen py-16 px-6 transition-colors duration-500 ${darkMode ? "bg-[#0b0f1a]" : "bg-slate-50"}`}>
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col items-center mb-16 text-center">
+          <span className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4 ${darkMode ? "bg-orange-500/10 text-orange-400" : "bg-orange-100 text-orange-600"}`}>
+            Dynamic Optimization
+          </span>
+          <h1 className={`text-5xl font-black tracking-tight mb-4 ${darkMode ? "text-white" : "text-slate-900"}`}>
+            Reinforcement <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-pink-500">Learning.</span>
+          </h1>
+          <p className={`text-lg max-w-xl ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            Master the algorithms that allow agents to learn through trial and error, 
+            paving the way for autonomous systems and expert-level AI.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {/* Basics of RL */}
-        <NavLink to="/BasicsOfRL" className="block">
-          <div className="bg-gradient-to-r from-blue-500 to-purple-500 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-blue-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Basics of RL (Agent, Environment, Reward)
-            </h3>
-          </div>
-        </NavLink>
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {topics.map((topic, index) => (
+            <NavLink to={topic.path} key={index} className="group relative">
+              <div className={`
+                relative overflow-hidden rounded-[2.5rem] border p-8 h-full flex flex-col transition-all duration-500
+                ${darkMode 
+                  ? "bg-zinc-900/40 border-zinc-800/50 backdrop-blur-xl hover:bg-zinc-800/60 hover:border-orange-500/50 shadow-2xl shadow-black/50" 
+                  : "bg-white border-slate-200 hover:border-orange-400 hover:shadow-xl hover:shadow-orange-500/10"}
+                group-hover:-translate-y-2
+              `}>
+                
+                {/* Visual Accent */}
+                <div className={`absolute top-0 right-0 -mr-16 -mt-16 w-40 h-40 bg-gradient-to-br ${colorMap[topic.color]} blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-        {/* Markov Decision Processes */}
-        <NavLink to="/MDP" className="block">
-          <div className="bg-gradient-to-r from-green-500 to-teal-500 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-green-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Markov Decision Processes (MDP)
-            </h3>
-          </div>
-        </NavLink>
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-8">
+                    <div className={`p-4 rounded-2xl transition-colors duration-300 ${darkMode ? "bg-zinc-800 text-orange-400 group-hover:bg-orange-500 group-hover:text-white" : "bg-slate-100 text-slate-700 group-hover:bg-orange-600 group-hover:text-white"}`}>
+                      {React.cloneElement(topic.icon, { size: 24 })}
+                    </div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full ${darkMode ? "bg-zinc-800 text-slate-400" : "bg-slate-100 text-slate-500"}`}>
+                      {topic.difficulty}
+                    </span>
+                  </div>
 
-        {/* Q-Learning */}
-        <NavLink to="/QLearning" className="block">
-          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-yellow-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Q-Learning
-            </h3>
-          </div>
-        </NavLink>
+                  <h3 className={`text-xl font-bold mb-3 transition-colors ${darkMode ? "text-white group-hover:text-orange-400" : "text-slate-900 group-hover:text-orange-600"}`}>
+                    {topic.title}
+                  </h3>
+                  <p className={`text-sm leading-relaxed mb-8 ${darkMode ? "text-slate-400" : "text-slate-500"}`}>
+                    {topic.desc}
+                  </p>
 
-        {/* Deep Q Networks */}
-        <NavLink to="/DQN" className="block">
-          <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-red-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Deep Q Networks (DQN)
-            </h3>
-          </div>
-        </NavLink>
-
-        {/* Policy Gradient Methods */}
-        <NavLink to="/PolicyGradientMethods" className="block">
-          <div className="bg-gradient-to-r from-indigo-500 to-blue-500 p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-indigo-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Policy Gradient Methods
-            </h3>
-          </div>
-        </NavLink>
-
-        {/* Applications */}
-        <NavLink to="/RLGamingRobotics" className="block">
-          <div className="bg-gradient-to-r from-gray-500 to-black p-6 rounded-xl shadow-md hover:shadow-xl transform hover:scale-105 transition duration-300 border border-gray-400 cursor-pointer">
-            <h3 className="text-2xl font-bold text-white text-center">
-              Applications (Game AI, Robotics)
-            </h3>
-          </div>
-        </NavLink>
+                  <div className={`mt-auto flex items-center justify-between pt-6 border-t ${darkMode ? "border-zinc-800" : "border-slate-100"}`}>
+                    <span className={`flex items-center text-xs font-medium ${darkMode ? "text-slate-500" : "text-slate-400"}`}>
+                      <Circle className="w-2 h-2 mr-2 fill-orange-500 animate-pulse stroke-none" />
+                      {topic.stats}
+                    </span>
+                    <div className={`flex items-center text-sm font-bold transition-all ${darkMode ? "text-white group-hover:text-orange-400" : "text-slate-900 group-hover:text-orange-600"} group-hover:translate-x-1`}>
+                      Launch Agent <ArrowRight className="ml-2 w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </NavLink>
+          ))}
+        </div>
       </div>
     </div>
   );

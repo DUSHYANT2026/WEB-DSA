@@ -1,199 +1,128 @@
 import React, { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { useTheme } from "../../ThemeContext.jsx";
+import { ArrowLeft, ArrowRight, BookOpen, ChevronRight, Circle } from "lucide-react";
 
 const Foundation = () => {
-  // Check user's preferred color scheme or saved preference
-  const [darkMode, setDarkMode] = useState(() => {
-    // Check localStorage first
-    const savedMode = localStorage.getItem("darkMode");
-    if (savedMode !== null) {
-      return savedMode === "true";
-    }
-    // Otherwise check system preference
-    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-  });
-
-  // Update localStorage when darkMode changes
-  useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-    // Apply dark mode class to body
-    if (darkMode) {
-      document.body.classList.add("dark-mode");
-    } else {
-      document.body.classList.remove("dark-mode");
-    }
-  }, [darkMode]);
+  const { darkMode } = useTheme();
 
   const topics = [
     {
       title: "Linear Algebra",
       path: "/LinearAlgebra",
-      description: "Vectors, matrices, eigenvalues, and transformations",
-      gradient: "from-blue-500 to-purple-500",
-      icon: "∑"
+      description: "Vectors, matrices, eigenvalues, and spatial transformations.",
+      color: "from-blue-600 to-indigo-600",
+      icon: "∑",
+      step: "01"
     },
     {
-      title: "Probability & Statistics",
+      title: "Prob & Stats",
       path: "/Probability",
-      description: "Distributions, hypothesis testing, and statistical inference",
-      gradient: "from-green-500 to-teal-500",
-      icon: "σ"
+      description: "Distributions, hypothesis testing, and statistical inference.",
+      color: "from-emerald-600 to-teal-600",
+      icon: "σ",
+      step: "02"
     },
     {
-      title: "Calculus",
+      title: "Multivariate Calculus",
       path: "/Calculus",
-      description: "Derivatives, integrals, and optimization techniques",
-      gradient: "from-yellow-500 to-orange-500",
-      icon: "∫"
+      description: "Partial derivatives, chain rule, and gradient descent logic.",
+      color: "from-amber-500 to-orange-600",
+      icon: "∫",
+      step: "03"
     },
     {
       title: "Python for ML",
       path: "/Python",
-      description: "NumPy, Pandas, Matplotlib, and SciKit-Learn",
-      gradient: "from-pink-500 to-red-500",
-      icon: "🐍"
+      description: "Data manipulation with NumPy, Pandas, and SciKit-Learn.",
+      color: "from-rose-500 to-pink-600",
+      icon: "Py",
+      step: "04"
     }
   ];
 
   return (
-    <div className={`py-12 px-4 sm:px-6 lg:px-8 transition-colors duration-300 ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen py-16 px-6 transition-colors duration-500 ${darkMode ? "bg-[#0b0f1a]" : "bg-slate-50"}`}>
       <div className="max-w-6xl mx-auto">
-        {/* Dark Mode Toggle */}
-        <div className="absolute top-4 right-4">
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={`p-2 rounded-full ${darkMode ? 'bg-gray-700 text-yellow-300' : 'bg-gray-200 text-gray-700'}`}
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            ) : (
-              <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-              </svg>
-            )}
-          </button>
-        </div>
+        
+        {/* Breadcrumb & Meta */}
+        <nav className="flex items-center space-x-2 mb-8 text-sm font-medium">
+          <NavLink to="/" className={`${darkMode ? "text-slate-500 hover:text-white" : "text-slate-400 hover:text-slate-900"} transition-colors`}>Home</NavLink>
+          <ChevronRight size={14} className="text-slate-500" />
+          <span className="text-orange-500">Foundations</span>
+        </nav>
 
-        {/* Header with breadcrumb */}
-        <div className={`mb-6 flex items-center text-sm ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-          <NavLink to="/" className={`hover:${darkMode ? 'text-blue-400' : 'text-blue-600'}`}>Home</NavLink>
-          <span className="mx-2">/</span>
-          <span className={darkMode ? 'text-gray-300' : 'text-gray-700'}>Foundations</span>
-        </div>
-
-        {/* Title Section */}
-        <div className="mb-10 text-center">
-          <h1 className={`text-4xl font-bold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>
-            Foundations of Machine Learning
+        {/* Header Section */}
+        <div className="mb-16">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="h-px w-12 bg-orange-500"></div>
+            <span className="text-orange-500 uppercase tracking-widest font-bold text-xs">Phase 01</span>
+          </div>
+          <h1 className={`text-5xl font-black tracking-tight mb-6 ${darkMode ? "text-white" : "text-slate-900"}`}>
+            The Mathematical <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-red-500">Bedrock.</span>
           </h1>
-          <p className={`text-lg max-w-3xl mx-auto ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
-            Master the essential mathematical concepts that form the backbone of all machine learning algorithms
+          <p className={`text-xl max-w-2xl leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+            Before building models, you must understand the language they speak. 
+            These modules cover the essential math required for modern AI engineering.
           </p>
         </div>
 
-        {/* Why this matters */}
-        <div className={`mb-10 p-6 rounded-lg shadow-md border ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Why Foundations Matter</h2>
-          <p className={darkMode ? 'text-gray-300' : 'text-gray-600'}>
-            Strong mathematical foundations are crucial for understanding machine learning algorithms. 
-            These core concepts help you grasp how models work, troubleshoot issues, and develop new approaches.
-          </p>
-        </div>
-
-        {/* Topics Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-10">
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
           {topics.map((topic, index) => (
-            <NavLink to={topic.path} className="block" key={index}>
+            <NavLink to={topic.path} key={index} className="group relative">
               <div className={`
-                bg-gradient-to-r ${topic.gradient} p-6 rounded-lg shadow-md 
-                hover:shadow-lg transform hover:translate-y-1 
-                transition duration-300 border border-gray-200
+                relative overflow-hidden rounded-[2.5rem] border p-10 h-full flex flex-col transition-all duration-500
+                ${darkMode 
+                  ? "bg-zinc-900/40 border-zinc-800/50 backdrop-blur-xl hover:bg-zinc-800/60 hover:border-orange-500/50 shadow-2xl shadow-black/50" 
+                  : "bg-white border-slate-200 hover:border-orange-400 hover:shadow-xl hover:shadow-orange-500/10"}
+                group-hover:-translate-y-2
               `}>
-                <div className="flex items-center mb-3">
-                  <span className="text-3xl text-white mr-3 font-bold">{topic.icon}</span>
-                  <h3 className="text-2xl font-bold text-white">
+                
+                {/* Step Indicator */}
+                <div className="absolute top-8 right-10 text-5xl font-black opacity-5 group-hover:opacity-10 transition-opacity italic">
+                  {topic.step}
+                </div>
+
+                <div className="relative z-10 flex flex-col h-full">
+                  <div className="flex justify-between items-start mb-10">
+                    <div className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl font-serif italic shadow-lg transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 ${topic.color} text-white`}>
+                      {topic.icon}
+                    </div>
+                  </div>
+
+                  <h3 className={`text-2xl font-bold mb-4 ${darkMode ? "text-white" : "text-slate-900"}`}>
                     {topic.title}
                   </h3>
-                </div>
-                <p className="text-white text-opacity-90 mb-4">
-                  {topic.description}
-                </p>
-                <div className="mt-2">
-                  <span className="inline-flex items-center bg-white bg-opacity-20 px-3 py-1 rounded-full text-white text-sm">
-                    Explore topic
-                    <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </span>
+                  <p className={`text-base leading-relaxed mb-8 ${darkMode ? "text-slate-400" : "text-slate-600"}`}>
+                    {topic.description}
+                  </p>
+
+                  <div className={`mt-auto flex items-center justify-between pt-8 border-t ${darkMode ? "border-zinc-800" : "border-slate-100"}`}>
+                    <span className="flex items-center text-xs font-bold uppercase tracking-widest text-orange-500">
+                      <Circle size={8} className="mr-2 fill-orange-500 animate-pulse" />
+                      Core Module
+                    </span>
+                    <div className={`flex items-center text-sm font-bold transition-all ${darkMode ? "text-white group-hover:text-orange-400" : "text-slate-900 group-hover:text-orange-600"} group-hover:translate-x-2`}>
+                      Begin <ArrowRight className="ml-2 w-4 h-4" />
+                    </div>
+                  </div>
                 </div>
               </div>
             </NavLink>
           ))}
         </div>
 
-        {/* Learning Roadmap */}
-        <div className={`p-6 rounded-lg shadow-md border mb-10 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
-          <h2 className={`text-2xl font-semibold mb-4 ${darkMode ? 'text-white' : 'text-gray-800'}`}>Learning Path</h2>
-          <div className="space-y-4">
-            <div className="flex items-start">
-              <div className={`rounded-full p-2 mr-4 ${darkMode ? 'bg-blue-900 text-blue-300' : 'bg-blue-100 text-blue-600'}`}>
-                <span className="font-bold">1</span>
-              </div>
-              <div>
-                <h3 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Start with Linear Algebra</h3>
-                <p className={darkMode ? 'text-gray-400 text-sm' : 'text-gray-600 text-sm'}>Begin with vector spaces and matrix operations</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className={`rounded-full p-2 mr-4 ${darkMode ? 'bg-green-900 text-green-300' : 'bg-green-100 text-green-600'}`}>
-                <span className="font-bold">2</span>
-              </div>
-              <div>
-                <h3 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Move to Probability & Statistics</h3>
-                <p className={darkMode ? 'text-gray-400 text-sm' : 'text-gray-600 text-sm'}>Understand statistical concepts critical for ML</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className={`rounded-full p-2 mr-4 ${darkMode ? 'bg-yellow-800 text-yellow-300' : 'bg-yellow-100 text-yellow-600'}`}>
-                <span className="font-bold">3</span>
-              </div>
-              <div>
-                <h3 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Explore Calculus</h3>
-                <p className={darkMode ? 'text-gray-400 text-sm' : 'text-gray-600 text-sm'}>Learn derivatives and gradients for optimization</p>
-              </div>
-            </div>
-            <div className="flex items-start">
-              <div className={`rounded-full p-2 mr-4 ${darkMode ? 'bg-pink-900 text-pink-300' : 'bg-pink-100 text-pink-600'}`}>
-                <span className="font-bold">4</span>
-              </div>
-              <div>
-                <h3 className={`font-medium ${darkMode ? 'text-white' : 'text-gray-800'}`}>Apply with Python</h3>
-                <p className={darkMode ? 'text-gray-400 text-sm' : 'text-gray-600 text-sm'}>Implement concepts using Python libraries</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="flex justify-between">
-          <NavLink to="/" className={`px-4 py-2 rounded flex items-center ${darkMode ? 'bg-gray-700 hover:bg-gray-600 text-gray-200' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}>
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Roadmap
+        {/* Global Navigation */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-12 border-t border-slate-200/10">
+          <NavLink to="/" className={`flex items-center space-x-2 font-bold px-6 py-3 rounded-2xl transition-all ${darkMode ? "bg-zinc-800 text-white hover:bg-zinc-700" : "bg-slate-200 text-slate-900 hover:bg-slate-300"}`}>
+            <ArrowLeft size={18} />
+            <span>Curriculum Home</span>
           </NavLink>
-          <NavLink to="/MachineLearning" className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white flex items-center">
-            Next: Introduction to ML
-            <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
+
+          <NavLink to="/MachineLearning" className="flex items-center space-x-2 font-bold px-8 py-4 rounded-2xl bg-orange-600 text-white hover:bg-orange-500 shadow-xl shadow-orange-600/20 transition-all hover:-translate-y-1">
+            <span>Next: Intro to ML</span>
+            <ArrowRight size={18} />
           </NavLink>
         </div>
       </div>
