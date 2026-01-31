@@ -1,214 +1,183 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Leetcode() {
   const [username, setUsername] = useState("");
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
-  const fetchLeetCodeData = async () => {
-    if (!username.trim()) {
-      setError("Please enter a LeetCode username.");
-      return;
+  const CACHE_DURATION = 10 * 60 * 1000; // 10 minutes
+
+  // NEW: Effect to restore data on page refresh
+  useEffect(() => {
+    const lastUser = localStorage.getItem("last_searched_user");
+    if (lastUser) {
+      const cacheKey = `leetcode_${lastUser.toLowerCase()}`;
+      const cachedItem = localStorage.getItem(cacheKey);
+
+      if (cachedItem) {
+        const { data, timestamp } = JSON.parse(cachedItem);
+        const isExpired = Date.now() - timestamp > CACHE_DURATION;
+
+        if (!isExpired) {
+          setUserData(data);
+          setLastUpdated(timestamp);
+          setUsername(lastUser);
+        }
+      }
+    }
+  }, []);
+
+  const fetchLeetCodeData = async (targetUser = username) => {
+    if (!targetUser.trim()) return;
+
+    const cacheKey = `leetcode_${targetUser.trim().toLowerCase()}`;
+    const cachedItem = localStorage.getItem(cacheKey);
+
+    if (cachedItem) {
+      const { data, timestamp } = JSON.parse(cachedItem);
+      if (Date.now() - timestamp < CACHE_DURATION) {
+        setUserData(data);
+        setLastUpdated(timestamp);
+        setError(null);
+        return;
+      }
     }
 
     setLoading(true);
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://leetcode-api-faisalshohag.vercel.app/${username}`
-      );
-
-      if (!response.ok) {
-        throw new Error("User not found or API limit reached.");
-      }
-
+      const response = await fetch(`https://leetcode-api-faisalshohag.vercel.app/${targetUser}`);
+      if (!response.ok) throw new Error("User not found");
       const data = await response.json();
 
-      setUserData({
-        username: data.username || username,
-        totalSolved: data.totalSolved || 0,
-        easySolved: data.easySolved || 0,
-        mediumSolved: data.mediumSolved || 0,
-        hardSolved: data.hardSolved || 0,
-        ranking: data.ranking || "N/A",
-        contests: data.contestParticipation || [],
-      });
+      const timestamp = Date.now();
+      localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp }));
+      localStorage.setItem("last_searched_user", targetUser.trim());
+
+      setUserData(data);
+      setLastUpdated(timestamp);
     } catch (err) {
-      setError(err.message);
-      setUserData(null);
+      setError("Failed to fetch data");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 text-white px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-tr from-[#d31027] via-[#ea384d] to-[#ff9900] text-white p-6 font-sans">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">
-            LeetCode Profile Viewer
-          </h1>
-          <p className="mt-3 text-gray-300">
-            Visualize your LeetCode progress beautifully
-          </p>
-        </div>
-
-        {/* Search Box */}
-        <div className="max-w-md mx-auto bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-2xl p-5 shadow-xl">
-          <div className="relative">
+        <div className="flex flex-col items-center mb-10">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="bg-white p-1 rounded-md">
+                <img src="https://leetcode.com/static/images/LeetCode_logo_rvs.png" alt="logo" className="w-6 h-6 invert" />
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight">LeetCode <span className="font-light opacity-80">api</span></h1>
+          </div>
+          
+          <div className="flex items-center bg-black/40 rounded-lg overflow-hidden border border-white/20 shadow-xl mb-4">
             <input
               type="text"
-              placeholder="Enter LeetCode username"
+              className="bg-transparent px-4 py-2 outline-none w-48 text-sm placeholder-white/50"
+              placeholder="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && fetchLeetCodeData()}
-              className="w-full p-4 pr-24 rounded-xl bg-gray-900 border border-gray-700 focus:ring-2 focus:ring-purple-500 outline-none"
             />
-
-            {username && (
-              <button
-                onClick={() => setUsername("")}
-                className="absolute right-16 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
-              >
-                ✕
-              </button>
-            )}
-
-            <button
-              onClick={fetchLeetCodeData}
-              disabled={loading}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-600 to-blue-500 px-4 py-2 rounded-lg font-semibold hover:shadow-lg hover:shadow-purple-500/40 transition-all disabled:opacity-70"
+            <button 
+              onClick={() => fetchLeetCodeData()}
+              className="bg-white/10 hover:bg-white/20 px-6 py-2 text-sm transition-colors border-l border-white/20 font-bold"
             >
-              {loading ? "..." : "Fetch"}
+              Okay
             </button>
           </div>
+
+          {lastUpdated && userData && (
+            <p className="text-[10px] uppercase tracking-widest opacity-50 mb-6">
+              Data Cached: {new Date(lastUpdated).toLocaleTimeString()} (Valid for 10m)
+            </p>
+          )}
+
+          {userData && (
+            <div className="flex flex-col items-center gap-4 animate-fadeIn">
+                <div className="relative group">
+                    <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full blur opacity-40"></div>
+                    <img 
+                        src={userData.avatar || `https://ui-avatars.com/api/?name=${username}&background=random`} 
+                        alt="Profile" 
+                        className="relative w-24 h-24 rounded-full border-4 border-white/10 object-cover shadow-2xl"
+                    />
+                </div>
+                <div className="text-center">
+                    <h2 className="text-3xl font-black tracking-tight uppercase">{userData.username}</h2>
+                    <a 
+                        href={`https://leetcode.com/${userData.username}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="mt-2 inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 px-4 py-1.5 rounded-full text-xs font-bold transition-all border border-white/10 shadow-lg"
+                    >
+                        View Official Profile 
+                    </a>
+                </div>
+            </div>
+          )}
         </div>
 
-        {/* States */}
-        {loading && (
-          <p className="text-center mt-10 text-purple-300 animate-pulse">
-            Crunching LeetCode data...
-          </p>
-        )}
-
-        {error && (
-          <div className="mt-6 max-w-md mx-auto bg-red-900/40 border border-red-700 text-red-300 p-4 rounded-xl text-center">
-            {error}
-          </div>
-        )}
-
-        {!userData && !loading && !error && (
-          <div className="mt-16 text-center text-gray-400">
-            <p className="text-lg">👋 Enter a username to get started</p>
-            <p className="text-sm mt-2">
-              Try: <span className="text-purple-400">tourist</span>,{" "}
-              <span className="text-purple-400">errichto</span>,{" "}
-              <span className="text-purple-400">neetcode</span>
-            </p>
-          </div>
-        )}
-
-        {/* Profile */}
         {userData && (
-          <div className="mt-14 bg-gray-800/60 backdrop-blur-md border border-gray-700 rounded-2xl p-8 shadow-2xl">
-            {/* Profile Header */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
-              <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-600 to-blue-500 flex items-center justify-center text-3xl font-bold">
-                  {userData.username.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <a
-                    href={`https://leetcode.com/${userData.username}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-2xl font-bold hover:text-purple-400 transition"
-                  >
-                    {userData.username}
-                  </a>
-                  <p className="text-gray-400">LeetCode Enthusiast</p>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-slideUp">
+            <StatCard label="Total Solved" value={`${userData.totalSolved}/${userData.totalQuestions}`} progress={userData.totalSolved / userData.totalQuestions} />
+            <StatCard label="Ranking" value={userData.ranking} noRing />
+            <StatCard label="Easy Solved" value={`${userData.easySolved}/${userData.totalEasy}`} color="text-teal-400" progress={userData.easySolved / userData.totalEasy} />
+            <StatCard label="Medium Solved" value={`${userData.mediumSolved}/${userData.totalMedium}`} color="text-yellow-400" progress={userData.mediumSolved / userData.totalMedium} />
+            <StatCard label="Hard Solved" value={`${userData.hardSolved}/${userData.totalHard}`} color="text-red-400" progress={userData.hardSolved / userData.totalHard} />
+            <StatCard label="Contribution Points" value={userData.contributionPoints} noRing />
+
+            <div className="md:col-span-3 bg-black/30 backdrop-blur-md rounded-3xl overflow-hidden border border-white/10 shadow-2xl mt-4">
+              <div className="p-6 pb-2">
+                <h3 className="text-xl font-bold">Recent Submissions</h3>
               </div>
-
-              <button
-                onClick={() =>
-                  window.open(
-                    `https://leetcode.com/${userData.username}`,
-                    "_blank"
-                  )
-                }
-                className="bg-gradient-to-r from-purple-600 to-blue-500 px-6 py-2 rounded-lg font-semibold hover:shadow-xl hover:shadow-purple-500/40 transition"
-              >
-                View Profile →
-              </button>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Problem Stats */}
-              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-6">
-                <h2 className="text-xl font-semibold mb-1">Problem Stats</h2>
-                <p className="text-sm text-gray-400 mb-6">
-                  Difficulty-wise solved problems
-                </p>
-
-                <div className="flex justify-around">
-                  <ProgressRing
-                    label="Easy"
-                    solved={userData.easySolved}
-                    total={500}
-                    color="text-green-400"
-                  />
-                  <ProgressRing
-                    label="Medium"
-                    solved={userData.mediumSolved}
-                    total={1000}
-                    color="text-yellow-400"
-                  />
-                  <ProgressRing
-                    label="Hard"
-                    solved={userData.hardSolved}
-                    total={500}
-                    color="text-red-400"
-                  />
-                </div>
-              </div>
-
-              {/* Contest Stats */}
-              <div className="bg-gray-900/50 border border-gray-700 rounded-xl p-6">
-                <h2 className="text-xl font-semibold mb-6">Contest Stats</h2>
-
-                <StatRow label="Global Ranking" value={userData.ranking} icon="🏆" />
-                <StatRow
-                  label="Contests Participated"
-                  value={userData.contests.length}
-                  icon="📊"
-                />
-
-                <div className="mt-6">
-                  <div className="h-3 bg-gray-700 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-purple-500 to-blue-500"
-                      style={{
-                        width: `${Math.min(
-                          100,
-                          (userData.totalSolved / 500) * 100
-                        )}%`,
-                      }}
-                    />
-                  </div>
-                  <p className="text-sm text-gray-400 mt-2">
-                    {500 - userData.totalSolved} problems to reach{" "}
-                    <span className="text-purple-400 font-semibold">
-                      500 milestone 🚀
-                    </span>
-                  </p>
-                </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-black/40 text-xs uppercase tracking-wider text-white/70">
+                      <th className="px-6 py-4 font-bold">Title</th>
+                      <th className="px-6 py-4 font-bold">Status</th>
+                      <th className="px-6 py-4 font-bold">Language</th>
+                      <th className="px-6 py-4 font-bold">Timestamp</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/5 text-sm">
+                    {userData.recentSubmissions?.map((sub, index) => (
+                      <tr key={index} className="hover:bg-white/5 transition-colors">
+                        <td className="px-6 py-4 whitespace-nowrap font-medium">
+                          <a href={`https://leetcode.com/problems/${sub.titleSlug}`} target="_blank" rel="noreferrer" className="text-blue-300 hover:text-white transition-colors underline decoration-blue-300/30">
+                            {sub.title}
+                          </a>
+                        </td>
+                        <td className={`px-6 py-4 font-bold ${
+                          sub.statusDisplay === "Accepted" ? "text-green-400" : 
+                          sub.statusDisplay === "Wrong Answer" ? "text-red-400" : "text-orange-400"
+                        }`}>
+                          {sub.statusDisplay}
+                        </td>
+                        <td className="px-6 py-4 text-white/80">{sub.lang}</td>
+                        <td className="px-6 py-4 text-white/60">
+                          {new Date(sub.timestamp * 1000).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
+          </div>
+        )}
+        
+        {loading && (
+          <div className="flex justify-center mt-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-white"></div>
           </div>
         )}
       </div>
@@ -216,57 +185,25 @@ function Leetcode() {
   );
 }
 
-/* ---------------- Components ---------------- */
-
-function ProgressRing({ label, solved, total, color }) {
-  const radius = 40;
+function StatCard({ label, value, color = "text-blue-400", progress, noRing }) {
+  const radius = 35;
   const circumference = 2 * Math.PI * radius;
-  const progress = Math.min(100, (solved / total) * 100);
-  const offset = circumference * (1 - progress / 100);
+  const offset = circumference - (progress || 0) * circumference;
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-24 h-24">
-        <svg className="w-full h-full -rotate-90">
-          <circle
-            cx="48"
-            cy="48"
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="8"
-            fill="transparent"
-            className="text-gray-700"
-          />
-          <circle
-            cx="48"
-            cy="48"
-            r={radius}
-            stroke="currentColor"
-            strokeWidth="8"
-            fill="transparent"
-            strokeDasharray={circumference}
-            strokeDashoffset={offset}
-            strokeLinecap="round"
-            className={color}
-          />
-        </svg>
-        <span className="absolute inset-0 flex items-center justify-center font-bold">
-          {solved}
-        </span>
+    <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-3xl p-8 flex justify-between items-center shadow-xl">
+      <div>
+        <h3 className="text-xs font-bold uppercase tracking-widest opacity-60 mb-1">{label}</h3>
+        <p className="text-3xl font-black">{value}</p>
       </div>
-      <p className="mt-2 text-sm text-gray-300">{label}</p>
-    </div>
-  );
-}
-
-function StatRow({ label, value, icon }) {
-  return (
-    <div className="flex items-center justify-between py-2 border-b border-gray-700 last:border-none">
-      <div className="flex items-center gap-2 text-gray-300">
-        <span>{icon}</span>
-        {label}
-      </div>
-      <span className="font-bold">{value}</span>
+      {!noRing && (
+        <div className="relative w-20 h-20">
+          <svg className="w-full h-full -rotate-90">
+            <circle cx="40" cy="40" r={radius} stroke="rgba(255,255,255,0.05)" strokeWidth="6" fill="transparent" />
+            <circle cx="40" cy="40" r={radius} stroke="currentColor" strokeWidth="6" fill="transparent" strokeDasharray={circumference} strokeDashoffset={offset} strokeLinecap="round" className={color} />
+          </svg>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,7 +20,7 @@ const fetchGitHubData = async () => {
 
     try {
         // Point to your LOCAL server instead of GitHub API directly
-        const response = await fetch(`https://allaboutcodingbackend.vercel.app/github/${username}`);
+        const response = await fetch(`http://localhost:5000/github/${username}`);
 
         if (!response.ok) {
             // This will catch the 404 "User not found" sent by your server
