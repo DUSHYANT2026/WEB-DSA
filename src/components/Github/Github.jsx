@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Github() {
     const [username, setUsername] = useState("");
@@ -6,11 +6,52 @@ function Github() {
     const [reposData, setReposData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [lastUpdated, setLastUpdated] = useState(null);
+
+    // Cache duration set to 30 minutes to increase API efficiency
+    const CACHE_DURATION = 30 * 60 * 1000; 
+
+    // Effect to restore data on page refresh
+    useEffect(() => {
+        const lastUser = localStorage.getItem("github_last_searched_user");
+        if (lastUser) {
+            const cacheKey = `github_${lastUser.toLowerCase()}`;
+            const cachedItem = localStorage.getItem(cacheKey);
+
+            if (cachedItem) {
+                const { user, repos, timestamp } = JSON.parse(cachedItem);
+                const isExpired = Date.now() - timestamp > CACHE_DURATION;
+
+                if (!isExpired) {
+                    setUserData(user);
+                    setReposData(repos);
+                    setLastUpdated(timestamp);
+                    setUsername(lastUser);
+                }
+            }
+        }
+    }, []);
 
     const fetchGitHubData = async () => {
-        if (!username.trim()) {
+        const targetUser = username.trim();
+        if (!targetUser) {
             setError("Please enter a GitHub username.");
             return;
+        }
+
+        // Check for valid cache before fetching
+        const cacheKey = `github_${targetUser.toLowerCase()}`;
+        const cachedItem = localStorage.getItem(cacheKey);
+
+        if (cachedItem) {
+            const { user, repos, timestamp } = JSON.parse(cachedItem);
+            if (Date.now() - timestamp < CACHE_DURATION) {
+                setUserData(user);
+                setReposData(repos);
+                setLastUpdated(timestamp);
+                setError(null);
+                return;
+            }
         }
 
         setLoading(true);
@@ -22,8 +63,8 @@ function Github() {
 
         try {
             const [userResponse, reposResponse] = await Promise.all([
-                fetch(`https://api.github.com/users/${username}`, { headers }),
-                fetch(`https://api.github.com/users/${username}/repos`, { headers })
+                fetch(`https://api.github.com/users/${targetUser}`, { headers }),
+                fetch(`https://api.github.com/users/${targetUser}/repos`, { headers })
             ]);
 
             if (!userResponse.ok || !reposResponse.ok) {
@@ -35,8 +76,14 @@ function Github() {
                 reposResponse.json()
             ]);
 
+            // Save to cache and track last searched user
+            const timestamp = Date.now();
+            localStorage.setItem(cacheKey, JSON.stringify({ user, repos, timestamp }));
+            localStorage.setItem("github_last_searched_user", targetUser);
+
             setUserData(user);
             setReposData(repos);
+            setLastUpdated(timestamp);
         } catch (err) {
             setError(err.message);
             setUserData(null);
@@ -57,6 +104,11 @@ function Github() {
                     <p className="text-gray-300 max-w-lg mx-auto">
                         Discover GitHub profiles, repositories, and activity stats in a beautiful interface
                     </p>
+                    {lastUpdated && userData && (
+                        <p className="text-[10px] uppercase tracking-widest opacity-50 mt-2">
+                            Last Updated: {new Date(lastUpdated).toLocaleTimeString()}
+                        </p>
+                    )}
                 </header>
 
                 {/* Search Section */}
@@ -112,7 +164,6 @@ function Github() {
                 {/* User Profile Section */}
                 {userData && (
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-                        {/* Profile Card */}
                         <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-gray-700/50 lg:col-span-1 transform transition-all duration-500 hover:scale-[1.01]">
                             <div className="flex flex-col items-center">
                                 <a href={userData.html_url} target="_blank" rel="noopener noreferrer">
@@ -173,9 +224,7 @@ function Github() {
                             </div>
                         </div>
 
-                        {/* Stats and Repos */}
                         <div className="lg:col-span-2 space-y-8">
-                            {/* Stats Section */}
                             <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-gray-700/50">
                                 <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-700/50 flex items-center">
                                     <svg className="w-6 h-6 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -186,28 +235,28 @@ function Github() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-4 border border-gray-700/50">
                                         <img
-                                            src={`https://github-readme-stats.vercel.app/api?username=${username}&show_icons=true&hide_border=true&theme=dark&include_all_commits=true`}
+                                            src={`https://github-readme-stats.vercel.app/api?username=${userData.login}&show_icons=true&hide_border=true&theme=dark&include_all_commits=true`}
                                             alt="GitHub Stats"
                                             className="w-full h-auto rounded-lg"
                                         />
                                     </div>
                                     <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-4 border border-gray-700/50">
                                         <img
-                                            src={`https://github-readme-streak-stats.herokuapp.com/?user=${username}&theme=dark&hide_border=true`}
+                                            src={`https://github-readme-streak-stats.herokuapp.com/?user=${userData.login}&theme=dark&hide_border=true`}
                                             alt="GitHub Streak"
                                             className="w-full h-auto rounded-lg"
                                         />
                                     </div>
                                     <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-4 border border-gray-700/50">
                                         <img
-                                            src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${username}&layout=compact&theme=dark&hide_border=true`}
+                                            src={`https://github-readme-stats.vercel.app/api/top-langs/?username=${userData.login}&layout=compact&theme=dark&hide_border=true`}
                                             alt="Top Languages"
                                             className="w-full h-auto rounded-lg"
                                         />
                                     </div>
                                     <div className="bg-gradient-to-br from-gray-800/60 to-gray-900/60 rounded-xl p-4 border border-gray-700/50">
                                         <img
-                                            src={`https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${username}&theme=github_dark`}
+                                            src={`https://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=${userData.login}&theme=github_dark`}
                                             alt="Profile Details"
                                             className="w-full h-auto rounded-lg"
                                         />
@@ -215,7 +264,6 @@ function Github() {
                                 </div>
                             </div>
 
-                            {/* Repositories Section */}
                             {reposData.length > 0 && (
                                 <div className="bg-gray-800/60 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-gray-700/50">
                                     <h3 className="text-xl font-bold mb-6 pb-2 border-b border-gray-700/50 flex items-center">

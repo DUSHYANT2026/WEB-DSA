@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { User, Trophy, BarChart3, MapPin, Globe, Calendar, ExternalLink, Award } from "lucide-react";
 
 function Codeforces() {
@@ -8,45 +8,91 @@ function Codeforces() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
+    // Cache duration: 30 minutes
+    const CACHE_DURATION = 30 * 60 * 1000; 
+
+    // Restore from local storage on mount
+    useEffect(() => {
+        const lastHandle = localStorage.getItem("cf_last_handle");
+        if (lastHandle) {
+            const cachedData = localStorage.getItem(`cf_data_${lastHandle.toLowerCase()}`);
+            if (cachedData) {
+                const { user, subs, timestamp } = JSON.parse(cachedData);
+                const isExpired = Date.now() - timestamp > CACHE_DURATION;
+
+                if (!isExpired) {
+                    setUserData(user);
+                    setSubmissions(subs);
+                    setHandle(lastHandle); // Keep the input in sync
+                }
+            }
+        }
+    }, []);
+
     const fetchCodeforcesData = async () => {
-        if (!handle.trim()) {
+        const query = handle.trim();
+        if (!query) {
             setError("Please enter a Codeforces handle.");
             return;
         }
+
+        // Check local storage before API call
+        const cacheKey = `cf_data_${query.toLowerCase()}`;
+        const cachedItem = localStorage.getItem(cacheKey);
+        
+        if (cachedItem) {
+            const { user, subs, timestamp } = JSON.parse(cachedItem);
+            if (Date.now() - timestamp < CACHE_DURATION) {
+                setUserData(user);
+                setSubmissions(subs);
+                setError(null);
+                return;
+            }
+        }
+
         setLoading(true);
         setError(null);
 
         try {
-            const [userResponse, submissionsResponse] = await Promise.all([
-                fetch(`https://codeforces.com/api/user.info?handles=${handle}`),
-                fetch(`https://codeforces.com/api/user.status?handle=${handle}&from=1&count=50`)
+            const [userRes, subsRes] = await Promise.all([
+                fetch(`https://codeforces.com/api/user.info?handles=${query}`),
+                fetch(`https://codeforces.com/api/user.status?handle=${query}&from=1&count=50`)
             ]);
 
-            const userJson = await userResponse.json();
-            const submissionsJson = await submissionsResponse.json();
+            const userJson = await userRes.json();
+            const subsJson = await subsRes.json();
 
             if (userJson.status !== 'OK') throw new Error(userJson.comment || "User not found.");
-            if (submissionsJson.status !== 'OK') throw new Error("Could not fetch submissions.");
             
-            setUserData(userJson.result[0]);
-            setSubmissions(submissionsJson.result);
+            const user = userJson.result[0];
+            const subs = subsJson.result;
+
+            // Strict Storage Update
+            localStorage.setItem(cacheKey, JSON.stringify({
+                user,
+                subs,
+                timestamp: Date.now()
+            }));
+            localStorage.setItem("cf_last_handle", query);
+
+            setUserData(user);
+            setSubmissions(subs);
         } catch (err) {
             setError(err.message);
-            setUserData(null);
-            setSubmissions([]);
         } finally {
             setLoading(false);
         }
     };
 
     const getRankColor = (rating) => {
-        if (rating < 1200) return 'text-gray-400'; // Newbie
-        if (rating < 1400) return 'text-green-500'; // Pupil
-        if (rating < 1600) return 'text-cyan-400'; // Specialist
-        if (rating < 1900) return 'text-blue-600'; // Expert
-        if (rating < 2100) return 'text-purple-500'; // Candidate Master
-        if (rating < 2400) return 'text-orange-400'; // Master
-        return 'text-red-600'; // Grandmaster
+        if (!rating) return 'text-gray-400';
+        if (rating < 1200) return 'text-gray-400';
+        if (rating < 1400) return 'text-green-500';
+        if (rating < 1600) return 'text-cyan-400';
+        if (rating < 1900) return 'text-blue-600';
+        if (rating < 2100) return 'text-purple-500';
+        if (rating < 2400) return 'text-orange-400';
+        return 'text-red-600';
     };
 
     const getVerdictStyle = (verdict) => {
@@ -57,14 +103,12 @@ function Codeforces() {
 
     return (
         <div className="min-h-screen bg-[#0b0f1a] text-slate-200 p-4 md:p-10 selection:bg-cyan-500/30">
-            {/* Background Gradient Accents */}
             <div className="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
                 <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-cyan-500/10 blur-[120px] rounded-full" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 blur-[120px] rounded-full" />
             </div>
 
             <div className="max-w-6xl mx-auto">
-                {/* Search Header */}
                 <header className="flex flex-col items-center mb-16 space-y-6">
                     <h1 className="text-5xl md:text-6xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600">
                         Codeforces <span className="text-white/90">Pulse</span>
@@ -84,7 +128,7 @@ function Codeforces() {
                             <button
                                 onClick={fetchCodeforcesData}
                                 disabled={loading}
-                                className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 rounded-xl font-bold hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+                                className="bg-gradient-to-r from-cyan-500 to-blue-600 px-6 py-3 rounded-xl font-bold hover:scale-105 transition-all disabled:opacity-50"
                             >
                                 {loading ? "..." : "Analyze"}
                             </button>
@@ -96,8 +140,6 @@ function Codeforces() {
 
                 {userData && (
                     <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 animate-in fade-in slide-in-from-bottom-10 duration-700">
-                        
-                        {/* Left Column: User Profile */}
                         <div className="lg:col-span-4 space-y-6">
                             <div className="bg-white/5 border border-white/10 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:rotate-12 transition-transform">
@@ -105,11 +147,7 @@ function Codeforces() {
                                 </div>
                                 
                                 <div className="flex flex-col items-center text-center">
-                                    <img 
-                                        src={userData.titlePhoto} 
-                                        className="w-32 h-32 rounded-3xl object-cover border-2 border-white/20 mb-6 shadow-2xl" 
-                                        alt="Avatar" 
-                                    />
+                                    <img src={userData.titlePhoto} className="w-32 h-32 rounded-3xl object-cover border-2 border-white/20 mb-6 shadow-2xl" alt="Avatar" />
                                     <h2 className={`text-3xl font-black mb-1 ${getRankColor(userData.rating)}`}>
                                         {userData.handle}
                                     </h2>
@@ -127,20 +165,6 @@ function Codeforces() {
                                             <p className="text-[10px] font-bold uppercase text-gray-500 tracking-tighter">Peak</p>
                                         </div>
                                     </div>
-
-                                    {/* Rating Progress Bar */}
-                                    <div className="w-full mt-8 space-y-2">
-                                        <div className="flex justify-between text-[10px] font-bold uppercase text-gray-500">
-                                            <span>Progress to Next Rank</span>
-                                            <span>{Math.round((userData.rating % 200) / 2)}%</span>
-                                        </div>
-                                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                                            <div 
-                                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-1000"
-                                                style={{ width: `${(userData.rating % 200) / 2}%` }}
-                                            />
-                                        </div>
-                                    </div>
                                 </div>
 
                                 <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
@@ -151,12 +175,11 @@ function Codeforces() {
                             </div>
                         </div>
 
-                        {/* Right Column: Submissions & Analytics */}
                         <div className="lg:col-span-8 space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <StatCard title="Accuracy" val="74%" detail="Recent Average" color="text-green-400" />
                                 <StatCard title="Submissions" val={submissions.length} detail="Recent Status" color="text-cyan-400" />
                                 <StatCard title="Contribution" val={userData.contribution} detail="Community Score" color="text-purple-400" />
+                                <StatCard title="Rating" val={userData.rating || "N/A"} detail="Competitive Tier" color="text-green-400" />
                             </div>
 
                             <div className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-[2.5rem] p-8">
@@ -171,8 +194,8 @@ function Codeforces() {
                                 </div>
 
                                 <div className="space-y-3 overflow-y-auto max-h-[500px] pr-4 custom-scrollbar">
-                                    {submissions.map((sub) => (
-                                        <div key={sub.id} className="group bg-white/5 hover:bg-white/10 border border-white/5 p-5 rounded-2xl flex items-center justify-between transition-all">
+                                    {submissions.map((sub, idx) => (
+                                        <div key={idx} className="group bg-white/5 hover:bg-white/10 border border-white/5 p-5 rounded-2xl flex items-center justify-between transition-all">
                                             <div>
                                                 <h4 className="font-bold text-white group-hover:text-cyan-400 transition-colors">
                                                     {sub.problem.name}
@@ -198,7 +221,6 @@ function Codeforces() {
     );
 }
 
-// Sub-components for cleaner structure
 const SearchIcon = (props) => (
     <svg {...props} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
 );
